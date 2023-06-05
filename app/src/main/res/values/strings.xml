@@ -1,0 +1,101 @@
+<resources>
+    <!--Main App Text-->
+    <string name="app_name">SMWC</string>
+    <string name="dashboard">Dashboard</string>
+    <!--Internet Connection text-->
+    <string name="title">Connection Status</string>
+    <string name="connectionDescription">The Internet connection appears to be offline.</string>
+    <string name="noConnectionDescription">Please check your connection status and try again</string>
+    <string name="settings">Settings</string>
+    <string name="deleteMessage">Are you sure you want to delete this entry?</string>
+
+    <!-- Logout text-->
+    <string name="loggedUser">Logged User</string>
+    <string name="delete">Delete</string>
+    <string name="logout">Logout</string>
+    <string name="progressTxt">Please Wait...</string>
+    <string name="logoutMessage">Are you sure you want to logout?</string>
+    <string name="get">GET</string>
+    <string name="name_error_msg">Enter First Name</string>
+    <string name="last_name_error_msg">Enter Last Name</string>
+    <string name="email_error_msg">Enter Email or Mobile</string>
+    <string name="valid_email_error_msg">Please enter a valid email id</string>
+
+
+    <!-- Main Activity text-->
+    <string name="home">Home</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Home Fragment text-->
+    <string name="welcome_msg">Hello , Mark  Willson!</string>
+    <string name="greeting_msg">Have a nice day!</string>
+    <string name="complete">Complete</string>
+    <string name="pending">Pending</string>
+    <string name="detail">Store details</string>
+    <string name="address">2414 Leo StreetNew Florence, PA 15944</string>
+    <string name="product">Product</string>
+
+    <!-- Notification text-->
+    <string name="notification_title">Notification</string>
+
+    <!-- Sign Up text-->
+    <string name="sign_up_title">Sign Up</string>
+    <string name="name">First Name</string>
+    <string name="hint_name">Enter First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="hint_last_name">Enter Last Name</string>
+    <string name="email_mobile">Email Id or Mobile Number</string>
+    <string name="hint_email_mobile">Enter Email Id or Mobile Number</string>
+    <string name="get_otp">Get Otp</string>
+
+    <!-- Company Info text-->
+    <string name="company_name">Company Name</string>
+    <string name="hint_company_name">Enter Company Name</string>
+    <string name="company_email">Company Email Id</string>
+    <string name="hint_company_email">Enter Company Email Id</string>
+    <string name="valid_company_email">Enter Valid Company Email Id</string>
+    <string name="company_mobile_no">Company Mobile Number</string>
+    <string name="hint_company_mobile_no">Enter Company Mobile Number</string>
+    <string name="valid_company_mobile_no">Enter valid Company Mobile Number</string>
+    <string name="company_address">Company Address</string>
+    <string name="hint_company_address">Enter Company Address</string>
+    <string name="company_city">Company City</string>
+    <string name="hint_company_city">Enter Company City</string>
+    <string name="zip_code">Zip Code</string>
+    <string name="hint_zip_code">Enter Zip Code</string>
+    <string name="profile_name">Mark Willson</string>
+    <string name="submit">Submit</string>
+
+    <!-- Profile text-->
+    <string name="title_profile">Profile</string>
+    <string name="profile_email_mobile">Email Id or Mobile Number :</string>
+    <string name="hint_profile_email_mobile">+22 12354 89856</string>
+    <string name="profile_company_name">Company Name :</string>
+    <string name="hint_profile_company_name">FedEX</string>
+    <string name="profile_company_email">Company Email Id :</string>
+    <string name="hint_profile_company_email">markwilsonfedex@gmail.com</string>
+    <string name="profile_company_mobile">Company Mobile Number :</string>
+    <string name="hint_profile_company_mobile">+22 12354 89856</string>
+    <string name="profile_company_city">Company City :</string>
+    <string name="hint_profile_company_city">Washington DC</string>
+    <string name="profile_zip_code">Zip Code :</string>
+    <string name="hint_profile_zip_code">35933</string>
+    <string name="profile_company_address">Company Address :</string>
+    <string name="hint_profile_company_address">6 Highway 15, Wiggins,ms, 39533 United States</string>
+
+    <!-- Edit text-->
+    <string name="title_edit">Edit Profile</string>
+
+    <!-- History text-->
+    <string name="title_history">History</string>
+    <string name="time">15 January, 2023</string>
+
+    <!-- Otp text-->
+    <string name="code_verify_title">Verifications Code</string>
+    <string name="sent_otp">We have sent an OTP on your number</string>
+    <string name="temp_number">+22 00000 00000</string>
+    <string name="verify_code">Verify Code</string>
+    <string name="resend_otp">Resend OTP</string>
+
+
+</resources>

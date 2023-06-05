@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="blue">#3F52E4</color>
+    <color name="store_bg">#DBE9FF</color>
+    <color name="normal_blue">#C0D8FF</color>
+    <color name="view">#D2D8FF</color>
+    <color name="light_blue">#3A86FF</color>
+    <color name="pagination_bg">#2A71D8</color>
+    <color name="colorPrimary">#013888</color>
+    <color name="fill_otp_color">#3242b6</color>
+    <color name="colorPrimaryDark">#3F52E4</color>
+    <color name="colorPrimary_two">#278CB1</color>
+    <color name="colorSecondary">#51cacf</color>
+    <color name="formFieldBg">#F0F5FF</color>
+    <color name="deemSecondary">#F5FAFA</color>
+    <color name="btn_colour">#3F52E4</color>
+    <color name="colorBlack">#000000</color>
+    <color name="btnSecondary">#844fc1</color>
+    <color name="renewColor">#4cc346</color>
+    <color name="black_overlay">#3B423B</color>
+    <color name="black_normal_overlay">#3242b6</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="lightGray">#DDDFE1</color>
+    <color name="grayTextColor">#a8acaf</color>
+    <color name="shadow">#838383</color>
+    <color name="simmerColor">#CDCDCD</color>
+    <color name="darkColor">#8e95aa</color>
+    <color name="deemBlue">#007bff</color>
+    <color name="transparent_color">#00017DFF</color>
+    <color name="primary_transparent">#59017DFF</color>
+    <color name="dashboardTileColor">#133983</color>
+    <color name="header">#F1F1F1</color>
+    <color name="green">#45bc4b</color>
+    <color name="tileColor">#8e95aa</color>
+    <color name="iconColor">#6c7293</color>
+    <color name="redColor">#FF0000</color>
+    <color name="iconBackgroundColor">#e7f2fb</color>
+    <color name="colorWarn">#FDE99A</color>
+    <color name="colorPrimaryBlueDark">#1e394c</color>
+    <color name="userIconColor">#001737</color>
+    <color name="darkBlueSecondary">#1a237e</color>
+    <color name="colorDarkBlueTransparent">#751A237E</color>
+    <color name="colorPrimaryActivate">#008000</color>
+    <color name="colorPrimarySvg">#0185ff</color>
+    <color name="bgColor">#e4e4f4</color>
+    <color name="search_bg_Color">#f7f7f7</color>
+    <color name="raw_bg_Color">#f4f5fa</color>
+
+    <!--    Tag line color-->
+    <color name="colorAdd">#423d56</color>
+    <color name="colorC">#d03d37</color>
+    <color name="colorO">#b33468</color>
+    <color name="colorOo">#469f61</color>
+    <color name="colorU">#b33468</color>
+    <color name="colorR">#4aacc0</color>
+    <color name="colorS">#c0d90f</color>
+    <color name="colorAmp">#462e9c</color>
+
+    <!--Tile color-->
+    <color name="firstTile">#001668</color>
+    <color name="secondTile">#d14738</color>
+    <color name="thirdTile">#007676</color>
+    <color name="fourthTile">#239c4f</color>
+
+    <color name="colorProgressBackground">#00000000</color>
+
+    <style name="progressStyles" parent="Theme.AppCompat.Light">
+        <item name="colorAccent">@color/colorPrimary</item>
+    </style>
+
+</resources>
