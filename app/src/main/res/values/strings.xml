@@ -2,6 +2,10 @@
     <!--Main App Text-->
     <string name="app_name">SMWC</string>
     <string name="dashboard">Dashboard</string>
+
+    <!-- Login text-->
+    <string name="have_not_account">Don`t have an account?</string>
+
     <!--Internet Connection text-->
     <string name="title">Connection Status</string>
     <string name="connectionDescription">The Internet connection appears to be offline.</string>
@@ -33,10 +37,13 @@
     <string name="pending">Pending</string>
     <string name="detail">Store details</string>
     <string name="address">2414 Leo StreetNew Florence, PA 15944</string>
-    <string name="product">Product</string>
+    <string name="product">Products</string>
+    <string name="token_no">Token Number</string>
+    <string name="token_no_hint">1 2 3 4 5</string>
 
     <!-- Notification text-->
     <string name="notification_title">Notification</string>
+    <string name="inProgress">In Progress</string>
 
     <!-- Sign Up text-->
     <string name="sign_up_title">Sign Up</string>
@@ -46,9 +53,10 @@
     <string name="hint_last_name">Enter Last Name</string>
     <string name="email_mobile">Email Id or Mobile Number</string>
     <string name="hint_email_mobile">Enter Email Id or Mobile Number</string>
-    <string name="get_otp">Get Otp</string>
+    <string name="get_otp">Get OTP</string>
 
     <!-- Company Info text-->
+    <string name="company_info_title">Company Information</string>
     <string name="company_name">Company Name</string>
     <string name="hint_company_name">Enter Company Name</string>
     <string name="company_email">Company Email Id</string>

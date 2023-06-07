@@ -1,5 +1,6 @@
 package com.app.smwc.Activity.SignUpActivity
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
 import android.view.View
@@ -7,7 +8,9 @@ import android.view.WindowManager
 import androidx.databinding.DataBindingUtil
 import com.app.frimline.views.Utils
 import com.app.smwc.Activity.BaseActivity
+import com.app.smwc.Activity.OtpActivity.OtpActivity
 import com.app.smwc.Common.CodeReUse
+import com.app.smwc.Common.HELPER
 import com.app.smwc.R
 import com.app.smwc.databinding.ActivitySignUpBinding
 import com.app.ssn.Utils.Loader
@@ -19,7 +22,8 @@ class SignUpActivity : BaseActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(act, R.layout.activity_sign_up)
         act?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
-        hideKeyboard(binding!!.rootLayout)
+
+
         Utils.makeStatusBarTransparent(this)
         initView()
     }
@@ -38,9 +42,14 @@ class SignUpActivity : BaseActivity(), View.OnClickListener {
     override fun onClick(view: View?) {
         when (view!!.id) {
             binding!!.toolbar.ivBack.id -> {
+                onBackPressed()
             }
             binding!!.getOtpBtn.id -> {
-                validation()
+                val i = Intent(act,OtpActivity::class.java)
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                startActivity(i)
+                HELPER.slideEnter(act)
+               // validation()
             }
         }
     }

@@ -15,12 +15,16 @@
     <color name="pagination_bg">#2A71D8</color>
     <color name="colorPrimary">#013888</color>
     <color name="fill_otp_color">#3242b6</color>
+    <color name="colorNormalOverlay">#2e6bcc</color>
+    <color name="placeholder_color">#B7B7B7</color>
+    <color name="colorNormalOverlayBlue">#3242b6</color>
     <color name="colorPrimaryDark">#3F52E4</color>
     <color name="colorPrimary_two">#278CB1</color>
     <color name="colorSecondary">#51cacf</color>
     <color name="formFieldBg">#F0F5FF</color>
     <color name="deemSecondary">#F5FAFA</color>
     <color name="btn_colour">#3F52E4</color>
+    <color name="textFiled_colour">#676767</color>
     <color name="colorBlack">#000000</color>
     <color name="btnSecondary">#844fc1</color>
     <color name="renewColor">#4cc346</color>
@@ -29,6 +33,7 @@
     <color name="colorWhite">#FFFFFF</color>
     <color name="lightGray">#DDDFE1</color>
     <color name="grayTextColor">#a8acaf</color>
+    <color name="history_colour">#ADADAD</color>
     <color name="shadow">#838383</color>
     <color name="simmerColor">#CDCDCD</color>
     <color name="darkColor">#8e95aa</color>

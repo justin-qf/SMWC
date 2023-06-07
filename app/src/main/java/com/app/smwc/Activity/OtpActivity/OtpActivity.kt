@@ -1,15 +1,22 @@
 package com.app.smwc.Activity.OtpActivity
 
+import android.animation.ArgbEvaluator
+import android.animation.PropertyValuesHolder
+import android.animation.ValueAnimator
+import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.View
 import androidx.databinding.DataBindingUtil
 import com.app.smwc.Activity.BaseActivity
+import com.app.smwc.Activity.MainActivity
 import com.app.smwc.Common.HELPER
 import com.app.smwc.R
 import com.app.smwc.Utils.GenericTextWatcher
 import com.app.smwc.databinding.ActivityOtpBinding
 import java.util.*
+
 
 class OtpActivity : BaseActivity(), View.OnClickListener {
 
@@ -28,6 +35,7 @@ class OtpActivity : BaseActivity(), View.OnClickListener {
 
     private fun initView() {
         binding!!.toolbar.ivBack.setOnClickListener(this)
+        binding!!.verifyCodeBtn.setOnClickListener(this)
         binding!!.resendCodeTxt.setOnClickListener {
             counter()
             updateCountDownText()
@@ -153,6 +161,12 @@ class OtpActivity : BaseActivity(), View.OnClickListener {
         when (view!!.id) {
             binding!!.toolbar.ivBack.id -> {
 
+            }
+            binding!!.verifyCodeBtn.id->{
+                val i = Intent(act,MainActivity::class.java)
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                startActivity(i)
+                HELPER.slideEnter(act)
             }
 
         }

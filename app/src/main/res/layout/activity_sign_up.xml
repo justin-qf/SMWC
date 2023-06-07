@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/rootLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -28,7 +29,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/_21sdp"
-                android:layout_marginTop="@dimen/_20sdp"
+                android:layout_marginTop="@dimen/_22sdp"
                 android:layout_marginEnd="@dimen/_21sdp"
                 android:orientation="vertical">
 
@@ -43,23 +44,24 @@
                     style="@style/CommonInputLayoutStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/hint_name"
                     app:errorEnabled="true"
-                   >
+                    app:hintEnabled="false">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/firstNameEdt"
                         style="@style/CommonTextInputEditTextStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textEmailAddress" />
+                        android:hint="@string/hint_name"
+                        android:inputType="textEmailAddress"
+                        android:textColorHint="@color/placeholder_color" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     style="@style/commonTextStyle"
                     android:layout_gravity="fill"
-                    android:layout_marginTop="0dp"
+                    android:layout_marginTop="@dimen/_5sdp"
                     android:text="@string/last_name" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -67,21 +69,23 @@
                     style="@style/CommonInputLayoutStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/hint_last_name"
-                    app:errorEnabled="true">
+                    app:errorEnabled="true"
+                    app:hintEnabled="false">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/lastNameEdt"
                         style="@style/CommonTextInputEditTextStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textEmailAddress" />
+                        android:hint="@string/hint_last_name"
+                        android:inputType="textEmailAddress"
+                        android:textColorHint="@color/placeholder_color" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     style="@style/commonTextStyle"
                     android:layout_gravity="fill"
-                    android:layout_marginTop="0dp"
+                    android:layout_marginTop="@dimen/_5sdp"
                     android:text="@string/email_mobile" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -89,15 +93,17 @@
                     style="@style/CommonInputLayoutStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/hint_email_mobile"
-                    app:errorEnabled="true">
+                    app:errorEnabled="true"
+                    app:hintEnabled="false">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/emailMobileEdt"
                         style="@style/CommonTextInputEditTextStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textEmailAddress" />
+                        android:hint="@string/hint_email_mobile"
+                        android:inputType="textEmailAddress"
+                        android:textColorHint="@color/placeholder_color" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
@@ -106,12 +112,13 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/getOtpBtn"
             android:layout_width="@dimen/_120sdp"
+            android:outlineSpotShadowColor="@color/btn_colour"
             android:layout_height="@dimen/_45sdp"
             android:layout_gravity="bottom|center_horizontal"
             android:layout_marginTop="@dimen/_15sdp"
             android:layout_marginBottom="@dimen/_20sdp"
-            android:elevation="@dimen/_3sdp"
-            android:fontFamily="@font/rubik_regular"
+            android:elevation="@dimen/_8sdp"
+            android:fontFamily="@font/rubik_bold"
             android:paddingTop="@dimen/_3sdp"
             android:stateListAnimator="@null"
             android:text="@string/get_otp"

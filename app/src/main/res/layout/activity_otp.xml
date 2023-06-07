@@ -52,9 +52,9 @@
                 android:id="@+id/otpView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_30sdp"
+                android:layout_marginStart="@dimen/_33sdp"
                 android:layout_marginTop="@dimen/_30sdp"
-                android:layout_marginEnd="@dimen/_30sdp"
+                android:layout_marginEnd="@dimen/_33sdp"
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:weightSum="4"
@@ -101,7 +101,7 @@
                 android:includeFontPadding="false"
                 android:text="@string/resend_otp"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_12sdp"
+                android:textSize="@dimen/_11sdp"
                 android:visibility="visible" />
 
             <TextView
@@ -113,19 +113,17 @@
                 android:includeFontPadding="false"
                 android:text="@string/resend_otp"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_12sdp"
+                android:textSize="@dimen/_11sdp"
                 android:visibility="gone" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/verifyCodeBtn"
-                android:layout_width="@dimen/_120sdp"
+                android:layout_width="@dimen/_128sdp"
                 android:layout_height="@dimen/_45sdp"
                 android:layout_gravity="bottom|center_horizontal"
                 android:layout_marginTop="@dimen/_12sdp"
                 android:layout_marginBottom="@dimen/_20sdp"
-                android:elevation="@dimen/_3sdp"
-                android:textFontWeight="600"
-                android:fontFamily="@font/rubik_regular"
+                android:fontFamily="@font/rubik_bold"
                 android:paddingTop="@dimen/_3sdp"
                 android:stateListAnimator="@null"
                 android:text="@string/verify_code"
@@ -133,7 +131,6 @@
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="@dimen/_12sdp"
                 android:textStyle="bold"
-                android:translationZ="@dimen/_5sdp"
                 app:backgroundTint="@color/white"
                 app:cornerRadius="@dimen/_7sdp"
                 app:layout_constraintBottom_toBottomOf="parent"

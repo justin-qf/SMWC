@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import com.app.frimline.views.Utils
 import com.app.smwc.Activity.CompanyInfo.CompanyInfoActivity
 import com.app.smwc.Activity.EditActivity.EditActivity
+import com.app.smwc.Activity.LoginActivity.LoginActivity
 import com.app.smwc.Activity.OtpActivity.OtpActivity
 import com.app.smwc.Activity.Profile.ProfileActivity
 import com.app.smwc.Activity.SignUpActivity.SignUpActivity
@@ -38,7 +39,7 @@ class SplashActivity : BaseActivity() {
 
     private fun initView() {
         Handler(Looper.getMainLooper()).postDelayed({
-            val i = Intent(act, MainActivity::class.java)
+            val i = Intent(act,LoginActivity::class.java)
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             startActivity(i)
             HELPER.slideEnter(act)

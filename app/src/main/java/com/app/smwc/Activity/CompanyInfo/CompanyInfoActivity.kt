@@ -1,14 +1,18 @@
 package com.app.smwc.Activity.CompanyInfo
 
+import android.graphics.Rect
 import android.os.Bundle
 import android.util.Patterns
 import android.view.View
+import android.view.ViewTreeObserver.OnGlobalLayoutListener
+import android.view.WindowManager
 import androidx.databinding.DataBindingUtil
 import com.app.frimline.views.Utils
 import com.app.smwc.Activity.BaseActivity
 import com.app.smwc.Common.CodeReUse
 import com.app.smwc.R
 import com.app.smwc.databinding.ActivityCompanyInfoBinding
+
 
 class CompanyInfoActivity : BaseActivity(), View.OnClickListener {
 
@@ -17,13 +21,17 @@ class CompanyInfoActivity : BaseActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(act, R.layout.activity_company_info)
         Utils.makeStatusBarTransparent(this)
+        hideKeyboard(binding!!.mainLayout)
         initView()
     }
 
     private fun initView() {
+
+        setScrolView()
         binding!!.toolbar.ivBack.setOnClickListener(this)
         binding!!.getOtpBtn.setOnClickListener(this)
-        binding!!.toolbar.title.text = getString(R.string.sign_up_title)
+        binding!!.toolbar.title.text = getString(R.string.company_info_title)
+        act.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
 
         //Remove Errors
         CodeReUse.RemoveError(binding!!.companyNameEdt, binding!!.companyNameLayout)
@@ -37,7 +45,7 @@ class CompanyInfoActivity : BaseActivity(), View.OnClickListener {
     override fun onClick(view: View?) {
         when (view!!.id) {
             binding!!.toolbar.ivBack.id -> {
-
+                onBackPressed()
             }
             binding!!.getOtpBtn.id -> {
                 validation()
@@ -45,6 +53,28 @@ class CompanyInfoActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
+
+    private fun setScrolView(){
+        binding!!.scrollView.viewTreeObserver.addOnGlobalLayoutListener {
+            val r = Rect()
+            binding!!.scrollView.getWindowVisibleDisplayFrame(r)
+            val screenHeight: Int = binding!!.scrollView.rootView.height
+            val keypadHeight: Int = screenHeight - r.bottom
+            if (keypadHeight > screenHeight * 0.15) {
+                // Keyboard is showing
+                binding!!.scrollView.post(Runnable {
+                    binding!!.scrollView.smoothScrollTo(
+                        0,
+                        binding!!.scrollView.bottom
+                    )
+                })
+            } else {
+                // Keyboard is hidden
+                binding!!.scrollView.post(Runnable { binding!!.scrollView.smoothScrollTo(0, 0) })
+            }
+        }
+
+    }
     private fun validation() {
         var isError = false
         var isFocus = false

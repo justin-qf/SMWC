@@ -32,7 +32,7 @@ class HomeAdapter(
     override fun onBindViewHolder(holder: DataHolder, position: Int) {
 
         holder.binding.totalProduct.text = "10"
-        holder.binding.productTitle.text = "Product"
+        holder.binding.productTitle.text = "Products"
         holder.binding.title.text = "Angelic Threads"
         holder.binding.location.text = "2414 Leo StreetNew Florence, PA 15944"
     }

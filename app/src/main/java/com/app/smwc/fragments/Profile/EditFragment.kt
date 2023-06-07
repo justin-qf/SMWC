@@ -5,10 +5,10 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import com.app.smwc.Common.CodeReUse
 import com.app.smwc.Common.Constant
 import com.app.smwc.Common.HELPER
-import com.app.smwc.Common.SWCApp
 import com.app.smwc.R
 import com.app.smwc.databinding.FragmentEditBinding
 import com.app.smwc.fragments.BaseFragment
@@ -23,14 +23,15 @@ class EditFragment : BaseFragment<FragmentEditBinding>(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        SWCApp.getInstance().observer.value = Constant.OBSERVER_EDIT_FRAGMENT_VISIBLE
+        app!!.observer.value = Constant.OBSERVER_EDIT_FRAGMENT_VISIBLE
+        hideKeyboard(binding.mainLayout)
+        act.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
         initViews()
     }
 
     private fun initViews() {
         binding.toolbar.ivBack.setOnClickListener(this)
-        binding.toolbar.title.text = getString(R.string.title_profile)
-        binding.toolbar.editLayout.visibility = View.GONE
+        binding.toolbar.title.text = getString(R.string.title_edit)
         binding.toolbar.submitLayout.visibility = View.VISIBLE
         //Remove Errors
         CodeReUse.RemoveError(binding.firstNameEdt, binding.firstNameLayout)
@@ -46,7 +47,7 @@ class EditFragment : BaseFragment<FragmentEditBinding>(), View.OnClickListener {
             validation()
         }
         binding.toolbar.ivBack.setOnClickListener {
-            app!!.observer.value = Constant.OBSERVER_PROFILE_BACKPRESS_FRAGMENT_VISIBLE
+            app!!.observer.value = Constant.OBSERVER_EDIT_PROFILE_BACK_PRESS_FRAGMENT_VISIBLE
         }
     }
 

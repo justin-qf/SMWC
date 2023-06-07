@@ -12,8 +12,8 @@
 
         <ImageView
             android:id="@+id/iv_back"
-            android:layout_width="@dimen/_15sdp"
-            android:layout_height="@dimen/_15sdp"
+            android:layout_width="@dimen/_14sdp"
+            android:layout_height="@dimen/_14sdp"
             android:scaleType="centerCrop"
             android:src="@drawable/back"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -29,10 +29,10 @@
             android:gravity="center"
             android:includeFontPadding="false"
             android:textColor="@color/black"
-            android:textSize="@dimen/_18sdp"
+            android:textSize="@dimen/_16sdp"
             app:layout_constraintBottom_toBottomOf="@+id/iv_back"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/iv_back"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/iv_back" />
 
 

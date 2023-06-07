@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.app.smwc.Common.Constant
+import com.app.smwc.Common.HELPER
 import com.app.smwc.Common.SWCApp
 import com.app.smwc.databinding.FragmentNotificationBinding
 import com.app.smwc.fragments.BaseFragment
@@ -20,7 +21,8 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(), View.O
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        SWCApp.getInstance().observer.value = Constant.OBSERVER_NOTIFICATION_FRAGMENT_VISIBLE
+        app!!.observer.value = Constant.OBSERVER_NOTIFICATION_FRAGMENT_VISIBLE
+        HELPER.print("IsCall:::::::", "NotificationFragment")
         initViews()
     }
 

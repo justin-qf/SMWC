@@ -4,7 +4,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginTop="@dimen/_7sdp"
         android:paddingStart="@dimen/_15sdp"
         android:paddingTop="@dimen/_5sdp"
         android:paddingEnd="@dimen/_20sdp"
@@ -27,37 +27,15 @@
             android:fontFamily="@font/rubik_bold"
             android:gravity="center"
             android:includeFontPadding="false"
+            android:paddingStart="@dimen/_5sdp"
             android:text="@string/title_profile"
             android:layout_marginStart="@dimen/_10sdp"
             android:textColor="@color/white"
             android:textSize="@dimen/_16sdp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/editLayout"
+            app:layout_constraintEnd_toStartOf="@+id/submitLayout"
             app:layout_constraintStart_toEndOf="@+id/iv_back"
-            app:layout_constraintTop_toTopOf="@+id/editLayout" />
-
-
-        <RelativeLayout
-            android:id="@+id/editLayout"
-            android:layout_width="@dimen/_24sdp"
-            android:layout_height="@dimen/_24sdp"
-            android:background="@drawable/bg_profile_radius"
-            android:gravity="center"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/iv_edit"
-                android:layout_width="@dimen/_13sdp"
-                android:layout_height="@dimen/_13sdp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/edit"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/white" />
-        </RelativeLayout>
+            app:layout_constraintTop_toTopOf="@+id/submitLayout" />
 
         <RelativeLayout
             android:id="@+id/submitLayout"

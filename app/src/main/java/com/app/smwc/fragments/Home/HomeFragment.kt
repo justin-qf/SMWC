@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.smwc.Activity.CompanyInfo.CompanyInfoActivity
 import com.app.smwc.Activity.MainActivity
+import com.app.smwc.Activity.OtpActivity.OtpActivity
 import com.app.smwc.Common.Constant
 import com.app.smwc.Common.HELPER
 import com.app.smwc.Common.SWCApp
@@ -17,15 +18,10 @@ import com.app.smwc.fragments.BaseFragment
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>(), View.OnClickListener {
 
-    private var param1: String? = null
-    private var param2: String? = null
     private var homeAdapter: HomeAdapter? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString("param1")
-            param2 = it.getString("param2")
         }
     }
 
@@ -37,7 +33,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        SWCApp.getInstance().observer.value = Constant.OBSERVER_HOME_FRAGMENT_VISIBLE
+        app!!.observer.value = Constant.OBSERVER_HOME_FRAGMENT_VISIBLE
         initViews()
     }
 
@@ -49,13 +45,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), View.OnClickListener {
                 false
             )
             val listClickListener =
-
                 ListClickListener { view, pos, `object` ->
-
                     val intent = Intent(act, MainActivity::class.java)
                     act.startActivity(intent)
                     HELPER.slideEnter(act)
-
                 }
 
             homeAdapter = HomeAdapter(
@@ -68,26 +61,22 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), View.OnClickListener {
     private fun initViews() {
         binding.toolbar.ivQrcode.setOnClickListener(this)
         binding.toolbar.ivQrcode.setOnClickListener {
-//            val i = Intent(act, CompanyInfoActivity::class.java)
-//            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-//            startActivity(i)
-//            HELPER.slideEnter(act)
-            //HELPER.print("IS_CLICK", "DONE")
+            val i = Intent(act, CompanyInfoActivity::class.java)
+            //i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            startActivity(i)
+            HELPER.slideEnter(act)
         }
         binding.toolbar.ivProfile.setOnClickListener {
-//            val i = Intent(act, CompanyInfoActivity::class.java)
+//            val i = Intent(act, OtpActivity::class.java)
 //            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 //            startActivity(i)
 //            HELPER.slideEnter(act)
+            app!!.observer.value = Constant.OBSERVER_PROFILE_VISIBLE_FROM_HOME
         }
         storeDetails
     }
 
     override fun onClick(view: View?) {
-
-        HELPER.print("IS_CLICK", id.toString())
-        HELPER.print("IS_CLICK", binding.toolbar.ivQrcode.id.toString())
-
         when (requireView().id) {
             binding.toolbar.ivQrcode.id -> {
                 val intent = Intent(act, MainActivity::class.java)

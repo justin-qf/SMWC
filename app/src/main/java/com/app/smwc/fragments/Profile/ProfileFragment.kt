@@ -25,6 +25,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(), View.OnClickList
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        HELPER.print("IsCall:::::::", "ProfileFragment")
         SWCApp.getInstance().observer.value = Constant.OBSERVER_PROFILE_FRAGMENT_VISIBLE
         initViews()
     }
@@ -33,9 +34,12 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(), View.OnClickList
     private fun initViews() {
         binding.toolbar.ivBack.setOnClickListener(this)
         //binding.ivEditProfile.setOnClickListener(this)
-        binding.ivEditProfile.setOnClickListener {
+        binding.toolbar.editLayout.setOnClickListener {
             HELPER.print("----------IS_CLICK--------", "DONE")
             setPublic(EditFragment(), "Edit")
+        }
+        binding.toolbar.ivBack.setOnClickListener {
+            app!!.observer.value = Constant.OBSERVER_PROFILE_BACK_PRESS_FRAGMENT_VISIBLE
         }
         binding.toolbar.title.text = getString(R.string.title_profile)
         binding.toolbar.editLayout.visibility = View.VISIBLE
@@ -58,7 +62,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(), View.OnClickList
     @Deprecated("Deprecated in Java")
     override fun update(observable: Observable?, data: Any?) {
         super.update(observable, data)
-        if (app!!.observer.value == Constant.OBSERVER_PROFILE_BACKPRESS_FRAGMENT_VISIBLE) {
+        if (app!!.observer.value == Constant.OBSERVER_EDIT_PROFILE_BACK_PRESS_FRAGMENT_VISIBLE) {
             onBackPressed()
         }
     }

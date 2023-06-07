@@ -18,16 +18,10 @@ import com.app.smwc.fragments.BaseFragment
 
 class HistoryFragment : BaseFragment<FragmentHistoryBinding>(), View.OnClickListener {
 
-    private var param1: String? = null
-    private var param2: String? = null
     private var homeAdapter: HomeAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString("param1")
-            param2 = it.getString("param2")
-        }
     }
 
     override fun onCreateBinding(
@@ -38,6 +32,7 @@ class HistoryFragment : BaseFragment<FragmentHistoryBinding>(), View.OnClickList
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        HELPER.print("IsCall:::::::", "HistoryFragment")
         SWCApp.getInstance().observer.value = Constant.OBSERVER_HISTORY_FRAGMENT_VISIBLE
         initViews()
     }
@@ -69,7 +64,9 @@ class HistoryFragment : BaseFragment<FragmentHistoryBinding>(), View.OnClickList
     private fun initViews() {
         storeDetails
         binding.toolbar.title.text = getString(R.string.title_history)
-
+        binding.toolbar.ivBack.setOnClickListener {
+            app!!.observer.value = Constant.OBSERVER_HISTORY_BACK_PRESS_FRAGMENT_VISIBLE
+        }
     }
 
     override fun onClick(view: View?) {

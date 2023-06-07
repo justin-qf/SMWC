@@ -4,14 +4,15 @@
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
+        android:id="@+id/mainLayout"
         android:layout_height="match_parent"
+        android:fillViewport="true"
         tools:context=".Activity.SignUpActivity.SignUpActivity">
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:paddingBottom="@dimen/_20sdp"
             android:scrollbars="none"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -29,7 +30,7 @@
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_122sdp"
+                    android:layout_height="@dimen/_118sdp"
                     android:background="@drawable/profile_bg"
                     android:gravity="center"
                     app:cardBackgroundColor="@color/blue"
@@ -37,11 +38,31 @@
                     app:cardElevation="@dimen/_3sdp"
                     app:cardPreventCornerOverlap="true">
 
-                    <ImageView
+                    <RelativeLayout
                         android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/top_left_shap" />
+
+                        <ImageView
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentBottom="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/bottom_round_shap" />
+                    </RelativeLayout>
+
+
+                    <ImageView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/profile_bg" />
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/top_left_shap" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -50,7 +71,7 @@
 
                         <include
                             android:id="@+id/toolbar"
-                            layout="@layout/profile_toolbar" />
+                            layout="@layout/edit_toolbar" />
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="wrap_content"
@@ -84,7 +105,6 @@
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
                     </LinearLayout>
 
                 </androidx.cardview.widget.CardView>
@@ -92,7 +112,7 @@
                 <TextView
                     style="@style/commonTextStyle"
                     android:layout_gravity="fill"
-                    android:layout_marginTop="@dimen/_20sdp"
+                    android:layout_marginTop="@dimen/_25sdp"
                     android:text="@string/name" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -100,11 +120,12 @@
                     style="@style/CommonInputLayoutStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/hint_name"
+                    app:hintEnabled="false"
                     app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/firstNameEdt"
+                        android:hint="@string/hint_name"
                         style="@style/CommonTextInputEditTextStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -123,13 +144,14 @@
                     style="@style/CommonInputLayoutStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/hint_last_name"
+                    app:hintEnabled="false"
                     app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/lastNameEdt"
                         style="@style/CommonTextInputEditTextStyle"
                         android:layout_width="match_parent"
+                        android:hint="@string/hint_last_name"
                         android:layout_height="wrap_content"
                         android:inputType="textEmailAddress" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -143,9 +165,9 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/emailMobileLayout"
                     style="@style/CommonInputLayoutStyle"
+                    app:hintEnabled="false"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/hint_email_mobile"
                     app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -153,6 +175,7 @@
                         style="@style/CommonTextInputEditTextStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:hint="@string/hint_email_mobile"
                         android:inputType="textEmailAddress" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -167,13 +190,14 @@
                     style="@style/CommonInputLayoutStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/hint_company_name"
+                    app:hintEnabled="false"
                     app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/companyNameEdt"
                         style="@style/CommonTextInputEditTextStyle"
                         android:layout_width="match_parent"
+                        android:hint="@string/hint_company_name"
                         android:layout_height="wrap_content"
                         android:inputType="textEmailAddress" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -189,13 +213,14 @@
                     style="@style/CommonInputLayoutStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/hint_company_email"
+                    app:hintEnabled="false"
                     app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/companyEmailEdt"
                         style="@style/CommonTextInputEditTextStyle"
                         android:layout_width="match_parent"
+                        android:hint="@string/hint_company_email"
                         android:layout_height="wrap_content"
                         android:inputType="textEmailAddress" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -210,14 +235,15 @@
                     android:id="@+id/companyMobileLayout"
                     style="@style/CommonInputLayoutStyle"
                     android:layout_width="match_parent"
+                    app:hintEnabled="false"
                     android:layout_height="wrap_content"
-                    android:hint="@string/hint_company_mobile_no"
                     app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/companyMobileEdt"
                         style="@style/CommonTextInputEditTextStyle"
                         android:layout_width="match_parent"
+                        android:hint="@string/hint_company_mobile_no"
                         android:layout_height="wrap_content"
                         android:inputType="textEmailAddress" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -233,13 +259,14 @@
                     style="@style/CommonInputLayoutStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/hint_company_address"
+                    app:hintEnabled="false"
                     app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/companyAddressEdt"
                         style="@style/CommonTextInputEditTextStyle"
                         android:layout_width="match_parent"
+                        android:hint="@string/hint_company_address"
                         android:layout_height="fill_parent"
                         android:gravity="top|start"
                         android:inputType="textMultiLine"
@@ -258,14 +285,15 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/companyCityLayout"
                     style="@style/CommonInputLayoutStyle"
+                    app:hintEnabled="false"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/hint_company_city"
                     app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/companyCityEdt"
                         style="@style/CommonTextInputEditTextStyle"
+                        android:hint="@string/hint_company_city"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textEmailAddress" />
@@ -281,8 +309,8 @@
                     android:id="@+id/zipCodeLayout"
                     style="@style/CommonInputLayoutStyle"
                     android:layout_width="match_parent"
+                    app:hintEnabled="false"
                     android:layout_height="wrap_content"
-                    android:hint="@string/hint_zip_code"
                     app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -290,6 +318,7 @@
                         style="@style/CommonTextInputEditTextStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:hint="@string/hint_zip_code"
                         android:inputType="textEmailAddress" />
                 </com.google.android.material.textfield.TextInputLayout>
 

@@ -25,11 +25,11 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_20sdp"
                 android:fontFamily="@font/rubik_regular"
                 android:text="@string/time"
-                android:textColor="@color/grayTextColor"
-                android:textSize="@dimen/_12sdp"
+                android:textColor="@color/history_colour"
+                android:textSize="@dimen/_11sdp"
                 android:textStyle="normal" />
 
             <androidx.recyclerview.widget.RecyclerView
@@ -37,7 +37,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clipToPadding="false"
-                android:paddingBottom="@dimen/_50sdp"
+                android:paddingBottom="@dimen/_32sdp"
                 tools:listitem="@layout/store_matches_item_layout" />
 
         </LinearLayout>

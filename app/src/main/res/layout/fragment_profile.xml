@@ -9,7 +9,6 @@
         tools:context=".Activity.SignUpActivity.SignUpActivity">
 
         <androidx.core.widget.NestedScrollView
-
             android:id="@+id/nestedLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -48,8 +47,10 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingTop="@dimen/_3sdp"
+                        android:paddingBottom="@dimen/_18sdp">
 
                         <include
                             android:id="@+id/toolbar"
@@ -60,7 +61,7 @@
                             android:layout_width="@dimen/_45sdp"
                             android:layout_height="@dimen/_45sdp"
                             android:layout_gravity="center"
-                            android:layout_marginTop="@dimen/_10sdp"
+                            android:layout_marginTop="@dimen/_20sdp"
                             android:scaleType="centerCrop"
                             android:src="@drawable/user_icon"
                             app:tint="@color/white" />
@@ -69,12 +70,12 @@
                             android:id="@+id/name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_10sdp"
+                            android:layout_marginTop="@dimen/_13sdp"
                             android:fontFamily="@font/rubik_bold"
                             android:gravity="center"
                             android:text="@string/profile_name"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/_20sdp" />
+                            android:textSize="@dimen/_16sdp" />
 
                     </LinearLayout>
 
@@ -93,7 +94,7 @@
                         android:text="@string/profile_email_mobile" />
 
                     <TextView
-                        style="@style/CommonTextStyle"
+                        style="@style/CommonNewTextStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/hint_profile_email_mobile" />
@@ -118,7 +119,7 @@
                         android:text="@string/profile_company_name" />
 
                     <TextView
-                        style="@style/CommonTextStyle"
+                        style="@style/CommonNewTextStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/hint_profile_company_name" />
@@ -143,7 +144,7 @@
                         android:text="@string/profile_company_email" />
 
                     <TextView
-                        style="@style/CommonTextStyle"
+                        style="@style/CommonNewTextStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/hint_profile_company_email" />
@@ -168,7 +169,7 @@
                         android:text="@string/profile_company_mobile" />
 
                     <TextView
-                        style="@style/CommonTextStyle"
+                        style="@style/CommonNewTextStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/hint_profile_company_mobile" />
@@ -193,7 +194,7 @@
                         android:text="@string/profile_company_city" />
 
                     <TextView
-                        style="@style/CommonTextStyle"
+                        style="@style/CommonNewTextStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/hint_profile_company_city" />
@@ -218,7 +219,7 @@
                         android:text="@string/profile_zip_code" />
 
                     <TextView
-                        style="@style/CommonTextStyle"
+                        style="@style/CommonNewTextStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/hint_profile_zip_code" />
@@ -242,19 +243,26 @@
                         android:layout_height="wrap_content"
                         android:text="@string/profile_company_address" />
 
-                    <TextView
-                        style="@style/CommonTextStyle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/hint_profile_company_address" />
-
                 </LinearLayout>
+
+                <TextView
+                    android:fontFamily="@font/rubik_regular"
+                    android:maxLines="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:includeFontPadding="false"
+                    android:text="@string/hint_profile_company_address"
+                    android:textColor="@color/textFiled_colour"
+                    android:textSize="@dimen/_10sdp"
+                    android:textStyle="normal" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_1sdp"
                     android:layout_marginTop="@dimen/_12sdp"
-                    android:background="@drawable/bg_corner_view_radius" />
+                    android:background="@drawable/bg_corner_view_radius"
+                    android:visibility="gone" />
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 

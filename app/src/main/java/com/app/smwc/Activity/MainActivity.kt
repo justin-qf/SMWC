@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import com.app.frimline.views.Utils
 import com.app.smwc.Common.Constant
 import com.app.smwc.Common.HELPER
-import com.app.smwc.Common.SWCApp
 import com.app.smwc.R
 import com.app.smwc.databinding.ActivityMainBinding
 import com.app.smwc.fragments.Home.HistoryFragment
@@ -93,8 +92,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
     }
 
     override fun onClick(view: View?) {
-        val viewId: Int = view!!.id
-        when (viewId) {
+        when (view!!.id) {
             R.id.Home -> {
                 HELPER.print("IsHomeClick", "YES")
                 localFragmentCalled = homeFragment
@@ -114,7 +112,6 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                 setPublic(notificationFragment!!, "Notification")
             }
             R.id.Profile -> {
-                HELPER.print("IsNProfileClick", "YES")
                 localFragmentCalled = profileFragment
                 profileTabEnable(true)
                 setPublic(profileFragment!!, "Profile")
@@ -180,8 +177,8 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         if (currentFragmentVisible != Constant.OBSERVER_HOME_FRAGMENT_VISIBLE && currentFragmentVisible != Constant.OBSERVER_HISTORY_FRAGMENT_VISIBLE && currentFragmentVisible != Constant.OBSERVER_NOTIFICATION_FRAGMENT_VISIBLE && currentFragmentVisible != Constant.OBSERVER_PROFILE_FRAGMENT_VISIBLE) {
             handled = true
             if (currentFragmentVisible == Constant.OBSERVER_EDIT_FRAGMENT_VISIBLE) {
-                SWCApp.getInstance().observer.value =
-                    Constant.OBSERVER_PROFILE_BACKPRESS_FRAGMENT_VISIBLE
+                app!!.observer.value =
+                    Constant.OBSERVER_EDIT_PROFILE_BACK_PRESS_FRAGMENT_VISIBLE
             }
         }
         if (!handled) {
@@ -202,8 +199,9 @@ class MainActivity : BaseActivity(), View.OnClickListener {
     @Deprecated("Deprecated in Java")
     override fun update(observable: Observable?, data: Any?) {
         super.update(observable, data)
-        HELPER.print("IS_UPDATE", "WORKING")
-        if (app.observer.value === Constant.OBSERVER_HOME_FRAGMENT_VISIBLE) {
+        if (app.observer.value === Constant.OBSERVER_PROFILE_VISIBLE_FROM_HOME) {
+            binding!!.Profile.performClick()
+        } else if (app.observer.value === Constant.OBSERVER_HOME_FRAGMENT_VISIBLE) {
             currentFragmentVisible = Constant.OBSERVER_HOME_FRAGMENT_VISIBLE
             homeTabEnable(true)
         } else if (app.observer.value === Constant.OBSERVER_HISTORY_FRAGMENT_VISIBLE) {
@@ -215,9 +213,12 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         } else if (app.observer.value === Constant.OBSERVER_PROFILE_FRAGMENT_VISIBLE) {
             currentFragmentVisible = Constant.OBSERVER_PROFILE_FRAGMENT_VISIBLE
             profileTabEnable(true)
+        } else if (app.observer.value === Constant.OBSERVER_HISTORY_BACK_PRESS_FRAGMENT_VISIBLE) {
+            super.onBackPressed()
+        } else if (app.observer.value === Constant.OBSERVER_PROFILE_BACK_PRESS_FRAGMENT_VISIBLE) {
+            super.onBackPressed()
         } else if (app.observer.value === Constant.OBSERVER_EDIT_FRAGMENT_VISIBLE) {
             currentFragmentVisible = Constant.OBSERVER_EDIT_FRAGMENT_VISIBLE
         }
     }
-
 }

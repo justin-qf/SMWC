@@ -3,4 +3,6 @@
     <integer name="slide_animation_duration">300</integer>
     <integer name="anim_duration_medium">300</integer>
     <dimen name="otp_radius">@dimen/_18sdp</dimen>
+    <dimen name="bottom_navigation_icon_size">@dimen/_17sdp</dimen>
+    <dimen name="bottom_navigation_dot_size">@dimen/_5sdp</dimen>
 </resources>
