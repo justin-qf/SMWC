@@ -7,7 +7,7 @@
         android:id="@+id/rootLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/_30sdp"
+        android:fitsSystemWindows="true"
         tools:context=".Activity.SignUpActivity.SignUpActivity">
 
         <include
@@ -106,30 +106,41 @@
                         android:textColorHint="@color/placeholder_color" />
                 </com.google.android.material.textfield.TextInputLayout>
 
+
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 
-        <com.google.android.material.button.MaterialButton
+        <com.sanojpunchihewa.glowbutton.GlowButton
             android:id="@+id/getOtpBtn"
+            style="@style/commonShadowButtonStyle"
+            android:text="@string/get_otp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/getOtpBtns"
             android:layout_width="@dimen/_120sdp"
-            android:outlineSpotShadowColor="@color/btn_colour"
             android:layout_height="@dimen/_45sdp"
             android:layout_gravity="bottom|center_horizontal"
             android:layout_marginTop="@dimen/_15sdp"
             android:layout_marginBottom="@dimen/_20sdp"
             android:elevation="@dimen/_8sdp"
             android:fontFamily="@font/rubik_bold"
+            android:outlineSpotShadowColor="@color/btn_colour"
             android:paddingTop="@dimen/_3sdp"
             android:stateListAnimator="@null"
             android:text="@string/get_otp"
             android:textAllCaps="false"
             android:textSize="@dimen/_11sdp"
             android:translationZ="@dimen/_5sdp"
+            android:visibility="gone"
             app:backgroundTint="@color/btn_colour"
             app:cornerRadius="@dimen/_7sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

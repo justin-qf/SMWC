@@ -23,16 +23,19 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/rlBottom"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_65sdp"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill"
                 android:layout_margin="@dimen/_10sdp"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:gravity="center"
                 app:cardCornerRadius="@dimen/_14sdp"
                 app:cardElevation="@dimen/_3sdp"
                 app:cardUseCompatPadding="true"
+                app:cardPreventCornerOverlap="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent">
@@ -156,7 +159,7 @@
                     </LinearLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

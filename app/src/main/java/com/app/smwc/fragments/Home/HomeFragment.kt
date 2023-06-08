@@ -1,10 +1,19 @@
 package com.app.smwc.fragments.Home
 
 import android.content.Intent
+import android.content.res.Resources
+import android.graphics.Color
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.LayerDrawable
+import android.graphics.drawable.ShapeDrawable
+import android.graphics.drawable.shapes.RoundRectShape
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.ColorRes
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.smwc.Activity.CompanyInfo.CompanyInfoActivity
 import com.app.smwc.Activity.MainActivity
@@ -13,8 +22,10 @@ import com.app.smwc.Common.Constant
 import com.app.smwc.Common.HELPER
 import com.app.smwc.Common.SWCApp
 import com.app.smwc.Interfaces.ListClickListener
+import com.app.smwc.R
 import com.app.smwc.databinding.FragmentHomeBinding
 import com.app.smwc.fragments.BaseFragment
+import kotlin.math.roundToInt
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>(), View.OnClickListener {
 
@@ -35,6 +46,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), View.OnClickListener {
         super.onViewCreated(view, savedInstanceState)
         app!!.observer.value = Constant.OBSERVER_HOME_FRAGMENT_VISIBLE
         initViews()
+        //wrapInCustomShadow(binding.wrapper, R.color.blue)
     }
 
     private val storeDetails: Unit
@@ -45,7 +57,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), View.OnClickListener {
                 false
             )
             val listClickListener =
-                ListClickListener { view, pos, `object` ->
+                ListClickListener { _, _, _ ->
                     val intent = Intent(act, MainActivity::class.java)
                     act.startActivity(intent)
                     HELPER.slideEnter(act)
@@ -57,6 +69,63 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), View.OnClickListener {
             )
             binding.rootRecyclerList.adapter = homeAdapter
         }
+
+
+    private fun wrapInCustomShadow(
+        view: View,
+        @ColorRes shadowColor: Int,
+    ) {
+
+        val shadowColorValue = ContextCompat.getColor(view.context, shadowColor)
+        val shapeDrawable = ShapeDrawable()
+        shapeDrawable.setTint(shadowColorValue)
+
+        val shadowBlur = view.paddingBottom - 7.toDp(resources)
+        shapeDrawable.paint.setShadowLayer(
+            shadowBlur,
+            0f,
+            0f,
+            getColorWithAlpha(shadowColorValue, 1.0f)
+        )
+        view.setLayerType(View.LAYER_TYPE_SOFTWARE, shapeDrawable.paint)
+
+        val radius = 10.toDp(view.context.resources)
+        val outerRadius = floatArrayOf(
+            radius, radius,
+            radius, radius,
+            radius, radius,
+            radius, radius
+        )
+        shapeDrawable.shape = RoundRectShape(outerRadius, null, null)
+
+        val drawable = LayerDrawable(arrayOf<Drawable>(shapeDrawable))
+        val inset = view.paddingBottom
+        drawable.setLayerInset(
+            0,
+            inset,
+            inset,
+            inset,
+            inset
+        )
+        view.background = drawable
+    }
+
+
+    private fun getColorWithAlpha(color: Int, ratio: Float): Int {
+        val alpha = (Color.alpha(color) * ratio).roundToInt()
+        val r = Color.red(color)
+        val g = Color.green(color)
+        val b = Color.blue(color)
+        return Color.argb(alpha, r, g, b)
+    }
+
+    private fun Int.toDp(resources: Resources): Float {
+        return TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            this.toFloat(),
+            resources.displayMetrics
+        )
+    }
 
     private fun initViews() {
         binding.toolbar.ivQrcode.setOnClickListener(this)

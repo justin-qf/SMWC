@@ -1,11 +1,24 @@
 package com.app.smwc.Utils;
 
+import static androidx.core.content.ContextCompat.getSystemService;
+
+import static com.app.smwc.Activity.BaseActivity.hideSoftKeyboard;
+import static com.app.smwc.Common.CodeReUse.hideKeyboard;
+
 import android.app.Activity;
+import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import com.app.smwc.Interfaces.iVerifyOTP;
+
+import com.app.smwc.Common.CodeReUse;
+
+import android.content.Context;
+import android.view.inputmethod.InputMethodManager;
+
 import com.app.smwc.R;
 
 public class GenericTextWatcher implements TextWatcher {
@@ -48,11 +61,12 @@ public class GenericTextWatcher implements TextWatcher {
                     editText[2].requestFocus();
                 if (text.length() == 1) {
                     editText[3].clearFocus();
-                    //((iVerifyOTP) act).onVerification();
+                    hideSoftKeyboard(act);
                 }
                 break;
         }
     }
+
 
     @Override
     public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {

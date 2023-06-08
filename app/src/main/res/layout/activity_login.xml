@@ -21,6 +21,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/home_complete_bg"
+                android:visibility="gone"
+                app:elevation="@dimen/_10sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <ImageView
 
                 android:id="@+id/logo"
@@ -36,6 +49,7 @@
 
             <TextView
                 style="@style/commonTextStyle"
+                android:textSize="@dimen/_9sdp"
                 android:layout_gravity="fill"
                 android:layout_marginTop="@dimen/_50sdp"
                 android:text="@string/email_mobile" />
@@ -52,14 +66,35 @@
                     android:id="@+id/emailNoEdt"
                     style="@style/CommonTextInputEditTextStyle"
                     android:layout_width="match_parent"
+                    android:textSize="@dimen/_9sdp"
                     android:layout_height="wrap_content"
                     android:hint="@string/email_mobile"
                     android:inputType="textEmailAddress" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.button.MaterialButton
+            <com.sanojpunchihewa.glowbutton.GlowButton
                 android:id="@+id/getOtpBtn"
+                android:layout_width="@dimen/_123sdp"
+                android:layout_height="@dimen/_39sdp"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:fontFamily="@font/rubik_bold"
+                android:text="@string/get_otp"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                app:buttonColor="@color/btn_colour"
+                android:textSize="@dimen/_11sdp"
+                app:cornerRadius="@dimen/_7sdp"
+                app:glowColor="@color/btn_colour"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:pressedGlowSize="@dimen/_3sdp"
+                app:unpressedGlowSize="@dimen/_3sdp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:visibility="gone"
+                android:id="@+id/getOtpBtns"
                 android:layout_width="@dimen/_120sdp"
                 android:layout_height="@dimen/_45sdp"
                 android:layout_gravity="bottom|center_horizontal"
@@ -85,7 +120,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/_20sdp"
-            android:gravity="center"
+            android:gravity="center|bottom"
             android:orientation="horizontal"
             android:paddingStart="@dimen/_25sdp"
             android:paddingEnd="@dimen/_25sdp"
@@ -98,10 +133,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_5sdp"
                 android:fontFamily="@font/rubik_regular"
-                android:includeFontPadding="false"
-                android:text="@string/have_not_account"
+                android:gravity="bottom"
+                android:text="Don't have an account?"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_11sdp"
+                android:textSize="@dimen/_10sdp"
                 app:layout_constraintBottom_toBottomOf="@+id/iv_logo"
                 app:layout_constraintStart_toEndOf="@+id/iv_logo"
                 app:layout_constraintTop_toTopOf="@+id/iv_logo" />
@@ -109,12 +144,12 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_3sdp"
+                android:layout_marginStart="@dimen/_2sdp"
                 android:fontFamily="@font/rubik_semi_bold"
                 android:includeFontPadding="false"
                 android:text="@string/sign_up_title"
                 android:textColor="@color/btn_colour"
-                android:textSize="@dimen/_12sdp"
+                android:textSize="@dimen/_13sdp"
                 android:textStyle="normal"
                 app:fontWeight="1000"
                 app:layout_constraintBottom_toBottomOf="@+id/iv_logo"

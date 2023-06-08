@@ -1,22 +1,19 @@
 package com.app.smwc.Activity.OtpActivity
 
-import android.animation.ArgbEvaluator
-import android.animation.PropertyValuesHolder
-import android.animation.ValueAnimator
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.View
 import androidx.databinding.DataBindingUtil
 import com.app.smwc.Activity.BaseActivity
+import com.app.smwc.Activity.CompanyInfo.CompanyInfoActivity
 import com.app.smwc.Activity.MainActivity
+import com.app.smwc.Common.Constant
 import com.app.smwc.Common.HELPER
 import com.app.smwc.R
 import com.app.smwc.Utils.GenericTextWatcher
 import com.app.smwc.databinding.ActivityOtpBinding
 import java.util.*
-
 
 class OtpActivity : BaseActivity(), View.OnClickListener {
 
@@ -160,15 +157,24 @@ class OtpActivity : BaseActivity(), View.OnClickListener {
     override fun onClick(view: View?) {
         when (view!!.id) {
             binding!!.toolbar.ivBack.id -> {
-
+                onBackPressed()
             }
-            binding!!.verifyCodeBtn.id->{
-                val i = Intent(act,MainActivity::class.java)
+            binding!!.verifyCodeBtn.id -> {
+                val i = Intent(act, CompanyInfoActivity::class.java)
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 startActivity(i)
                 HELPER.slideEnter(act)
             }
 
+        }
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun update(observable: Observable?, data: Any?) {
+        super.update(observable, data)
+        if (app.observer.value === Constant.OBSERVER_OTP_CONFIRMATION) {
+            HELPER.print("IsOTP", "DONE")
+            //binding!!.Profile.performClick()
         }
     }
 }

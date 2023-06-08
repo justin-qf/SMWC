@@ -173,7 +173,7 @@
                             android:singleLine="true"
                             android:text="@string/address"
                             android:textColor="@color/black"
-                            android:textSize="10.5sp"
+                            android:textSize="@dimen/_9sdp"
                             android:textStyle="normal"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"

@@ -6,8 +6,7 @@
         android:id="@+id/mainLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/_30sdp"
-        android:fillViewport="true"
+        android:fitsSystemWindows="true"
         tools:context=".Activity.SignUpActivity.SignUpActivity">
 
         <include
@@ -180,8 +179,16 @@
                         android:inputType="number" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.button.MaterialButton
+                <com.sanojpunchihewa.glowbutton.GlowButton
                     android:id="@+id/getOtpBtn"
+                    android:layout_width="@dimen/_120sdp"
+                    style="@style/commonShadowButtonStyle"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:text="@string/submit" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/getOtpBtns"
                     android:layout_width="@dimen/_120sdp"
                     android:layout_height="@dimen/_45sdp"
                     android:layout_gravity="bottom|center_horizontal"
@@ -193,6 +200,7 @@
                     android:textAllCaps="false"
                     android:textSize="@dimen/_11sdp"
                     android:translationZ="@dimen/_5sdp"
+                    android:visibility="gone"
                     app:backgroundTint="@color/btn_colour"
                     app:cornerRadius="@dimen/_7sdp" />
             </LinearLayout>

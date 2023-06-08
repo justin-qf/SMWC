@@ -29,6 +29,7 @@ import android.widget.TimePicker;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
+
 import com.app.smwc.R;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -98,6 +99,15 @@ public class CodeReUse {
 
     public static void hideKeyboard(Activity activity, View view) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    public static void hideKeyboardWithoutView(Activity act) {
+        InputMethodManager imm = (InputMethodManager) act.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        View view = act.getCurrentFocus();
+        if (view == null) {
+            view = new View(act);
+        }
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 

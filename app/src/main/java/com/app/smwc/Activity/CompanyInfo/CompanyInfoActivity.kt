@@ -1,5 +1,6 @@
 package com.app.smwc.Activity.CompanyInfo
 
+import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
 import android.util.Patterns
@@ -9,7 +10,9 @@ import android.view.WindowManager
 import androidx.databinding.DataBindingUtil
 import com.app.frimline.views.Utils
 import com.app.smwc.Activity.BaseActivity
+import com.app.smwc.Activity.MainActivity
 import com.app.smwc.Common.CodeReUse
+import com.app.smwc.Common.HELPER
 import com.app.smwc.R
 import com.app.smwc.databinding.ActivityCompanyInfoBinding
 
@@ -27,7 +30,6 @@ class CompanyInfoActivity : BaseActivity(), View.OnClickListener {
 
     private fun initView() {
 
-        setScrolView()
         binding!!.toolbar.ivBack.setOnClickListener(this)
         binding!!.getOtpBtn.setOnClickListener(this)
         binding!!.toolbar.title.text = getString(R.string.company_info_title)
@@ -48,33 +50,15 @@ class CompanyInfoActivity : BaseActivity(), View.OnClickListener {
                 onBackPressed()
             }
             binding!!.getOtpBtn.id -> {
-                validation()
+                val i = Intent(act, MainActivity::class.java)
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                startActivity(i)
+                HELPER.slideEnter(act)
+                //validation()
             }
         }
     }
 
-
-    private fun setScrolView(){
-        binding!!.scrollView.viewTreeObserver.addOnGlobalLayoutListener {
-            val r = Rect()
-            binding!!.scrollView.getWindowVisibleDisplayFrame(r)
-            val screenHeight: Int = binding!!.scrollView.rootView.height
-            val keypadHeight: Int = screenHeight - r.bottom
-            if (keypadHeight > screenHeight * 0.15) {
-                // Keyboard is showing
-                binding!!.scrollView.post(Runnable {
-                    binding!!.scrollView.smoothScrollTo(
-                        0,
-                        binding!!.scrollView.bottom
-                    )
-                })
-            } else {
-                // Keyboard is hidden
-                binding!!.scrollView.post(Runnable { binding!!.scrollView.smoothScrollTo(0, 0) })
-            }
-        }
-
-    }
     private fun validation() {
         var isError = false
         var isFocus = false
