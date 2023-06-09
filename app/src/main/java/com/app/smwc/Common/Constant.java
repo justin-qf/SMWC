@@ -5,6 +5,7 @@ public class Constant {
     public static final String CHANNEL_ID = "SMWC";
     public static final String CHANNEL_NAME = "SMWCAPP";
     public static final String CHANNEL_DESCRIPTION = "com.app.smwc";
+    public static final int PERMISSION_REQUEST_CODE = 0;
     public static final int OBSERVER_HOME_FRAGMENT_VISIBLE = 1;
     public static final int OBSERVER_HISTORY_FRAGMENT_VISIBLE = 2;
     public static final int OBSERVER_NOTIFICATION_FRAGMENT_VISIBLE = 3;

@@ -8,12 +8,8 @@ import android.os.Looper
 import android.view.animation.AnimationUtils
 import androidx.databinding.DataBindingUtil
 import com.app.frimline.views.Utils
-import com.app.smwc.Activity.CompanyInfo.CompanyInfoActivity
-import com.app.smwc.Activity.EditActivity.EditActivity
 import com.app.smwc.Activity.LoginActivity.LoginActivity
-import com.app.smwc.Activity.OtpActivity.OtpActivity
-import com.app.smwc.Activity.Profile.ProfileActivity
-import com.app.smwc.Activity.SignUpActivity.SignUpActivity
+import com.app.smwc.Activity.ScannerActivity.ScannerActivity
 import com.app.smwc.Common.HELPER
 import com.app.smwc.R
 import com.app.smwc.databinding.ActivitySplashBinding
@@ -39,13 +35,14 @@ class SplashActivity : BaseActivity() {
 
     private fun initView() {
         Handler(Looper.getMainLooper()).postDelayed({
-            val i = Intent(act,LoginActivity::class.java)
+            val i = Intent(act, LoginActivity::class.java)
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             startActivity(i)
             HELPER.slideEnter(act)
             finish()
         }, 1000)
     }
+
     private fun setAppCache(liveMode: Boolean) {
         try {
             if (liveMode) {

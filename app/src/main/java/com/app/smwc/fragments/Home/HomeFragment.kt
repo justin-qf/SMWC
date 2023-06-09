@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.smwc.Activity.CompanyInfo.CompanyInfoActivity
 import com.app.smwc.Activity.MainActivity
 import com.app.smwc.Activity.OtpActivity.OtpActivity
+import com.app.smwc.Activity.ScannerActivity.ScannerActivity
 import com.app.smwc.Common.Constant
 import com.app.smwc.Common.HELPER
 import com.app.smwc.Common.SWCApp
@@ -130,16 +131,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), View.OnClickListener {
     private fun initViews() {
         binding.toolbar.ivQrcode.setOnClickListener(this)
         binding.toolbar.ivQrcode.setOnClickListener {
-            val i = Intent(act, CompanyInfoActivity::class.java)
-            //i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            val i = Intent(act, ScannerActivity::class.java)
             startActivity(i)
             HELPER.slideEnter(act)
         }
         binding.toolbar.ivProfile.setOnClickListener {
-//            val i = Intent(act, OtpActivity::class.java)
-//            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-//            startActivity(i)
-//            HELPER.slideEnter(act)
             app!!.observer.value = Constant.OBSERVER_PROFILE_VISIBLE_FROM_HOME
         }
         storeDetails

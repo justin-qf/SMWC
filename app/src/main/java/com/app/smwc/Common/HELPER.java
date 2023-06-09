@@ -558,28 +558,28 @@ public class HELPER {
         /* overridePendingTransition(R.anim.right_enter, R.anim.left_out)*/
     }
 
-    public static void LogoutNewDesign(Activity act, String userId) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(act, R.style.RoundShapeTheme);
-        final View customLayout = act.getLayoutInflater().inflate(R.layout.logout_dialog, null);
-        TextView loggedUserId = customLayout.findViewById(R.id.userId);
-        AppCompatButton cancelBtn = customLayout.findViewById(R.id.btnDialogCancel);
-        AppCompatButton logoutBtn = customLayout.findViewById(R.id.btnDialogLogout);
-        loggedUserId.setText(userId);
-        builder.setView(customLayout);
-        AlertDialog dialog = builder.create();
-        dialog.getWindow().setBackgroundDrawableResource(R.color.transparent_color);
-        dialog.setCancelable(false);
-        dialog.show();
-        cancelBtn.setOnClickListener(view -> dialog.dismiss());
-        logoutBtn.setOnClickListener(view -> {
-            new Pref(act).Logout();
-            Intent i = new Intent(act, MainActivity.class);
-            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            act.startActivity(i);
-            act.finish();
-            slideEnter(act);
-        });
-    }
+//    public static void LogoutNewDesign(Activity act, String userId) {
+//        AlertDialog.Builder builder = new AlertDialog.Builder(act, R.style.RoundShapeTheme);
+//        final View customLayout = act.getLayoutInflater().inflate(R.layout.logout_dialog, null);
+//        TextView loggedUserId = customLayout.findViewById(R.id.userId);
+//        AppCompatButton cancelBtn = customLayout.findViewById(R.id.btnDialogCancel);
+//        AppCompatButton logoutBtn = customLayout.findViewById(R.id.btnDialogLogout);
+//        loggedUserId.setText(userId);
+//        builder.setView(customLayout);
+//        AlertDialog dialog = builder.create();
+//        dialog.getWindow().setBackgroundDrawableResource(R.color.transparent_color);
+//        dialog.setCancelable(false);
+//        dialog.show();
+//        cancelBtn.setOnClickListener(view -> dialog.dismiss());
+//        logoutBtn.setOnClickListener(view -> {
+//            new Pref(act).Logout();
+//            Intent i = new Intent(act, MainActivity.class);
+//            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//            act.startActivity(i);
+//            act.finish();
+//            slideEnter(act);
+//        });
+//    }
 
     public static void logoutDialog(Activity act, Boolean isLogout, String email) {
         DialogToast dialogPermission = new DialogToast(act);

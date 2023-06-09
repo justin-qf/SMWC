@@ -3,15 +3,10 @@ package com.app.omcsalesapp.Common;
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
-import android.content.Intent
 import android.content.res.Resources
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.net.Uri
 import android.os.Build
-import android.os.Handler
-import android.os.Looper
-import android.provider.Settings
 import android.text.InputFilter
 import android.util.DisplayMetrics
 import android.util.Patterns
@@ -22,6 +17,7 @@ import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.HorizontalScrollView
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatButton
 import com.app.omcsalesapp.Views.DialogToast
 import com.app.smwc.Common.HELPER
 import com.app.smwc.R
@@ -70,6 +66,24 @@ class PubFun {
             return parsedDate
         }
 
+        fun permissionDialog(act: Activity, userId: String?, listener: () -> Unit) {
+            val builder = AlertDialog.Builder(act, R.style.RoundShapeTheme)
+            val customLayout = act.layoutInflater.inflate(R.layout.logout_dialog, null)
+            val loggedUserId = customLayout.findViewById<TextView>(R.id.userId)
+            val cancelBtn = customLayout.findViewById<AppCompatButton>(R.id.btnDialogCancel)
+            val logoutBtn = customLayout.findViewById<AppCompatButton>(R.id.btnDialogLogout)
+            loggedUserId.text = userId
+            builder.setView(customLayout)
+            val dialog = builder.create()
+            dialog.window!!.setBackgroundDrawableResource(R.color.transparent_color)
+            dialog.setCancelable(false)
+            dialog.show()
+            cancelBtn.setOnClickListener { view: View? -> dialog.dismiss() }
+            logoutBtn.setOnClickListener { view: View? ->
+                listener()
+                dialog.dismiss()
+            }
+        }
 
         fun getList(list: ArrayList<Long>): String {
             var listId = ""

@@ -4,7 +4,7 @@
     <string name="dashboard">Dashboard</string>
 
     <!-- Login text-->
-  <!--  <string name="have_not_account">Don't have an account?</string>-->
+    <!--  <string name="have_not_account">Don't have an account?</string>-->
 
     <!--Internet Connection text-->
     <string name="title">Connection Status</string>
