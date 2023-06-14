@@ -279,6 +279,12 @@ public class HELPER {
         imgView.setColorFilter(ContextCompat.getColor(context,
                 R.color.white));
     }
+
+    public static void setLayoutBgColour(ConstraintLayout layout, Context context) {
+        layout.setBackgroundColor(ContextCompat.getColor(context,
+                R.color.black));
+    }
+
     public static LinearLayout.LayoutParams setTextMargin(int left, int right, int top, int bottom, TextView textView) {
         LinearLayout.LayoutParams parameter = (LinearLayout.LayoutParams) textView.getLayoutParams();
         parameter.setMargins(left, top, right, bottom); // left, top, right, bottom
@@ -289,71 +295,6 @@ public class HELPER {
         LinearLayout.LayoutParams parameter = (LinearLayout.LayoutParams) TextInputLayout.getLayoutParams();
         parameter.setMargins(left, top, right, bottom); // left, top, right, bottom
         return parameter;
-    }
-
-    public static void DatePicker(Activity act, TextInputEditText editText) {
-        Pref f = new Pref(act);
-        int selectedDate = f.getDay();
-        int selectedMonth = f.getMonth();
-        int selectedYear = f.getYear();
-        DatePickerDialog picker;
-        final Calendar cldr = Calendar.getInstance();
-        int day = cldr.get(Calendar.DAY_OF_MONTH);
-        int month = cldr.get(Calendar.MONTH);
-        int year = cldr.get(Calendar.YEAR);
-
-        picker = new DatePickerDialog(act,
-                new DatePickerDialog.OnDateSetListener() {
-                    @SuppressLint("SetTextI18n")
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        Pref f = new Pref(act);
-                        f.setDay(dayOfMonth);
-                        f.setMonth(month);
-                        f.setYear(year);
-                        month = (month + 1);
-                        String dateStr = "";
-                        String monthStr = "";
-                        if (dayOfMonth < 10) {
-                            dateStr = "0" + dayOfMonth;
-                        } else {
-                            dateStr = String.valueOf(dayOfMonth);
-                        }
-
-                        if (month < 10) {
-                            monthStr = "0" + month;
-                        } else {
-                            monthStr = String.valueOf(month);
-                        }
-
-                        @SuppressLint("SimpleDateFormat") SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
-                        @SuppressLint("SimpleDateFormat") SimpleDateFormat fmt = new SimpleDateFormat("dd-MM-yyyy");
-                        String currentDateandTime = formatDate(sd.format(new Date()));
-                        editText.setText(dateStr + "-" + monthStr + "-" + year);
-//
-//                        if (compareDate(currentDateandTime, (dateStr + "-" + monthStr + "-" + year))) {
-////                            if (f.getDay() != 0) {
-////                                dateStr = String.valueOf(f.getDay());
-////                            }
-////                            if (f.getMonth() != 0) {
-////                                monthStr = String.valueOf(f.getMonth());
-////                            }
-////                            if (f.getYear() != 0) {
-////                                year = f.getYear();
-////                            }
-//                            editText.setText(dateStr + "-" + monthStr + "-" + year);
-//                        } else {
-//                            Toast.makeText(act, "Please choose valid date", Toast.LENGTH_SHORT).show();
-//                        }
-
-                        Log.e("SELECT_DATE", dateStr + "-" + monthStr + "-" + year);
-                    }
-                }, year, month, day);
-        //}, selectedYear != 0 ? selectedYear : year, selectedMonth != 0 ? selectedMonth : month, selectedDate != 0 ? selectedDate : day);
-
-        picker.getDatePicker().setCalendarViewShown(false);
-        picker.getDatePicker().setSpinnersShown(true);
-        picker.show();
     }
 
     public static boolean compareDate(String fromDate, String toDate) {

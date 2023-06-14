@@ -26,7 +26,6 @@ class MainActivity : BaseActivity(), View.OnClickListener {
     private var imageViewArray: ArrayList<ImageView>? = null
     private var localFragmentCalled: Fragment? = null
     private var currentFragmentVisible = 0
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(act, R.layout.activity_main)

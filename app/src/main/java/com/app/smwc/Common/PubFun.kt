@@ -7,6 +7,9 @@ import android.content.res.Resources
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
+import android.os.CountDownTimer
+import android.os.Handler
+import android.os.Looper
 import android.text.InputFilter
 import android.util.DisplayMetrics
 import android.util.Patterns
@@ -16,17 +19,19 @@ import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.HorizontalScrollView
+import android.widget.ImageView
+import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
+import androidx.core.content.res.ResourcesCompat
 import com.app.omcsalesapp.Views.DialogToast
-import com.app.smwc.Common.HELPER
+import com.app.smwc.Common.Constant
 import com.app.smwc.R
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textview.MaterialTextView
 import java.text.NumberFormat
-import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.concurrent.ExecutionException
 
 
 class PubFun {
@@ -47,25 +52,6 @@ class PubFun {
 
         var numFormatNew: NumberFormat = NumberFormat.getCurrencyInstance(Locale("en", "IN"))
 
-        fun formatDate(
-            date: String, initDateFormat: String,
-            endDateFormat: String
-        ): String? {
-            var parsedDate: String? = null
-            val initDate: Date
-            try {
-                initDate = SimpleDateFormat(initDateFormat, Locale.getDefault()).parse(date)
-                val formatter = SimpleDateFormat(endDateFormat, Locale.getDefault())
-                parsedDate = formatter.format(initDate)
-
-            } catch (e: Exception) {
-                e.printStackTrace()
-                return ""
-            }
-
-            return parsedDate
-        }
-
         fun permissionDialog(act: Activity, userId: String?, listener: () -> Unit) {
             val builder = AlertDialog.Builder(act, R.style.RoundShapeTheme)
             val customLayout = act.layoutInflater.inflate(R.layout.logout_dialog, null)
@@ -85,6 +71,151 @@ class PubFun {
             }
         }
 
+        fun qrRedirectDialog(
+            act: Activity,
+            mainMessage: String?,
+            isText: Boolean?,
+            openListener: () -> Unit,
+            copyListener: () -> Unit,
+            closeListener: () -> Unit
+        ) {
+            val builder = AlertDialog.Builder(act, R.style.RoundShapeTheme)
+            val customLayout = act.layoutInflater.inflate(R.layout.common_dialog_layout, null)
+            val loggedUserId = customLayout.findViewById<TextView>(R.id.userId)
+            val closeLayout = customLayout.findViewById<ImageView>(R.id.close)
+            val title = customLayout.findViewById<MaterialTextView>(R.id.tvDialogTitle)
+            val cancelBtn = customLayout.findViewById<AppCompatButton>(R.id.btnDialogCancel)
+            val logoutBtn = customLayout.findViewById<AppCompatButton>(R.id.btnDialogLogout)
+            if (isText == true) {
+                cancelBtn.visibility = View.GONE
+            } else {
+                cancelBtn.visibility = View.VISIBLE
+            }
+            loggedUserId.text = mainMessage
+            title.text = act.getString(R.string.scan_result)
+            cancelBtn.text =
+                if (isText == true) act.getString(R.string.close) else act.getString(R.string.copy)
+            logoutBtn.text =
+                if (isText == true) act.getString(R.string.copy) else act.getString(R.string.open)
+            builder.setView(customLayout)
+            val dialog = builder.create()
+            dialog.window!!.setBackgroundDrawableResource(R.color.transparent_color)
+            dialog.setCancelable(false)
+            dialog.show()
+            closeLayout.setOnClickListener {
+                closeListener()
+                dialog.dismiss()
+            }
+            cancelBtn.setOnClickListener {
+                copyListener()
+                dialog.dismiss()
+            }
+            logoutBtn.setOnClickListener {
+                openListener()
+                dialog.dismiss()
+            }
+        }
+
+        fun getImageDialog(
+            act: Activity,
+            cameraListener: () -> Unit,
+            galleryListener: () -> Unit
+        ) {
+            val builder = AlertDialog.Builder(act, R.style.RoundShapeTheme)
+            val customLayout = act.layoutInflater.inflate(R.layout.common_dialog_layout, null)
+            val closeLayout = customLayout.findViewById<ImageView>(R.id.close)
+            val loggedUserId = customLayout.findViewById<TextView>(R.id.userId)
+            val title = customLayout.findViewById<MaterialTextView>(R.id.tvDialogTitle)
+            val cancelBtn = customLayout.findViewById<AppCompatButton>(R.id.btnDialogCancel)
+            val logoutBtn = customLayout.findViewById<AppCompatButton>(R.id.btnDialogLogout)
+            loggedUserId.text = act.getString(R.string.chooseSource)
+            title.text = act.getString(R.string.choose)
+            cancelBtn.text =
+                act.getString(R.string.camera)
+            logoutBtn.text =
+                act.getString(R.string.gallery)
+            builder.setView(customLayout)
+            val dialog = builder.create()
+            dialog.window!!.setBackgroundDrawableResource(R.color.transparent_color)
+            dialog.setCancelable(false)
+            dialog.show()
+            cancelBtn.setOnClickListener {
+                cameraListener()
+                dialog.dismiss()
+            }
+            logoutBtn.setOnClickListener {
+                galleryListener()
+                dialog.dismiss()
+            }
+            closeLayout.setOnClickListener {
+                dialog.dismiss()
+            }
+        }
+
+        fun logoutDialog(
+            act: Activity?,
+            clickListener: () -> Unit,
+        ) {
+            val builder = AlertDialog.Builder(act, R.style.RoundShapeTheme)
+            val customLayout = act!!.layoutInflater.inflate(R.layout.logout_dialog, null)
+            val loggedUserId = customLayout.findViewById<TextView>(R.id.userId)
+            val title = customLayout.findViewById<MaterialTextView>(R.id.tvDialogTitle)
+            val cancelBtn = customLayout.findViewById<AppCompatButton>(R.id.btnDialogCancel)
+            val logoutBtn = customLayout.findViewById<AppCompatButton>(R.id.btnDialogLogout)
+            loggedUserId.text = act.getString(R.string.logoutMessage)
+            title.text = act.getString(R.string.logout)
+            cancelBtn.text = act.getString(R.string.cancel)
+            logoutBtn.text = act.getString(R.string.ok)
+            builder.setView(customLayout)
+            val dialog = builder.create()
+            dialog.window!!.setBackgroundDrawableResource(R.color.transparent_color)
+            dialog.setCancelable(false)
+            dialog.show()
+            cancelBtn.setOnClickListener {
+                dialog.dismiss()
+            }
+            logoutBtn.setOnClickListener {
+                clickListener()
+                dialog.dismiss()
+            }
+        }
+
+        fun commonDialog(
+            act: Activity?,
+            dialogTitle: String?,
+            message: String?,
+            isError: Boolean?,
+            clickListener: () -> Unit,
+        ) {
+            val builder = AlertDialog.Builder(act, R.style.RoundShapeTheme)
+            val customLayout = act!!.layoutInflater.inflate(R.layout.logout_dialog, null)
+            val loggedUserId = customLayout.findViewById<TextView>(R.id.userId)
+            val title = customLayout.findViewById<MaterialTextView>(R.id.tvDialogTitle)
+            val cancelBtn = customLayout.findViewById<AppCompatButton>(R.id.btnDialogCancel)
+            val logoutBtn = customLayout.findViewById<AppCompatButton>(R.id.btnDialogLogout)
+            loggedUserId.text = message
+            title.text = dialogTitle
+            cancelBtn.visibility = View.GONE
+            logoutBtn.visibility = View.GONE
+            builder.setView(customLayout)
+            val dialog = builder.create()
+            dialog.window!!.setBackgroundDrawableResource(R.color.transparent_color)
+            dialog.setCancelable(false)
+            dialog.show()
+            object : CountDownTimer(
+                if (isError == true) Constant.autoDialogDismissTimeInMlSecLow.toLong() else Constant.autoDialogDismissTimeInMlSec.toLong(),
+                1000
+            ) {
+                override fun onTick(millisUntilFinished: Long) {}
+                override fun onFinish() {
+                    if (dialog.isShowing) {
+                        clickListener()
+                        dialog.dismiss()
+                    }
+                }
+            }.start()
+        }
+
         fun getList(list: ArrayList<Long>): String {
             var listId = ""
             return if (list.isEmpty()) {
@@ -96,7 +227,6 @@ class PubFun {
                 listId.removePrefix(",")
             }
         }
-
 
         fun removeSpaceFromText(text: String): String {
             return text.replace(" ", "").trim().lowercase()
@@ -110,7 +240,6 @@ class PubFun {
             val dialogPermission = DialogToast(act)
             dialogPermission.show()
             dialogPermission.holder!!.messageLayout.visibility = View.VISIBLE
-
             dialogPermission.holder!!.bottomBtnLayout.visibility = View.VISIBLE
             dialogPermission.holder!!.btnDialogGet.visibility = View.GONE
             Objects.requireNonNull(dialogPermission.holder)!!.btnDialogCancel.setOnClickListener { dialogPermission.dismiss() }
@@ -120,193 +249,44 @@ class PubFun {
             }
         }
 
-        fun getCurrentDate(): String? {
-            val formatter = SimpleDateFormat("yyyy-MM-dd")
-            return formatter.format(Date())
-        }
-
-        fun getCurrentWithDate(): String? {
-            val formatter = SimpleDateFormat("dd-MM-yyyy")
-            return formatter.format(Date())
-        }
-
-        fun getCurrentApiPassDate(): String? {
-            val formatter = SimpleDateFormat("dd-MM-yyyy")
-            return formatter.format(Date())
-        }
-
-        fun getTotalAmount(
-            packageAmountEdt: TextInputEditText,
-            otiChangeEdt: TextInputEditText
-        ): Int {
-            var totalAmount: Int = 0
-            try {
-                if (packageAmountEdt.text.toString()
-                        .isNotEmpty() && packageAmountEdt.text.toString()
-                        .toInt() != 0 && otiChangeEdt.text.toString()
-                        .isNotEmpty() && otiChangeEdt.text.toString().toInt() != 0
-                ) {
-                    totalAmount = (packageAmountEdt.text.toString()
-                        .toInt()).plus((otiChangeEdt.text.toString().toInt())) * 100
-                } else if (packageAmountEdt.text.toString()
-                        .isEmpty() && otiChangeEdt.text.toString()
-                        .isNotEmpty() && otiChangeEdt.text.toString().toInt() != 0
-                ) {
-                    totalAmount = otiChangeEdt.text.toString().toInt() * 100
-                } else if (packageAmountEdt.text.toString()
-                        .isNotEmpty() && packageAmountEdt.text.toString()
-                        .toInt() != 0 && otiChangeEdt.text.toString()
-                        .isEmpty()
-                ) {
-                    totalAmount = packageAmountEdt.text.toString().toInt() * 100
-                } else {
-                    totalAmount = 1 * 100
-                }
-            } catch (e: ExecutionException) {
-                e.printStackTrace()
-            }
-            return totalAmount
-        }
-
-
-        fun getTotalByListAmount(
-            packageAmountEdt: Int,
-            otiChangeEdt: Int
-        ): Int {
-            var totalAmount: Int = 0
-            try {
-                if (packageAmountEdt != null && packageAmountEdt.toString()
-                        .isNotEmpty() && otiChangeEdt != null && otiChangeEdt.toString()
-                        .isNotEmpty()
-                ) {
-                    totalAmount = (packageAmountEdt.toString()
-                        .toInt()).plus((otiChangeEdt.toString().toInt()))
-                } else if (packageAmountEdt != null && packageAmountEdt.toString()
-                        .isEmpty() && otiChangeEdt != null && otiChangeEdt.toString()
-                        .isNotEmpty()
-                ) {
-                    totalAmount = otiChangeEdt
-                } else if (packageAmountEdt != null && packageAmountEdt.toString()
-                        .isNotEmpty() && otiChangeEdt != null && otiChangeEdt.toString()
-                        .isEmpty()
-                ) {
-                    totalAmount = packageAmountEdt.toString().toInt()
-                } else {
-                    totalAmount = 0
-                }
-            } catch (e: ExecutionException) {
-                e.printStackTrace()
-            }
-            return totalAmount
-        }
-
-        fun addDate(): String {
-            val date = Date()
-            var df = SimpleDateFormat("dd-MM-yyyy")
-            val c1 = Calendar.getInstance()
-            val currentDate = df.format(date) // get current date here
-            // now add 30 day in Calendar instance
-            c1.add(Calendar.DAY_OF_YEAR, 30)
-            df = SimpleDateFormat("dd-MM-yyyy")
-            val resultDate = c1.time
-            val dueDate = df.format(resultDate)
-            // print the result
-            HELPER.print("CurrentDate::", currentDate)
-            HELPER.print("DueDate::", dueDate)
-            return dueDate
-        }
-
-        fun addPassingDate(currentDate: String, addDay: String): String {
-
-            var sdf = SimpleDateFormat("dd-MM-yyyy")
-            val c = Calendar.getInstance()
-            val date = Date()
-            val currentDates = sdf.format(date)
-            try {
-                if (currentDate.isNotEmpty()) {
-                    c.time = sdf.parse(currentDate)
-                } else {
-                    c.time = sdf.parse(currentDates)
-                }
-            } catch (e: ParseException) {
-                e.printStackTrace()
-            }
-            if (addDay.isNotEmpty()) {
-                c.add(Calendar.DAY_OF_YEAR, addDay.toInt())
-            } else {
-                c.add(Calendar.DAY_OF_YEAR, 30)
-            }
-            sdf = SimpleDateFormat("dd-MM-yyyy")
-            val resultDate = c.time
-            val dueDate = sdf.format(resultDate)
-
-            HELPER.print("DueDate::", dueDate)
-            return dueDate
-        }
-
-        fun getTotalByLayoutAmount(
-            packageAmountEdt: TextInputEditText,
-            otiChangeEdt: TextInputEditText
-        ): Int {
-            var totalAmount: Int = 0
-            try {
-                if (packageAmountEdt.text != null && packageAmountEdt.text.toString()
-                        .isNotEmpty() && otiChangeEdt.text != null && otiChangeEdt.text.toString()
-                        .isNotEmpty()
-                ) {
-                    totalAmount = (packageAmountEdt.text.toString()
-                        .toInt()).plus((otiChangeEdt.text.toString().toInt()))
-                } else if (packageAmountEdt.text != null && packageAmountEdt.text.toString()
-                        .isEmpty() && otiChangeEdt.text != null && otiChangeEdt.text.toString()
-                        .isNotEmpty()
-                ) {
-                    totalAmount = otiChangeEdt.text.toString().toInt()
-                } else if (packageAmountEdt.text != null && packageAmountEdt.text.toString()
-                        .isNotEmpty() && otiChangeEdt.text != null && otiChangeEdt.text.toString()
-                        .isEmpty()
-                ) {
-                    totalAmount = packageAmountEdt.text.toString().toInt()
-                } else {
-                    totalAmount = 0
-                }
-            } catch (e: ExecutionException) {
-                e.printStackTrace()
-            }
-            return totalAmount
-        }
-
         fun apiResponseErrorDialog(
             act: Activity?,
             title: String?,
             msg: String?,
+            isMessage: Boolean?,
             listener: () -> Unit
         ) {
-            val dialogPermission = DialogToast(act!!)
+            try {
+                val dialogPermission = DialogToast(act!!)
 
-            if (dialogPermission != null && dialogPermission.isShowing) {
-                return
-            }
-            if (act != null && !dialogPermission.isShowing) {
-                dialogPermission.show()
-            }
+                if (dialogPermission != null && dialogPermission.isShowing) {
+                    return
+                }
+                if (act != null && !dialogPermission.isShowing) {
+                    dialogPermission.show()
+                }
+                dialogPermission.holder!!.tvTitle.text = title
+                dialogPermission.holder!!.okBtn.visibility = View.VISIBLE
+                dialogPermission.holder!!.messageLayout.visibility = View.VISIBLE
+                dialogPermission.holder!!.btnDialogLogout.visibility = View.GONE
+                dialogPermission.holder!!.btnDialogCancel.visibility = View.GONE
+                dialogPermission.holder!!.tvMessage.text = msg
+                dialogPermission.holder!!.tvMessage.gravity = Gravity.CENTER
+                dialogPermission.holder!!.bottomBtnLayout.visibility = View.VISIBLE
+                dialogPermission.holder!!.btnDialogGet.visibility = View.GONE
+                dialogPermission.holder!!.btnDialogLogout.setText(R.string.delete)
+                dialogPermission.holder!!.okBtn.setOnClickListener {
+                    dialogPermission.dismiss()
+                    listener()
+                }
+                if (isMessage == true)
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        dialogPermission.dismiss()
+                    }, 3000)
 
-            dialogPermission.holder!!.tvTitle.text = title
-            dialogPermission.holder!!.okBtn.visibility = View.VISIBLE
-            dialogPermission.holder!!.messageLayout.visibility = View.VISIBLE
-            dialogPermission.holder!!.btnDialogLogout.visibility = View.GONE
-            dialogPermission.holder!!.btnDialogCancel.visibility = View.GONE
-            dialogPermission.holder!!.tvMessage.text = msg
-            dialogPermission.holder!!.tvMessage.gravity = Gravity.CENTER
-            dialogPermission.holder!!.bottomBtnLayout.visibility = View.VISIBLE
-            dialogPermission.holder!!.btnDialogGet.visibility = View.GONE
-            dialogPermission.holder!!.btnDialogLogout.setText(R.string.delete)
-            dialogPermission.holder!!.okBtn.setOnClickListener {
-                dialogPermission.dismiss()
-                listener()
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
-//            Handler(Looper.getMainLooper()).postDelayed({
-//                dialogPermission.dismiss()
-//            }, 2500)
         }
 
         fun showDialog(context: Activity, title: String, msg: String, listener: () -> Unit) {
@@ -367,45 +347,11 @@ class PubFun {
             }
         }
 
-        fun getSendDateFormat(date: String): String {
-            var senDate = Date()
-            var temDate = ""
-            val input = SimpleDateFormat("dd MMM yyyy")
-            val output = SimpleDateFormat("dd/MM/yyyy")
-            try {
-                senDate = input.parse(date) // parse input
-                temDate = (output.format(senDate)) // format output
-            } catch (e: ParseException) {
-                e.printStackTrace()
-            }
-
-            return date
-        }
-
         fun isNull(str: String?, defStr: String): String {
             if (str != null && str.isNotBlank()) {
                 return str
             }
             return defStr
-        }
-
-        fun addTimeInCurrentTime(
-            returnDateFormat: SimpleDateFormat,
-            type: Int,
-            timeValue: Int
-        ): String {
-            try {
-                val cal = Calendar.getInstance()
-                cal.add(type, timeValue)
-                return returnDateFormat
-                    .format(
-                        SimpleDateFormat("EEE MMM dd HH:mm:ss", Locale.getDefault())
-                            .parse(cal.time.toString())
-                    )
-            } catch (e: Exception) {
-                e.printStackTrace()
-                return ""
-            }
         }
 
         fun parseDate(

@@ -34,8 +34,8 @@
                 android:gravity="center"
                 app:cardCornerRadius="@dimen/_14sdp"
                 app:cardElevation="@dimen/_3sdp"
-                app:cardUseCompatPadding="true"
                 app:cardPreventCornerOverlap="true"
+                app:cardUseCompatPadding="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent">
@@ -48,10 +48,8 @@
 
                     <LinearLayout
                         android:id="@+id/Home"
-                        android:layout_width="wrap_content"
+                        android:layout_width="@dimen/_40sdp"
                         android:layout_height="match_parent"
-                        android:layout_marginStart="@dimen/_12sdp"
-                        android:layout_marginEnd="@dimen/_5sdp"
                         android:gravity="center"
                         android:orientation="vertical"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -79,9 +77,9 @@
 
                     <LinearLayout
                         android:id="@+id/History"
-                        android:layout_width="wrap_content"
+                        android:layout_width="@dimen/_40sdp"
                         android:layout_height="match_parent"
-                        android:layout_marginStart="@dimen/_50sdp"
+                        android:layout_marginStart="@dimen/_25sdp"
                         android:gravity="center"
                         android:orientation="vertical"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -106,9 +104,9 @@
 
                     <LinearLayout
                         android:id="@+id/Notification"
-                        android:layout_width="0dp"
+                        android:layout_width="@dimen/_40sdp"
                         android:layout_height="match_parent"
-                        android:layout_marginEnd="@dimen/_50sdp"
+                        android:layout_marginEnd="@dimen/_30sdp"
                         android:layout_weight="1"
                         android:gravity="center"
                         android:orientation="vertical"
@@ -133,9 +131,8 @@
 
                     <LinearLayout
                         android:id="@+id/Profile"
-                        android:layout_width="wrap_content"
+                        android:layout_width="@dimen/_40sdp"
                         android:layout_height="match_parent"
-                        android:layout_marginEnd="@dimen/_12sdp"
                         android:layout_weight="1"
                         android:gravity="center"
                         android:orientation="vertical"

@@ -7,6 +7,8 @@
         android:id="@+id/mainLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:descendantFocusability="beforeDescendants"
+        android:focusableInTouchMode="true"
         android:background="@color/colorPrimaryDark"
         tools:context=".Activity.OtpActivity.OtpActivity">
 
@@ -31,7 +33,6 @@
                 android:fontFamily="@font/rubik_regular"
                 android:gravity="center"
                 android:includeFontPadding="false"
-                android:text="@string/sent_otp"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_12sdp" />
 

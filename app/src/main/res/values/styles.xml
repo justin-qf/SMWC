@@ -88,6 +88,7 @@
     <style name="CommonInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="boxStrokeColor">@color/colorPrimary</item>
         <item name="boxCornerRadiusTopStart">@dimen/_7sdp</item>
+        <item name="android:layout_marginBottom">@dimen/_5sdp</item>
         <item name="hintTextColor">@color/grayTextColor</item>
         <item name="android:layout_marginTop">@dimen/_5sdp</item>
         <item name="boxCornerRadiusTopEnd">@dimen/_7sdp</item>

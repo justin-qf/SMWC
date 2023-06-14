@@ -1,25 +1,33 @@
 package com.app.smwc.Activity.CompanyInfo
 
 import android.content.Intent
-import android.graphics.Rect
 import android.os.Bundle
 import android.util.Patterns
 import android.view.View
-import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.view.WindowManager
+import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import com.app.frimline.views.Utils
+import com.app.omcsalesapp.Common.PubFun
 import com.app.smwc.Activity.BaseActivity
+import com.app.smwc.Activity.LoginActivity.LoginActivity
 import com.app.smwc.Activity.MainActivity
 import com.app.smwc.Common.CodeReUse
+import com.app.smwc.Common.Constant
 import com.app.smwc.Common.HELPER
 import com.app.smwc.R
 import com.app.smwc.databinding.ActivityCompanyInfoBinding
+import com.app.ssn.Utils.Loader
+import com.app.ssn.Utils.NetworkResult
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class CompanyInfoActivity : BaseActivity(), View.OnClickListener {
 
     private var binding: ActivityCompanyInfoBinding? = null
+    private val addCompanyViewModel: CompanyInfoViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(act, R.layout.activity_company_info)
@@ -31,6 +39,8 @@ class CompanyInfoActivity : BaseActivity(), View.OnClickListener {
     private fun initView() {
 
         binding!!.toolbar.ivBack.setOnClickListener(this)
+        binding!!.toolbar.skip.visibility = View.VISIBLE
+        binding!!.toolbar.skip.setOnClickListener(this)
         binding!!.getOtpBtn.setOnClickListener(this)
         binding!!.toolbar.title.text = getString(R.string.company_info_title)
         act.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
@@ -42,6 +52,7 @@ class CompanyInfoActivity : BaseActivity(), View.OnClickListener {
         CodeReUse.RemoveError(binding!!.companyAddressEdt, binding!!.companyAddressLayout)
         CodeReUse.RemoveError(binding!!.companyCityEdt, binding!!.companyCityLayout)
         CodeReUse.RemoveError(binding!!.zipCodeLayoutEdt, binding!!.zipCodeLayout)
+        addCompanyResponse()
     }
 
     override fun onClick(view: View?) {
@@ -50,14 +61,105 @@ class CompanyInfoActivity : BaseActivity(), View.OnClickListener {
                 onBackPressed()
             }
             binding!!.getOtpBtn.id -> {
+                validation()
+            }
+            binding!!.toolbar.skip.id -> {
                 val i = Intent(act, MainActivity::class.java)
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 startActivity(i)
                 HELPER.slideEnter(act)
-                //validation()
             }
         }
     }
+
+    private fun addCompanyResponse() {
+        try {
+            addCompanyViewModel.companyResponseLiveData.observe(this) {
+                when (it) {
+                    is NetworkResult.Success -> {
+                        Loader.hideProgress()
+                        HELPER.print("GetOtpResponse::", gson.toJson(it.data!!))
+                        if (it.data.status == 1 && it.data.message!!.isNotEmpty()) {
+                            PubFun.commonDialog(
+                                act,
+                                getString(R.string.company_info_title),
+                                it.data.message!!.ifEmpty { "Server Error" },
+                                false,
+                                clickListener = {
+                                    val i = Intent(act, MainActivity::class.java)
+                                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                                    startActivity(i)
+                                    HELPER.slideEnter(act)
+                                })
+
+                        } else if (it.data.status == 2) {
+                            PubFun.commonDialog(
+                                act,
+                                getString(R.string.company_info_title),
+                                it.data.message!!.ifEmpty { "Server Error" },
+                                false,
+                                clickListener = {
+                                    prefManager.Logout()
+                                    val i = Intent(act, LoginActivity::class.java)
+                                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                                    act.startActivity(i)
+                                    act.finish()
+                                    HELPER.slideEnter(act)
+                                })
+                        } else {
+                            PubFun.commonDialog(
+                                act,
+                                getString(R.string.company_info_title),
+                                it.data.message!!.ifEmpty { "Server Error" },
+                                false,
+                                clickListener = {
+                                })
+                        }
+                    }
+                    is NetworkResult.Error -> {
+                        Loader.hideProgress()
+                        PubFun.commonDialog(
+                            act,
+                            getString(R.string.company_info_title),
+                            getString(
+                                R.string.errorMessage
+                            ),
+                            false,
+                            clickListener = {
+                            })
+                        HELPER.print("Network", "Error")
+                    }
+                    is NetworkResult.Loading -> {
+                        Loader.showProgress(act)
+                        HELPER.print("Network", "loading")
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun apiCall() {
+        if (Utils.hasNetwork(act)) {
+            Loader.showProgress(act)
+            val addCompanyParam = CompanyData(
+                address = binding!!.companyAddressEdt.text.toString(),
+                city = binding!!.companyCityEdt.text.toString().trim(),
+                name = binding!!.companyNameEdt.text.toString().trim(),
+                zipcode = binding!!.zipCodeLayoutEdt.text.toString().trim(),
+                mobile = binding!!.companyMobileEdt.text.toString().trim(),
+                email = binding!!.companyEmailEdt.text.toString().trim(),
+            )
+            addCompanyViewModel.addCompany(
+                addCompanyParam,
+                if (prefManager.getUser()!!.token!!.isNotEmpty()) "Bearer " + prefManager.getUser()!!.token!! else ""
+            )
+        } else {
+            HELPER.commonDialog(act, Constant.NETWORK_ERROR_MESSAGE)
+        }
+    }
+
 
     private fun validation() {
         var isError = false
@@ -134,10 +236,8 @@ class CompanyInfoActivity : BaseActivity(), View.OnClickListener {
                 isFocus = true
             }
         }
-
         if (!isError) {
-            //Loader.showProgress(act)
+            apiCall()
         }
     }
-
 }

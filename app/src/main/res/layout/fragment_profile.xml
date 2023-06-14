@@ -56,15 +56,14 @@
                             android:id="@+id/toolbar"
                             layout="@layout/profile_toolbar" />
 
-                        <ImageView
+                        <de.hdodenhof.circleimageview.CircleImageView
                             android:id="@+id/iv_edit_profile"
                             android:layout_width="@dimen/_45sdp"
                             android:layout_height="@dimen/_45sdp"
                             android:layout_gravity="center"
                             android:layout_marginTop="@dimen/_20sdp"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/user_icon"
-                            app:tint="@color/white" />
+                            android:src="@drawable/user_icon" />
 
                         <TextView
                             android:id="@+id/name"
@@ -246,12 +245,12 @@
                 </LinearLayout>
 
                 <TextView
-                    android:fontFamily="@font/rubik_regular"
-                    android:maxLines="1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_10sdp"
+                    android:fontFamily="@font/rubik_regular"
                     android:includeFontPadding="false"
+                    android:maxLines="1"
                     android:text="@string/hint_profile_company_address"
                     android:textColor="@color/textFiled_colour"
                     android:textSize="@dimen/_10sdp"

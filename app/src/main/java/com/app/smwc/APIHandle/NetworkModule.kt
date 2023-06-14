@@ -48,6 +48,8 @@ class NetworkModule {
                 .addInterceptor(loggingInterceptor)
                 .build()
 
+//            client.dispatcher.cancelAll()
+
             val gson: Gson = GsonBuilder()
                 .setLenient()
                 .create()

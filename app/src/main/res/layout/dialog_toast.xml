@@ -124,7 +124,7 @@
                 android:maxHeight="@dimen/_220sdp"
                 android:scrollbars="vertical"
                 android:text="@string/logoutMessage"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/black"
                 android:textSize="@dimen/_12sdp"
                 tools:ignore="HardcodedText" />
 

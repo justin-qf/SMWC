@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Pair
+import com.app.smwc.Activity.LoginActivity.LoginResponseData
+import com.app.smwc.Activity.LoginActivity.VerifyOtpModelData
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
@@ -13,14 +15,11 @@ class Pref @SuppressLint("CommitPrefEdits") constructor(context: Context) {
     private val pref: SharedPreferences
     private val editor: SharedPreferences.Editor
     private val server = "server_url"
-
     fun Logout() {
-        val countryCode: String = locationCountryCode
         editor.clear()
         editor.commit()
         editor.apply()
         editor.putBoolean(IS_FIRST_TIME_LAUNCH, false)
-        editor.putString(locationCountryCode, countryCode)
         editor.commit()
         editor.apply()
     }
@@ -32,33 +31,6 @@ class Pref @SuppressLint("CommitPrefEdits") constructor(context: Context) {
             editor.commit()
         }
 
-    fun getLocationCountryCode(): String? {
-        return pref.getString(locationCountryCode, "")
-    }
-
-    fun setLocationCountryCode(isFirstTime: String) {
-        editor.putString(locationCountryCode, isFirstTime)
-        editor.commit()
-    }
-
-    fun getLatitude(): String? {
-        return pref.getString(latitude, "")
-    }
-
-    fun setLatitude(Latitude: String) {
-        editor.putString(latitude, Latitude)
-        editor.commit()
-    }
-
-    fun getLongitude(): String? {
-        return pref.getString(longitude, "")
-    }
-
-    fun setLongitude(Longitude: String) {
-        editor.putString(longitude, Longitude)
-        editor.commit()
-    }
-
     fun getPreviousCode(): Int {
         return pref.getInt("code", 1)
     }
@@ -66,38 +38,6 @@ class Pref @SuppressLint("CommitPrefEdits") constructor(context: Context) {
     fun setAppCode(parameters: Int) {
         pref.edit().putInt("code", parameters).apply()
     }
-
-    fun getDay(): Int {
-        return pref.getInt("day", 2)
-    }
-
-    fun setDay(parameters: Int) {
-        pref.edit().putInt("day", parameters).apply()
-    }
-
-    fun dayClear(): Int {
-        editor.clear()
-        editor.commit()
-        editor.apply()
-        return pref.getInt("day", 2)
-    }
-
-    fun getMonth(): Int {
-        return pref.getInt("month", 3)
-    }
-
-    fun setMonth(parameters: Int) {
-        pref.edit().putInt("month", parameters).apply()
-    }
-
-    fun getYear(): Int {
-        return pref.getInt("year", 4)
-    }
-
-    fun setYear(parameters: Int) {
-        pref.edit().putInt("year", parameters).apply()
-    }
-
 
     fun getReferLinkData(): ArrayList<String> {
         val data: String? = pref.getString(referContent, "")
@@ -165,7 +105,16 @@ class Pref @SuppressLint("CommitPrefEdits") constructor(context: Context) {
         editor.commit()
     }
 
-    fun getSearchHistory(): ArrayList<String> {
+    fun saveUSer(user: LoginResponseData) {
+        pref.edit().putString("user", Gson().toJson(user)).apply()
+    }
+
+    fun getUser(): LoginResponseData? {
+        val data = pref.getString("user", null) ?: return null
+        return Gson().fromJson(data, LoginResponseData::class.java)
+    }
+
+    private fun getSearchHistory(): ArrayList<String> {
         val data: String? = pref.getString("localSearch", "")
         val list: ArrayList<String> = if (data == null || data.isEmpty()) {
             ArrayList()
@@ -174,27 +123,6 @@ class Pref @SuppressLint("CommitPrefEdits") constructor(context: Context) {
             Gson().fromJson(data, type)
         }
         return list
-    }
-
-//    fun setUserLoginData(loginList: ArrayList<List>) {
-//        editor.putString(loginData, Gson().toJson(loginList))
-//        editor.commit()
-//    }
-
-//    fun getUserLoginData(): ArrayList<List> {
-//        val data: String? = pref.getString(loginData, "")
-//        val list: ArrayList<List> = if (data == null || data.isEmpty()) {
-//            ArrayList()
-//        } else {
-//            val type: Type = object : TypeToken<ArrayList<List>>() {}.type
-//            Gson().fromJson(data, type)
-//        }
-//        return list
-//    }
-
-    fun clearPlayedVideoList() {
-        editor.remove("key")
-        editor.commit()
     }
 
     companion object {

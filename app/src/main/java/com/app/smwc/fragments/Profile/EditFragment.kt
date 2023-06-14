@@ -91,7 +91,7 @@ class EditFragment : BaseFragment<FragmentEditBinding>(), View.OnClickListener {
         }
         if (email.trim().isEmpty()) {
             isError = true
-            binding.emailMobileLayout.error = getString(R.string.email_error_msg)
+            binding.emailMobileLayout.error = getString(R.string.email_mobile_error_msg)
             if (!isFocus) {
                 binding.emailMobileEdt.requestFocus()
                 isFocus = true

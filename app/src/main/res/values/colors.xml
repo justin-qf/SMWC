@@ -20,6 +20,7 @@
     <color name="colorNormalOverlayBlue">#3242b6</color>
     <color name="colorPrimaryDark">#3F52E4</color>
     <color name="colorPrimary_two">#278CB1</color>
+    <color name="transparent">#00000000</color>
     <color name="colorSecondary">#51cacf</color>
     <color name="formFieldBg">#F0F5FF</color>
     <color name="deemSecondary">#F5FAFA</color>
@@ -57,6 +58,11 @@
     <color name="bgColor">#e4e4f4</color>
     <color name="search_bg_Color">#f7f7f7</color>
     <color name="raw_bg_Color">#f4f5fa</color>
+
+    <!-- Here you can add color of your choice  -->
+    <color name="ucrop_color_toolbar">@color/colorPrimaryDark</color>
+    <color name="ucrop_color_statusbar">@color/colorPrimaryDark</color>
+    <color name="ucrop_color_widget_active">@color/colorPrimaryDark</color>
 
     <!--    Tag line color-->
     <color name="colorAdd">#423d56</color>

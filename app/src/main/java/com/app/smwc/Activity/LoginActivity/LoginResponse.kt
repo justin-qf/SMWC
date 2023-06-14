@@ -4,26 +4,26 @@ import com.google.gson.annotations.SerializedName
 
 data class LoginResponse(
 
-    @SerializedName("errorCode") var errorCode: Int? = null,
-    @SerializedName("errorMessage") var errorMessage: String? = null,
-    @SerializedName("list") var list: ArrayList<List> = arrayListOf(),
-    @SerializedName("status") var status: Int? = null
+    @SerializedName("status") var status: Int? = null,
+    @SerializedName("message") var message: String? = null,
+    @SerializedName("data") var data: LoginResponseData? = LoginResponseData()
 )
 
-data class List(
+data class LoginResponseData(
     @SerializedName("id") var id: Int? = null,
-    @SerializedName("userName") var userName: String? = null,
-    @SerializedName("email") var email: String? = null,
-    @SerializedName("mobile") var mobile: String? = null,
-    @SerializedName("role") var role: Role? = Role(),
-    @SerializedName("userRights" ) var userRights : String? = null,
-    @SerializedName("updatedOn") var updatedOn: String? = null,
-    @SerializedName("addedOn") var addedOn: String? = null
-)
-
-data class Role(
-    @SerializedName("id") var id: Int? = null,
-    @SerializedName("type") var type: String? = null,
-    @SerializedName("permission") var permission: String? = null,
-    @SerializedName("addedOn") var addedOn: String? = null
+    @SerializedName("first_name") var firstName: String? = null,
+    @SerializedName("last_name") var lastName: String? = null,
+    @SerializedName("email_mobile") var emailMobile: String? = null,
+    @SerializedName("device_token") var deviceToken: String? = null,
+    @SerializedName("device_type") var deviceType: String? = null,
+    @SerializedName("company_id") var companyId: Int? = null,
+    @SerializedName("is_verify") var isVerify: Int? = null,
+    @SerializedName("token") var token: String? = null,
+    @SerializedName("image") var image: String? = null,
+    @SerializedName("company_name") var companyName: String? = null,
+    @SerializedName("company_email") var companyEmail: String? = null,
+    @SerializedName("company_mobile") var companyMobile: String? = null,
+    @SerializedName("company_city") var companyCity: String? = null,
+    @SerializedName("company_zipcode") var companyZipcode: String? = null,
+    @SerializedName("company_address") var companyAddress: String? = null
 )

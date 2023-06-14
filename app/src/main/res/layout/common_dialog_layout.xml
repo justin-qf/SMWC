@@ -17,38 +17,38 @@
         android:padding="@dimen/_5sdp">
 
         <RelativeLayout
-            android:id="@+id/close"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_5sdp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="end"
-            android:visibility="gone">
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvDialogTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:fontFamily="@font/muli_extra_old"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:text="Confirmation"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/_15sdp"
+                android:textStyle="bold"
+                tools:ignore="HardcodedText" />
 
             <ImageView
-                android:id="@+id/iv_edit_profile"
+                android:id="@+id/close"
                 android:layout_width="@dimen/_30sdp"
                 android:layout_height="@dimen/_20sdp"
+                android:layout_alignParentEnd="true"
                 android:layout_gravity="center"
                 android:padding="@dimen/_8sdp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/close"
                 app:tint="@color/colorPrimary" />
         </RelativeLayout>
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tvDialogTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
-            android:fontFamily="@font/muli_extra_old"
-            android:gravity="center"
-            android:includeFontPadding="false"
-            android:text="Confirmation"
-            android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/_15sdp"
-            android:textStyle="bold"
-            tools:ignore="HardcodedText" />
 
         <View
             android:layout_width="match_parent"
@@ -67,7 +67,6 @@
             android:visibility="visible">
 
             <com.google.android.material.textview.MaterialTextView
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/muli_bold"
@@ -76,16 +75,17 @@
                 android:textColor="@color/colorBlack"
                 android:textSize="@dimen/_12sdp"
                 android:textStyle="bold"
+                android:visibility="gone"
                 tools:ignore="HardcodedText" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/userId"
-                android:paddingStart="@dimen/_10sdp"
-                android:paddingEnd="@dimen/_10sdp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/muli_medium"
                 android:gravity="center"
+                android:paddingStart="@dimen/_10sdp"
+                android:paddingEnd="@dimen/_10sdp"
                 android:text=""
                 android:textColor="@color/black"
                 android:textSize="@dimen/_12sdp"
@@ -99,9 +99,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginBottom="@dimen/_10sdp"
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_10sdp"
             android:orientation="horizontal">
 
             <androidx.appcompat.widget.AppCompatButton

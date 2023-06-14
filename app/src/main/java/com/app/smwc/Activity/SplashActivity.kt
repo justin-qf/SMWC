@@ -34,12 +34,23 @@ class SplashActivity : BaseActivity() {
     }
 
     private fun initView() {
+        HELPER.print("USER_NOT_EMPTY", gson.toJson(prefManager.getUser()))
         Handler(Looper.getMainLooper()).postDelayed({
-            val i = Intent(act, LoginActivity::class.java)
-            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            startActivity(i)
-            HELPER.slideEnter(act)
-            finish()
+            if (prefManager.getUser() != null) {
+                val i =
+                    Intent(act, MainActivity::class.java)
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                startActivity(i)
+                HELPER.slideEnter(act)
+                finish()
+            } else {
+                val i =
+                    Intent(act, LoginActivity::class.java)
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                startActivity(i)
+                HELPER.slideEnter(act)
+                finish()
+            }
         }, 1000)
     }
 

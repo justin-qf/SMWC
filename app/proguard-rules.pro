@@ -26,3 +26,18 @@
 
 -dontwarn android.databinding.**
 -keep class android.databinding.** { *; }
+
+-keep public class * implements com.bumptech.glide.module.GlideModule
+#razoypay
+-keepclassmembers class * {
+    @android.webkit.JavascriptInterface <methods>;
+}
+-keep class androidx.appcompat.widget.** { *; }
+
+-keepattributes JavascriptInterface
+-keepattributes *Annotation*
+
+-dontwarn com.razorpay.**
+-keep class com.razorpay.** {*;}
+
+-optimizations !method/inlining

@@ -4,7 +4,7 @@
     <string name="dashboard">Dashboard</string>
 
     <!-- Login text-->
-    <!--  <string name="have_not_account">Don't have an account?</string>-->
+    <string name="login">Login</string>
 
     <!--Internet Connection text-->
     <string name="title">Connection Status</string>
@@ -20,11 +20,13 @@
     <string name="progressTxt">Please Wait...</string>
     <string name="logoutMessage">Are you sure you want to logout?</string>
     <string name="get">GET</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">Ok</string>
     <string name="name_error_msg">Enter First Name</string>
     <string name="last_name_error_msg">Enter Last Name</string>
-    <string name="email_error_msg">Enter Email or Mobile</string>
+    <string name="email_mobile_error_msg">Enter Email or Mobile</string>
     <string name="valid_email_error_msg">Please enter a valid email id</string>
-
+    <string name="valid_mobile_error_msg">Please enter a 10 Digit Number</string>
 
     <!-- Main Activity text-->
     <string name="home">Home</string>
@@ -72,6 +74,7 @@
     <string name="zip_code">Zip Code</string>
     <string name="hint_zip_code">Enter Zip Code</string>
     <string name="profile_name">Mark Willson</string>
+    <string name="skip">Skip</string>
     <string name="submit">Submit</string>
 
     <!-- Profile text-->
@@ -99,11 +102,32 @@
     <string name="time">15 January, 2023</string>
 
     <!-- Otp text-->
+    <string name="otp">OTP</string>
+    <string name="error_otp">Please Enter Otp</string>
     <string name="code_verify_title">Verifications Code</string>
     <string name="sent_otp">We have sent an OTP on your number</string>
+    <string name="sent_otp_email">We have sent an OTP on your email</string>
     <string name="temp_number">+22 00000 00000</string>
     <string name="verify_code">Verify Code</string>
     <string name="resend_otp">Resend OTP</string>
+    <string name="verifyOtp">Verify OTP</string>
 
+    <!-- Scan text-->
+    <string name="scan_title">QR Code</string>
+    <string name="code_scan_hint">Hover over the code to scan it</string>
+    <string name="scan_result">Scan Result</string>
+    <string name="copy">Copy</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+    <string name="copied_to_clipboard">Copied to clipboard</string>
+
+    <!-- API Handling text-->
+    <string name="errorMessage">Something went wrong</string>
+
+    <!-- Image text-->
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="choose">Choose</string>
+    <string name="chooseSource">Choose Source</string>
 
 </resources>

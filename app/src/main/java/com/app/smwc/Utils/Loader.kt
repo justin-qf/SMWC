@@ -24,7 +24,7 @@ object Loader {
         val dialogView = inflater.inflate(R.layout.progress_dialog, null)
         dialogBuilder.setView(dialogView)
         alertDialog = dialogBuilder.create()
-        context.runOnUiThread(Runnable { // Showing Alert Message
+        context.runOnUiThread { // Showing Alert Message
             try {
                 if (!alertDialog.isShowing) {
                     alertDialog.show()
@@ -34,7 +34,7 @@ object Loader {
             } catch (e: RuntimeException) {
                 e.printStackTrace()
             }
-        })
+        }
         alertDialog.apply {
             show()
             setCanceledOnTouchOutside(false)

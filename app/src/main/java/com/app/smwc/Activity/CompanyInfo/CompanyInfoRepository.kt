@@ -1,10 +1,8 @@
-package com.app.ssn.ui.login
+package com.app.smwc.Activity.CompanyInfo
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.app.smwc.APIHandle.Apis
-import com.app.smwc.Activity.LoginActivity.LoginData
-import com.app.smwc.Activity.LoginActivity.LoginResponse
 import com.app.smwc.Common.HELPER
 import com.app.ssn.Utils.NetworkResult
 import com.app.ssn.data.api.ApiServices
@@ -14,23 +12,23 @@ import retrofit2.Response
 import javax.inject.Inject
 import javax.inject.Named
 
-class LoginRepository @Inject constructor(@Named(Apis.BASE) private val apiServices: ApiServices) {
+class CompanyInfoRepository @Inject constructor(@Named(Apis.BASE) private val apiServices: ApiServices) {
 
-    private val loginResponse = MutableLiveData<NetworkResult<LoginResponse>>()
-    val loginResponseLiveData: LiveData<NetworkResult<LoginResponse>>
-        get() = loginResponse
+    private val addCompanyResponse = MutableLiveData<NetworkResult<CompanyInfoResponse>>()
+    val companyResponseLiveData: LiveData<NetworkResult<CompanyInfoResponse>>
+        get() = addCompanyResponse
 
-    suspend fun loginUser(userRequest: LoginData) {
-        loginResponse.postValue(NetworkResult.Loading())
+    suspend fun addCompany(userRequest: CompanyData, token: String) {
+        addCompanyResponse.postValue(NetworkResult.Loading())
         HELPER.print("PASSING_DATA", Gson().toJson(userRequest))
-        val response = apiServices.login(userRequest)
+        val response = apiServices.addCompany(token,userRequest)
         handleResponse(response)
     }
 
-    private fun handleResponse(response: Response<LoginResponse>) {
+    private fun handleResponse(response: Response<CompanyInfoResponse>) {
         try {
             if (response.isSuccessful && response.body() != null) {
-                loginResponse.postValue(NetworkResult.Success(response.body()))
+                addCompanyResponse.postValue(NetworkResult.Success(response.body()))
             } else if (response.errorBody() != null) {
                 HELPER.print("errorCode", Gson().toJson(response.code()))
                 HELPER.print("errorCode", Gson().toJson(response.message()))
@@ -38,12 +36,12 @@ class LoginRepository @Inject constructor(@Named(Apis.BASE) private val apiServi
                 HELPER.print("errorCode", Gson().toJson(response.body()))
                 val error = JSONObject(response.errorBody()!!.charStream().readText())
                 if (error.has("error") && error.getString("error").isNotEmpty()) {
-                    loginResponse.postValue(NetworkResult.Error(error.getString("error")))
+                    addCompanyResponse.postValue(NetworkResult.Error(error.getString("error")))
                 } else {
-                    loginResponse.postValue(NetworkResult.Error("Something went wrong."))
+                    addCompanyResponse.postValue(NetworkResult.Error("Something went wrong."))
                 }
             } else {
-                loginResponse.postValue(NetworkResult.Error("Something went wrong."))
+                addCompanyResponse.postValue(NetworkResult.Error("Something went wrong."))
             }
         } catch (e: Exception) {
             e.printStackTrace()
