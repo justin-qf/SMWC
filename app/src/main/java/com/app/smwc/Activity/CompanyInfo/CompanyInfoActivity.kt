@@ -9,6 +9,7 @@ import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import com.app.frimline.views.Utils
 import com.app.omcsalesapp.Common.PubFun
+import com.app.omcsalesapp.Common.PubFun.Companion.removeSpaceFromText
 import com.app.smwc.Activity.BaseActivity
 import com.app.smwc.Activity.LoginActivity.LoginActivity
 import com.app.smwc.Activity.MainActivity
@@ -51,7 +52,7 @@ class CompanyInfoActivity : BaseActivity(), View.OnClickListener {
         CodeReUse.RemoveError(binding!!.companyMobileEdt, binding!!.companyMobileLayout)
         CodeReUse.RemoveError(binding!!.companyAddressEdt, binding!!.companyAddressLayout)
         CodeReUse.RemoveError(binding!!.companyCityEdt, binding!!.companyCityLayout)
-        CodeReUse.RemoveError(binding!!.zipCodeLayoutEdt, binding!!.zipCodeLayout)
+        CodeReUse.RemoveError(binding!!.zipCodeEdt, binding!!.zipCodeLayout)
         addCompanyResponse()
     }
 
@@ -144,10 +145,10 @@ class CompanyInfoActivity : BaseActivity(), View.OnClickListener {
         if (Utils.hasNetwork(act)) {
             Loader.showProgress(act)
             val addCompanyParam = CompanyData(
-                address = binding!!.companyAddressEdt.text.toString(),
+                address = binding!!.companyAddressEdt.text.toString().trim(),
                 city = binding!!.companyCityEdt.text.toString().trim(),
                 name = binding!!.companyNameEdt.text.toString().trim(),
-                zipcode = binding!!.zipCodeLayoutEdt.text.toString().trim(),
+                zipcode = binding!!.zipCodeEdt.text.toString().trim(),
                 mobile = binding!!.companyMobileEdt.text.toString().trim(),
                 email = binding!!.companyEmailEdt.text.toString().trim(),
             )
@@ -164,12 +165,12 @@ class CompanyInfoActivity : BaseActivity(), View.OnClickListener {
     private fun validation() {
         var isError = false
         var isFocus = false
-        val companyName = binding!!.companyNameEdt.text!!.toString().replace(" ", "")
-        val email = binding!!.companyEmailEdt.text!!.toString().replace(" ", "")
-        val companyMobile = binding!!.companyMobileEdt.text!!.toString().replace(" ", "")
-        val companyAddress = binding!!.companyAddressEdt.text!!.toString().replace(" ", "")
-        val companyCity = binding!!.companyCityEdt.text!!.toString().replace(" ", "")
-        val companyZipcode = binding!!.zipCodeLayoutEdt.text!!.toString().replace(" ", "")
+        val companyName = removeSpaceFromText(binding!!.companyNameEdt.text.toString())
+        val email = removeSpaceFromText(binding!!.companyEmailEdt.text.toString())
+        val companyMobile = removeSpaceFromText(binding!!.companyMobileEdt.text.toString())
+        val companyAddress = removeSpaceFromText(binding!!.companyAddressEdt.text.toString())
+        val companyCity = removeSpaceFromText(binding!!.companyCityEdt.text.toString())
+        val companyZipcode = removeSpaceFromText(binding!!.zipCodeEdt.text.toString())
 
         if (companyName.trim().isEmpty()) {
             isError = true
@@ -232,7 +233,7 @@ class CompanyInfoActivity : BaseActivity(), View.OnClickListener {
             isError = true
             binding!!.zipCodeLayout.error = getString(R.string.hint_zip_code)
             if (!isFocus) {
-                binding!!.zipCodeLayoutEdt.requestFocus()
+                binding!!.zipCodeEdt.requestFocus()
                 isFocus = true
             }
         }

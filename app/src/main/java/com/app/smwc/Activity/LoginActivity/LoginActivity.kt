@@ -1,8 +1,6 @@
 package com.app.smwc.Activity.LoginActivity
 
-import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Patterns
 import android.view.View
@@ -48,10 +46,6 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         CodeReUse.RemoveError(binding!!.emailNoEdt, binding!!.emailNoLayout)
     }
 
-    fun isRunningOnAndroid(context: Context): Boolean {
-        return context.packageManager.hasSystemFeature(PackageManager.FEATURE_TOUCHSCREEN)
-    }
-
     override fun onClick(view: View?) {
         when (view!!.id) {
             binding!!.getOtpBtn.id -> {
@@ -94,112 +88,70 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun loginResponse() {
-        otpViewModel.setOtpLiveData.observe(this) {
-            Loader.hideProgress()
-            when (it) {
-                is NetworkResult.Success -> {
-                    if (it.data!!.status == 1 && it.data.otp != null) {
-                        HELPER.print("GetOtpResponse::", gson.toJson(it.data))
-                        val i = Intent(act, OtpActivity::class.java)
-                        i.putExtra(
-                            "email_mobile",
-                            binding!!.emailNoEdt.text.toString().trim()
-                        )
-                        i.putExtra("intentFrom", true)
-                        i.putExtra(
-                            "otp",
-                            it.data.otp!!.toString().trim()
-                        )
-                        // i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-                        HELPER.print("startActivity", "startActivity")
-                        startActivity(i)
-                        HELPER.slideEnter(act)
-//                        PubFun.apiResponseErrorDialog(
-//                            act,
-//                            getString(R.string.otp),
-//                            if (it.data.otp!!.isNotEmpty()) "Your OTP: " + it.data.otp!! else "Server Error",
-//                            false,
-//                            listener = {
-//                                val i = Intent(act, OtpActivity::class.java)
-//                                i.putExtra("intentFrom", true)
-//                                i.putExtra(
-//                                    "otp",
-//                                    binding!!.emailNoEdt.text.toString().trim()
-//                                )
-//                                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-//                                startActivity(i)
-//                                HELPER.slideEnter(act)
-//                            })
-                    } else if (it.data.status == 2) {
-                        PubFun.commonDialog(act,
-                            getString(R.string.login),
-                            it.data.message!!.ifEmpty { "Server Error" },
-                            false,
-                            clickListener = {
-                                prefManager.Logout()
-                                val i = Intent(act, LoginActivity::class.java)
-                                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                                act.startActivity(i)
-                                act.finish()
-                                HELPER.slideEnter(act)
-                            })
-//                        PubFun.apiResponseErrorDialog(
-//                            act,
-//                            getString(R.string.login),
-//                            it.data.message!!.ifEmpty { "Server Error" },
-//                            false,
-//                            listener = {
-//                                prefManager.Logout()
-//                                val i = Intent(act, LoginActivity::class.java)
-//                                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-//                                act.startActivity(i)
-//                                act.finish()
-//                                HELPER.slideEnter(act)
-//                            })
-                    } else {
-                        if (act != null && !act.isFinishing) {
+        try {
+            otpViewModel.setOtpLiveData.observe(this) {
+                Loader.hideProgress()
+                when (it) {
+                    is NetworkResult.Success -> {
+                        if (it.data!!.status == 1 && it.data.otp != null) {
+                            HELPER.print("GetOtpResponse::", gson.toJson(it.data))
+                            val i = Intent(act, OtpActivity::class.java)
+                            i.putExtra(
+                                "email_mobile",
+                                binding!!.emailNoEdt.text.toString().trim()
+                            )
+                            i.putExtra("intentFrom", true)
+                            i.putExtra(
+                                "otp",
+                                it.data.otp!!.toString().trim()
+                            )
+                            // i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                            HELPER.print("startActivity", "startActivity")
+                            startActivity(i)
+                            HELPER.slideEnter(act)
+                        } else if (it.data.status == 2) {
                             PubFun.commonDialog(act,
                                 getString(R.string.login),
                                 it.data.message!!.ifEmpty { "Server Error" },
                                 false,
                                 clickListener = {
-
+                                    prefManager.Logout()
+                                    val i = Intent(act, LoginActivity::class.java)
+                                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                                    act.startActivity(i)
+                                    act.finish()
+                                    HELPER.slideEnter(act)
                                 })
-//                            PubFun.apiResponseErrorDialog(
-//                                act,
-//                                getString(R.string.login),
-//                                it.data.message!!.ifEmpty { "Server Error" },
-//                                false,
-//                                listener = {
-//                                })
+                        } else {
+                            if (act != null && !act.isFinishing) {
+                                PubFun.commonDialog(act,
+                                    getString(R.string.login),
+                                    it.data.message!!.ifEmpty { "Server Error" },
+                                    false,
+                                    clickListener = {
+                                    })
+                            }
                         }
                     }
-                }
-                is NetworkResult.Error -> {
-                    PubFun.commonDialog(act,
-                        getString(R.string.login),
-                        getString(
-                            R.string.errorMessage
-                        ),
-                        false,
-                        clickListener = {
-                        })
-//                    PubFun.apiResponseErrorDialog(
-//                        act,
-//                        getString(R.string.login),
-//                        getString(
-//                            R.string.errorMessage
-//                        ),
-//                        false,
-//                        listener = {
-//                        })
-                    HELPER.print("Network", "Error")
-                }
-                is NetworkResult.Loading -> {
-                    Loader.showProgress(act)
-                    HELPER.print("Network", "loading")
+                    is NetworkResult.Error -> {
+                        PubFun.commonDialog(act,
+                            getString(R.string.login),
+                            getString(
+                                R.string.errorMessage
+                            ),
+                            false,
+                            clickListener = {
+                            })
+                        HELPER.print("Network", "Error")
+                    }
+                    is NetworkResult.Loading -> {
+                        Loader.showProgress(act)
+                        HELPER.print("Network", "loading")
+                    }
                 }
             }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
@@ -208,7 +160,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
             Loader.showProgress(act)
             val paymentParam = OtpData(
                 emailMobile = binding!!.emailNoEdt.text!!.toString().trim(),
-                isLogin = "1"
+                isLogin = Constant.IS_LOGIN
             )
             otpViewModel.getOtp(paymentParam)
         } else {

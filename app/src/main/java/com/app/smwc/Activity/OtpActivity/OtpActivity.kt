@@ -1,13 +1,11 @@
 package com.app.smwc.Activity.OtpActivity
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
 import android.view.View
-import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
@@ -29,6 +27,7 @@ import com.app.ssn.ui.login.LoginViewModel
 import com.app.ssn.ui.login.SignUpViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
+import kotlin.system.exitProcess
 
 @AndroidEntryPoint
 class OtpActivity : BaseActivity(), View.OnClickListener {
@@ -55,6 +54,8 @@ class OtpActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun initView() {
+
+        // getText From Intent
         name = intent.getStringExtra("name").toString()
         lastName = intent.getStringExtra("lastName").toString()
         emailMobile = intent.getStringExtra("email_mobile").toString()
@@ -68,6 +69,8 @@ class OtpActivity : BaseActivity(), View.OnClickListener {
             binding!!.titleTxt.text = getString(R.string.sent_otp_email)
             binding!!.numberTxt.text = emailMobile.ifEmpty { "" }
         }
+
+        //set OnCLickListener with visibility and colour
         binding!!.toolbar.ivBack.visibility = View.VISIBLE
         binding!!.toolbar.ivBack.setOnClickListener(this)
         binding!!.verifyCodeBtn.setOnClickListener(this)
@@ -75,6 +78,7 @@ class OtpActivity : BaseActivity(), View.OnClickListener {
         binding!!.toolbar.title.text = getString(R.string.code_verify_title)
         HELPER.setTextColour(binding!!.toolbar.title, act)
         HELPER.setImageColour(binding!!.toolbar.ivBack, act)
+
         otpView()
         verifyOtpResponse()
         loginResponse()
@@ -210,6 +214,9 @@ class OtpActivity : BaseActivity(), View.OnClickListener {
                                     val i = Intent(act, CompanyInfoActivity::class.java)
                                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                                     startActivity(i)
+                                    finish()
+                                    finishAffinity()
+                                    //exitProcess(0);
                                     HELPER.slideEnter(act)
                                 })
                         } else if (it.data.status == 2) {
@@ -361,14 +368,6 @@ class OtpActivity : BaseActivity(), View.OnClickListener {
             loginViewModel.login(loginParam)
         } else {
             HELPER.commonDialog(act, Constant.NETWORK_ERROR_MESSAGE)
-        }
-    }
-
-    @Deprecated("Deprecated in Java")
-    override fun update(observable: Observable?, data: Any?) {
-        super.update(observable, data)
-        if (app.observer.value === Constant.OBSERVER_OTP_CONFIRMATION) {
-            HELPER.print("IsOTP", "DONE")
         }
     }
 }

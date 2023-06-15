@@ -136,7 +136,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), View.OnClickListener {
             HELPER.slideEnter(act)
         }
         binding.toolbar.ivProfile.setOnClickListener {
-            app!!.observer.value = Constant.OBSERVER_PROFILE_VISIBLE_FROM_HOME
+            try {
+                app!!.observer.value = Constant.OBSERVER_PROFILE_VISIBLE_FROM_HOME
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
         storeDetails
     }

@@ -10,7 +10,6 @@ import androidx.databinding.DataBindingUtil
 import com.app.frimline.views.Utils
 import com.app.omcsalesapp.Common.PubFun
 import com.app.smwc.Activity.BaseActivity
-import com.app.smwc.Activity.LoginActivity.LoginActivity
 import com.app.smwc.Activity.OtpActivity.OtpActivity
 import com.app.smwc.Activity.OtpActivity.OtpData
 import com.app.smwc.Common.CodeReUse
@@ -65,9 +64,9 @@ class SignUpActivity : BaseActivity(), View.OnClickListener {
     private fun validation() {
         var isError = false
         var isFocus = false
-        val firstName = binding!!.firstNameEdt.text!!.toString().replace(" ", "")
-        val lastName = binding!!.lastNameEdt.text!!.toString().replace(" ", "")
-        val email = binding!!.emailMobileEdt.text!!.toString().replace(" ", "")
+        val firstName = PubFun.removeSpaceFromText(binding!!.firstNameEdt.text.toString())
+        val lastName = PubFun.removeSpaceFromText(binding!!.lastNameEdt.text.toString())
+        val email = PubFun.removeSpaceFromText(binding!!.emailMobileEdt.text.toString())
 
         if (firstName.trim().isEmpty()) {
             isError = true
@@ -113,92 +112,62 @@ class SignUpActivity : BaseActivity(), View.OnClickListener {
                 }
             }
         }
-//        if (email.trim().isEmpty()) {
-//            isError = true
-//            binding!!.emailMobileLayout.error = getString(R.string.email_mobile_error_msg)
-//            if (!isFocus) {
-//                binding!!.emailMobileEdt.requestFocus()
-//                isFocus = true
-//            }
-//        } else if (!Patterns.EMAIL_ADDRESS.matcher(email.trim())
-//                .matches()
-//        ) {
-//            isError = true
-//            binding!!.emailMobileLayout.error = getString(R.string.valid_email_error_msg)
-//            if (!isFocus) {
-//                binding!!.emailMobileEdt.requestFocus()
-//                isFocus = true
-//            }
-//        }
-
         if (!isError) {
             getOtpApiCall()
         }
     }
 
     private fun signUpResponse() {
-        otpViewModel.setOtpLiveData.observe(this) {
-            when (it) {
-                is NetworkResult.Success -> {
-                    Loader.hideProgress()
-                    if (it.data!!.status == 1 && it.data.otp != null) {
-                        HELPER.print("GetOtpResponse::", gson.toJson(it.data))
-                        val i = Intent(act, OtpActivity::class.java)
-                        i.putExtra("name", binding!!.firstNameEdt.text.toString())
-                        i.putExtra("lastName", binding!!.lastNameEdt.text.toString())
-                        i.putExtra("email_mobile", binding!!.emailMobileEdt.text.toString())
-                        i.putExtra("intentFrom", false)
-                        i.putExtra(
-                            "otp",
-                            it.data.otp!!.toString().trim()
-                        )
-                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                        startActivity(i)
-                        HELPER.slideEnter(act)
-                    } else {
-                        if (act != null && !act.isFinishing) {
-                            PubFun.commonDialog(act,
-                                getString(R.string.sign_up_title),
-                                it.data.message!!.ifEmpty { "Server Error" },
-                                false,
-                                clickListener = {
-                                })
-//                            PubFun.apiResponseErrorDialog(
-//                                act,
-//                                getString(R.string.sign_up_title),
-//                                it.data.message!!.ifEmpty { "Server Error" },
-//                                false,
-//                                listener = {
-//                                })
+        try {
+            otpViewModel.setOtpLiveData.observe(this) {
+                when (it) {
+                    is NetworkResult.Success -> {
+                        Loader.hideProgress()
+                        if (it.data!!.status == 1 && it.data.otp != null) {
+                            HELPER.print("GetOtpResponse::", gson.toJson(it.data))
+                            val i = Intent(act, OtpActivity::class.java)
+                            i.putExtra("name", binding!!.firstNameEdt.text.toString())
+                            i.putExtra("lastName", binding!!.lastNameEdt.text.toString())
+                            i.putExtra("email_mobile", binding!!.emailMobileEdt.text.toString())
+                            i.putExtra("intentFrom", false)
+                            i.putExtra(
+                                "otp",
+                                it.data.otp!!.toString().trim()
+                            )
+                            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                            startActivity(i)
+                            HELPER.slideEnter(act)
+                        } else {
+                            if (act != null && !act.isFinishing) {
+                                PubFun.commonDialog(act,
+                                    getString(R.string.sign_up_title),
+                                    it.data.message!!.ifEmpty { "Server Error" },
+                                    false,
+                                    clickListener = {
+                                    })
+                            }
                         }
                     }
-                }
-                is NetworkResult.Error -> {
-                    Loader.hideProgress()
-                    PubFun.commonDialog(act,
-                        getString(R.string.sign_up_title),
-                        getString(
-                            R.string.errorMessage
-                        ),
-                        false,
-                        clickListener = {
-                        })
-//                    PubFun.apiResponseErrorDialog(
-//                        act,
-//                        getString(R.string.sign_up_title),
-//                        getString(
-//                            R.string.errorMessage
-//                        ),
-//                        false,
-//                        listener = {
-//                        })
-                    HELPER.print("Network", "Error")
-                }
-                is NetworkResult.Loading -> {
-                    Loader.showProgress(act)
-                    HELPER.print("Network", "loading")
+                    is NetworkResult.Error -> {
+                        Loader.hideProgress()
+                        PubFun.commonDialog(act,
+                            getString(R.string.sign_up_title),
+                            getString(
+                                R.string.errorMessage
+                            ),
+                            false,
+                            clickListener = {
+                            })
+                        HELPER.print("Network", "Error")
+                    }
+                    is NetworkResult.Loading -> {
+                        Loader.showProgress(act)
+                        HELPER.print("Network", "loading")
+                    }
                 }
             }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
@@ -207,7 +176,7 @@ class SignUpActivity : BaseActivity(), View.OnClickListener {
             Loader.showProgress(act)
             val paymentParam = OtpData(
                 emailMobile = binding!!.emailMobileEdt.text.toString().trim(),
-                isLogin = "0"
+                isLogin = Constant.IS_SIGNUP
             )
             otpViewModel.getOtp(paymentParam)
         } else {

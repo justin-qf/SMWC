@@ -229,7 +229,7 @@ class PubFun {
         }
 
         fun removeSpaceFromText(text: String): String {
-            return text.replace(" ", "").trim().lowercase()
+            return text.replace(" ", "").trim()
         }
 
         fun confirmationDialog(

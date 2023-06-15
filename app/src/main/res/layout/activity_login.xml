@@ -49,10 +49,10 @@
 
             <TextView
                 style="@style/commonTextStyle"
-                android:textSize="@dimen/_9sdp"
                 android:layout_gravity="fill"
                 android:layout_marginTop="@dimen/_50sdp"
-                android:text="@string/email_mobile" />
+                android:text="@string/email_mobile"
+                android:textSize="@dimen/_9sdp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/emailNoLayout"
@@ -66,10 +66,10 @@
                     android:id="@+id/emailNoEdt"
                     style="@style/CommonTextInputEditTextStyle"
                     android:layout_width="match_parent"
-                    android:textSize="@dimen/_9sdp"
                     android:layout_height="wrap_content"
                     android:hint="@string/email_mobile"
-                    android:inputType="textEmailAddress" />
+                    android:inputType="textEmailAddress"
+                    android:textSize="@dimen/_9sdp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -82,8 +82,8 @@
                 android:text="@string/get_otp"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                app:buttonColor="@color/btn_colour"
                 android:textSize="@dimen/_11sdp"
+                app:buttonColor="@color/btn_colour"
                 app:cornerRadius="@dimen/_7sdp"
                 app:glowColor="@color/btn_colour"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -93,7 +93,6 @@
                 app:unpressedGlowSize="@dimen/_3sdp" />
 
             <com.google.android.material.button.MaterialButton
-                android:visibility="gone"
                 android:id="@+id/getOtpBtns"
                 android:layout_width="@dimen/_120sdp"
                 android:layout_height="@dimen/_45sdp"
@@ -108,6 +107,7 @@
                 android:textAllCaps="false"
                 android:textSize="@dimen/_11sdp"
                 android:translationZ="@dimen/_5sdp"
+                android:visibility="gone"
                 app:backgroundTint="@color/btn_colour"
                 app:cornerRadius="@dimen/_7sdp"
                 app:layout_constraintBottom_toBottomOf="parent"

@@ -6,7 +6,10 @@ public class Constant {
     public static final String CHANNEL_NAME = "SMWCAPP";
     public static final String CHANNEL_DESCRIPTION = "com.app.smwc";
     public static final String DEVICE_TYPE = "android";
-    public static final String NETWORK_ERROR_MESSAGE = "OMC app requires the internet connection. please turn on the data and try again.";
+    public static final String NETWORK_ERROR_MESSAGE = "SMWC app requires the internet connection. please turn on the data and try again.";
+
+    public static final String IS_LOGIN = "1";
+    public static final String IS_SIGNUP = "0";
     public static final int autoDialogDismissTimeInMlSecLow = 2000;
     public static final int autoDialogDismissTimeInMlSec = 4000;
     public static final int PERMISSION_REQUEST_CODE = 0;
