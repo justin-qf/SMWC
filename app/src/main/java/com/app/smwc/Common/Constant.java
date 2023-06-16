@@ -27,5 +27,8 @@ public class Constant {
 
     public static final int OBSERVER_REFRESH_PROFILE_DATA = 11;
 
+    public static final int OBSERVER_REFRESH_DASHBOARD_DATA = 12;
+
+
 
 }

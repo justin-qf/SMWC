@@ -2,6 +2,7 @@ package com.app.smwc.fragments.Home
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +22,7 @@ import com.app.smwc.fragments.BaseFragment
 import com.app.ssn.Utils.Loader
 import com.app.ssn.Utils.NetworkResult
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(), View.OnClickListener {
@@ -45,8 +47,19 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), View.OnClickListener {
         app!!.observer.value = Constant.OBSERVER_HOME_FRAGMENT_VISIBLE
         initViews()
         setApiCall()
+        iniRefreshListener()
     }
-
+    private fun iniRefreshListener() {
+        binding.swipeContainer.setOnRefreshListener {
+            setApiCall()
+            val handler = Handler()
+            handler.postDelayed({
+                if (binding.swipeContainer.isRefreshing) {
+                    binding.swipeContainer.isRefreshing = false
+                }
+            }, 1500)
+        }
+    }
     private fun setApiCall() {
 
         setHomeResponse()
@@ -66,11 +79,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), View.OnClickListener {
                 when (it) {
                     is NetworkResult.Success -> {
                         Loader.hideProgress()
+                        if (binding.swipeContainer.isRefreshing) {
+                            binding.swipeContainer.isRefreshing = false
+                        }
                         if (it.data!!.status == 1 && it.data.data != null) {
                             HELPER.print("GetOtpResponse::", gson!!.toJson(it.data))
                             setStoreTitle(it.data.data!!.orders)
                             setTokenWithCountLayout(it.data.data!!)
                             setAdapter(it.data.data!!.orders)
+                            //binding.userNameTxt.text = ""
 //                            PubFun.commonDialog(
 //                                act,
 //                                getString(R.string.home),
@@ -139,6 +156,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), View.OnClickListener {
                 .isNotEmpty()
         ) {
             binding.tokenLayout.visibility = View.VISIBLE
+            binding.tokenNumberTxt.text = homeData.queueToken
         } else {
             binding.tokenLayout.visibility = View.GONE
         }
@@ -193,6 +211,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), View.OnClickListener {
                 app!!.observer.value = Constant.OBSERVER_PROFILE_VISIBLE_FROM_HOME
             } catch (e: Exception) {
                 e.printStackTrace()
+            }
+        }
+    }
+
+
+    @Deprecated("Deprecated in Java")
+    override fun update(observable: Observable?, data: Any?) {
+        super.update(observable, data)
+        if (app!!.observer.value == Constant.OBSERVER_REFRESH_DASHBOARD_DATA) {
+            act.runOnUiThread {
+                setApiCall()
             }
         }
     }

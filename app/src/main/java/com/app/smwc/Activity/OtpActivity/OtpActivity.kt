@@ -3,8 +3,6 @@ package com.app.smwc.Activity.OtpActivity
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.os.Handler
-import android.os.Looper
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
@@ -27,7 +25,6 @@ import com.app.ssn.ui.login.LoginViewModel
 import com.app.ssn.ui.login.SignUpViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
-import kotlin.system.exitProcess
 
 @AndroidEntryPoint
 class OtpActivity : BaseActivity(), View.OnClickListener {
@@ -82,9 +79,9 @@ class OtpActivity : BaseActivity(), View.OnClickListener {
         otpView()
         verifyOtpResponse()
         loginResponse()
-        Handler(Looper.getMainLooper()).postDelayed({
-            getOtpFromApi()
-        }, 1000)
+//        Handler(Looper.getMainLooper()).postDelayed({
+//            getOtpFromApi()
+//        }, 1000)
     }
 
     private fun getOtpFromApi() {

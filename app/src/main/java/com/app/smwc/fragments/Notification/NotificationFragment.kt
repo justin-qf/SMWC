@@ -2,6 +2,7 @@ package com.app.smwc.fragments.Notification
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,6 +38,18 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(), View.O
         app!!.observer.value = Constant.OBSERVER_NOTIFICATION_FRAGMENT_VISIBLE
         initViews()
         setApiCall()
+        iniRefreshListener()
+    }
+    private fun iniRefreshListener() {
+        binding.swipeContainer.setOnRefreshListener {
+            setApiCall()
+            val handler = Handler()
+            handler.postDelayed({
+                if (binding.swipeContainer.isRefreshing) {
+                    binding.swipeContainer.isRefreshing = false
+                }
+            }, 1500)
+        }
     }
 
     private fun setApiCall() {
@@ -57,6 +70,9 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(), View.O
                 when (it) {
                     is NetworkResult.Success -> {
                         Loader.hideProgress()
+                        if (binding.swipeContainer.isRefreshing) {
+                            binding.swipeContainer.isRefreshing = false
+                        }
                         if (it.data!!.status == 1 && it.data.data != null) {
                             if (it.data.data != null && it.data.data.size != 0) {
                                 HELPER.print("HistoryResponse::", gson!!.toJson(it.data))

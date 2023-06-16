@@ -11,7 +11,6 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Patterns
 import android.view.View
-import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
@@ -22,8 +21,6 @@ import com.app.omcsalesapp.Common.PubFun
 import com.app.omcsalesapp.Common.PubFun.Companion.permissionDialog
 import com.app.omcsalesapp.Common.PubFun.Companion.qrRedirectDialog
 import com.app.smwc.Activity.BaseActivity
-import com.app.smwc.Activity.CompanyInfo.CompanyData
-import com.app.smwc.Activity.CompanyInfo.CompanyInfoViewModel
 import com.app.smwc.Activity.LoginActivity.LoginActivity
 import com.app.smwc.Common.Constant
 import com.app.smwc.Common.HELPER
@@ -111,31 +108,34 @@ class ScannerActivity : BaseActivity(), View.OnClickListener {
                     is NetworkResult.Success -> {
                         Loader.hideProgress()
                         if (it.data!!.status == 1 && it.data.data != null) {
-                            HELPER.print("GetOtpResponse::", gson!!.toJson(it.data))
+                            HELPER.print("Response::", gson!!.toJson(it.data))
                             PubFun.commonDialog(
                                 act,
                                 getString(R.string.scan_title),
                                 it.data.message!!.ifEmpty { "Server Error" },
                                 false,
                                 clickListener = {
-                                    qrRedirectDialog(act, scanResult, true, openListener = {
-                                        binding!!.title.text = ""
-                                        //copy Text
-                                        (act.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).setPrimaryClip(
-                                            ClipData.newPlainText(
-                                                null,
-                                                scanResult
-                                            )
-                                        )
-                                       // showToast(act, act.getString(R.string.copied_to_clipboard))
-                                        codeScanner.startPreview()
-                                    }, copyListener = {
-                                        binding!!.title.text = ""
-                                        codeScanner.startPreview()
-                                    }, closeListener = {
-                                        binding!!.title.text = ""
-                                        codeScanner.startPreview()
-                                    })
+                                    onBackPressed()
+                                    app!!.observer.value = Constant.OBSERVER_REFRESH_DASHBOARD_DATA
+//                                    qrRedirectDialog(act, scanResult, true, openListener = {
+//                                        binding!!.title.text = ""
+//                                        //copy Text
+//                                        (act.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).setPrimaryClip(
+//                                            ClipData.newPlainText(
+//                                                null,
+//                                                scanResult
+//                                            )
+//                                        )
+//                                       // showToast(act, act.getString(R.string.copied_to_clipboard))
+//                                        codeScanner.startPreview()
+//                                    }, copyListener = {
+//                                        binding!!.title.text = ""
+//                                        codeScanner.startPreview()
+//                                    }, closeListener = {
+//                                        binding!!.title.text = ""
+//                                        codeScanner.startPreview()
+//                                    })
+
                                 })
 
                         } else if (it.data.status == 2) {

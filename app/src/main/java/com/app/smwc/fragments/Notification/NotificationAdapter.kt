@@ -33,7 +33,7 @@ class NotificationAdapter(
     override fun onBindViewHolder(holder: DataHolder, position: Int) {
         val model = notificationList[position]
         holder.binding.notificationTxt.text = model.notification.toString().trim()
-        holder.binding.notificationTypeTxt.text = model.notificationType.toString().trim()
+        holder.binding.notificationTypeTxt.text = model.createdDate.toString().trim()
     }
 
     override fun getItemCount(): Int {

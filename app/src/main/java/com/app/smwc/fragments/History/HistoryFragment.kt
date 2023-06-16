@@ -48,7 +48,7 @@ class HistoryFragment : BaseFragment<FragmentHistoryBinding>(), View.OnClickList
         iniRefreshListener()
     }
 
-    fun iniRefreshListener() {
+    private fun iniRefreshListener() {
         binding.swipeContainer.setOnRefreshListener {
             setApiCall()
             val handler = Handler()
@@ -77,8 +77,12 @@ class HistoryFragment : BaseFragment<FragmentHistoryBinding>(), View.OnClickList
                 when (it) {
                     is NetworkResult.Success -> {
                         Loader.hideProgress()
+                        if (binding.swipeContainer.isRefreshing) {
+                            binding.swipeContainer.isRefreshing = false
+                        }
                         if (it.data!!.status == 1 && it.data.data != null) {
                             if (it.data.data!!.orders != null && it.data.data!!.orders.size != 0) {
+
                                 HELPER.print("HistoryResponse::", gson!!.toJson(it.data))
                                 binding.historyMainLayout.visibility = View.VISIBLE
                                 binding.emptyText.visibility = View.GONE

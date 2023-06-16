@@ -3,6 +3,7 @@ package com.app.smwc.fragments.Profile.ProfileFragment
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,8 +44,18 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(), View.OnClickList
         SWCApp.getInstance().observer.value = Constant.OBSERVER_PROFILE_FRAGMENT_VISIBLE
         initViews()
         setApiCall()
+        iniRefreshListener()
     }
 
+    private fun iniRefreshListener() {
+        binding.swipeContainer.setOnRefreshListener {
+            setApiCall()
+            val handler = Handler()
+            handler.postDelayed({
+
+            }, 1500)
+        }
+    }
     private fun setApiCall() {
         setProfileResponse()
         if (Utils.hasNetwork(act)) {
@@ -62,11 +73,15 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(), View.OnClickList
             profileViewModel.profileResponseLiveData.observe(this) {
                 when (it) {
                     is NetworkResult.Success -> {
+                        if (binding.swipeContainer.isRefreshing) {
+                            binding.swipeContainer.isRefreshing = false
+                        }
                         Loader.hideProgress()
                         if (it.data!!.status == 1 && it.data.data != null) {
                             HELPER.print("ProfileResponse::", gson!!.toJson(it.data))
                             setData(it.data.data)
                             profileData = it.data.data
+                            binding.name.text = it.data!!.data!!.firstName + " "+it.data!!.data!!.lastName
 //                            PubFun.commonDialog(
 //                                act,
 //                                getString(R.string.home),

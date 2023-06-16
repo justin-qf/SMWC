@@ -44,7 +44,7 @@
                         android:lineSpacingExtra="0dp"
                         android:text="Notification"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/_18sdp"
+                        android:textSize="@dimen/_12sdp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"

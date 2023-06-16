@@ -121,7 +121,7 @@ class EditActivity : BaseActivity(), View.OnClickListener {
                 onBackPressed()
             }
             binding!!.toolbar.submitLayout.id -> {
-                uploadImageUsingVolley()
+                validation()
                 //validation()
             }
             binding!!.editProfileLayout.id -> {
@@ -160,7 +160,9 @@ class EditActivity : BaseActivity(), View.OnClickListener {
         val request =
             AndroidNetworking.upload(Apis.BASE + Apis.UPDATE_PROFILE).setTag("updateProfile")
                 .setPriority(Priority.HIGH)
-        request.addMultipartFile("image", createFileFromUri(fileUri!!))
+        if (fileUri != null) {
+            request.addMultipartFile("image", createFileFromUri(fileUri!!))
+        }
         request.addMultipartParameter("first_name", binding!!.firstNameEdt.text.toString().trim())
         request.addMultipartParameter("last_name", binding!!.lastNameEdt.text.toString().trim())
         request.addMultipartParameter(
@@ -204,6 +206,7 @@ class EditActivity : BaseActivity(), View.OnClickListener {
             override fun onResponse(response: JSONObject) {
                 Loader.hideProgress()
                 uploadImageResponse = response
+                HELPER.print("IsUploadImage", gson.toJson(uploadImageResponse))
                 if (uploadImageResponse?.get("status") == 1) {
                     PubFun.commonDialog(act,
                         getString(R.string.login),
@@ -235,6 +238,7 @@ class EditActivity : BaseActivity(), View.OnClickListener {
                                 .ifEmpty { "Server Error" },
                             false,
                             clickListener = {
+                                onBackPressed()
                             })
                     }
                 }
@@ -431,7 +435,7 @@ class EditActivity : BaseActivity(), View.OnClickListener {
         }
 
         if (!isError) {
-            updateProfileApiCall()
+            uploadImageUsingVolley()
         }
     }
 
