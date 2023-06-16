@@ -55,7 +55,6 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
-
                             android:id="@+id/product_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -164,20 +163,18 @@
                             android:src="@drawable/location" />
 
                         <TextView
+                            android:layout_marginEnd="@dimen/_28sdp"
                             android:id="@+id/location"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/_5sdp"
                             android:ellipsize="end"
                             android:fontFamily="@font/rubik_regular"
-                            android:singleLine="true"
                             android:text="@string/address"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_9sdp"
                             android:textStyle="normal"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                           />
 
                     </LinearLayout>
 

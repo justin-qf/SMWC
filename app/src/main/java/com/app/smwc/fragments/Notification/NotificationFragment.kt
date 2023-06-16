@@ -1,4 +1,4 @@
-package com.app.smwc.fragments.Home
+package com.app.smwc.fragments.Notification
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,78 +10,68 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.frimline.views.Utils
 import com.app.omcsalesapp.Common.PubFun
 import com.app.smwc.Activity.LoginActivity.LoginActivity
-import com.app.smwc.Activity.MainActivity
-import com.app.smwc.Activity.ScannerActivity.ScannerActivity
 import com.app.smwc.Common.Constant
 import com.app.smwc.Common.HELPER
 import com.app.smwc.Interfaces.ListClickListener
 import com.app.smwc.R
-import com.app.smwc.databinding.FragmentHomeBinding
+import com.app.smwc.databinding.FragmentNotificationBinding
 import com.app.smwc.fragments.BaseFragment
 import com.app.ssn.Utils.Loader
 import com.app.ssn.Utils.NetworkResult
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class HomeFragment : BaseFragment<FragmentHomeBinding>(), View.OnClickListener {
+class NotificationFragment : BaseFragment<FragmentNotificationBinding>(), View.OnClickListener {
 
-    private var homeAdapter: HomeAdapter? = null
-    private val homeViewModel: HomeViewModel by activityViewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-        }
-    }
+    private val notificationViewModel: NotificationViewModel by activityViewModels()
+    private var notificationAdapter: NotificationAdapter? = null
 
     override fun onCreateBinding(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): FragmentHomeBinding = FragmentHomeBinding.inflate(inflater, container, false)
+    ): FragmentNotificationBinding = FragmentNotificationBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        app!!.observer.value = Constant.OBSERVER_HOME_FRAGMENT_VISIBLE
+        app!!.observer.value = Constant.OBSERVER_NOTIFICATION_FRAGMENT_VISIBLE
         initViews()
         setApiCall()
     }
 
     private fun setApiCall() {
-
-        setHomeResponse()
         if (Utils.hasNetwork(act)) {
             Loader.showProgress(act)
-            homeViewModel.home(
+            notificationViewModel.notification(
                 if (pref!!.getUser()!!.token!!.isNotEmpty()) "Bearer " + pref!!.getUser()!!.token!! else ""
             )
+            setNotificationResponse()
         } else {
             HELPER.commonDialog(act, Constant.NETWORK_ERROR_MESSAGE)
         }
     }
 
-    private fun setHomeResponse() {
+    private fun setNotificationResponse() {
         try {
-            homeViewModel.homeResponseLiveData.observe(this) {
+            notificationViewModel.notificationResponseLiveData.observe(this) {
                 when (it) {
                     is NetworkResult.Success -> {
                         Loader.hideProgress()
                         if (it.data!!.status == 1 && it.data.data != null) {
-                            HELPER.print("GetOtpResponse::", gson!!.toJson(it.data))
-                            setStoreTitle(it.data.data!!.orders)
-                            setTokenWithCountLayout(it.data.data!!)
-                            setAdapter(it.data.data!!.orders)
-//                            PubFun.commonDialog(
-//                                act,
-//                                getString(R.string.home),
-//                                it.data.message!!.ifEmpty { "Server Error" },
-//                                false,
-//                                clickListener = {
-//                                })
+                            if (it.data.data != null && it.data.data.size != 0) {
+                                HELPER.print("HistoryResponse::", gson!!.toJson(it.data))
+                                binding.notificationMainLayout.visibility = View.VISIBLE
+                                binding.emptyText.visibility = View.GONE
+                                setAdapter(it.data.data)
+                            } else {
+                                binding.notificationMainLayout.visibility = View.GONE
+                                binding.emptyText.visibility = View.VISIBLE
+                            }
+
                         } else if (it.data.status == 2) {
                             PubFun.commonDialog(
                                 act,
-                                getString(R.string.home),
+                                getString(R.string.notification_title),
                                 it.data.message!!.ifEmpty { "Server Error" },
                                 false,
                                 clickListener = {
@@ -95,7 +85,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), View.OnClickListener {
                         } else {
                             PubFun.commonDialog(
                                 act,
-                                getString(R.string.home),
+                                getString(R.string.notification_title),
                                 it.data.message!!.ifEmpty { "Server Error" },
                                 false,
                                 clickListener = {
@@ -106,7 +96,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), View.OnClickListener {
                         Loader.hideProgress()
                         PubFun.commonDialog(
                             act,
-                            getString(R.string.home),
+                            getString(R.string.notification_title),
                             getString(
                                 R.string.errorMessage
                             ),
@@ -126,43 +116,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), View.OnClickListener {
         }
     }
 
-    private fun setStoreTitle(orderList: ArrayList<Orders>?) {
-        if (orderList != null && orderList.size != 0) {
-            binding.storeTitle.visibility = View.VISIBLE
-        } else {
-            binding.storeTitle.visibility = View.GONE
-        }
-    }
-
-    private fun setTokenWithCountLayout(homeData: HomeData?) {
-        if (homeData!!.queueToken != null && homeData.queueToken.toString()
-                .isNotEmpty()
-        ) {
-            binding.tokenLayout.visibility = View.VISIBLE
-        } else {
-            binding.tokenLayout.visibility = View.GONE
-        }
-
-        if (homeData.completedOrder != null && homeData.completedOrder.toString()
-                .isNotEmpty()
-        ) {
-            binding.completeCountTxt.text =
-                homeData.completedOrder.toString().trim()
-        } else {
-            binding.completeCountTxt.text = ""
-        }
-
-        if (homeData.pendingOrder != null && homeData.pendingOrder.toString()
-                .isNotEmpty()
-        ) {
-            binding.pendingCountTxt.text =
-                homeData.pendingOrder.toString().trim()
-        } else {
-            binding.pendingCountTxt.text = ""
-        }
-    }
-
-    private fun setAdapter(orderList: ArrayList<Orders>) {
+    private fun setAdapter(notificationList: ArrayList<NotificationData>) {
         binding.rootRecyclerList.layoutManager = LinearLayoutManager(
             act,
             LinearLayoutManager.VERTICAL,
@@ -170,40 +124,24 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), View.OnClickListener {
         )
         val listClickListener =
             ListClickListener { _, _, _ ->
-
             }
 
-        homeAdapter = HomeAdapter(
+        notificationAdapter = NotificationAdapter(
             act,
-            orderList,
+            notificationList,
             listClickListener
         )
-        binding.rootRecyclerList.adapter = homeAdapter
+        binding.rootRecyclerList.adapter = notificationAdapter
     }
 
     private fun initViews() {
-        binding.toolbar.ivQrcode.setOnClickListener(this)
-        binding.toolbar.ivQrcode.setOnClickListener {
-            val i = Intent(act, ScannerActivity::class.java)
-            startActivity(i)
-            HELPER.slideEnter(act)
-        }
-        binding.toolbar.ivProfile.setOnClickListener {
-            try {
-                app!!.observer.value = Constant.OBSERVER_PROFILE_VISIBLE_FROM_HOME
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+        binding.toolbar.title.text = getString(R.string.notification_title)
+        binding.toolbar.ivBack.setOnClickListener {
+            app!!.observer.value = Constant.OBSERVER_HISTORY_BACK_PRESS_FRAGMENT_VISIBLE
         }
     }
 
     override fun onClick(view: View?) {
-        when (requireView().id) {
-            binding.toolbar.ivQrcode.id -> {
-                val intent = Intent(act, MainActivity::class.java)
-                act.startActivity(intent)
-                HELPER.slideEnter(act)
-            }
-        }
+
     }
 }

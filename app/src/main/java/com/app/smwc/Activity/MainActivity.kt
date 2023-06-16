@@ -1,21 +1,28 @@
 package com.app.smwc.Activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
+import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.app.frimline.views.Utils
+import com.app.omcsalesapp.Common.PubFun
+import com.app.smwc.Activity.LoginActivity.LoginActivity
 import com.app.smwc.Common.Constant
 import com.app.smwc.Common.HELPER
 import com.app.smwc.R
 import com.app.smwc.databinding.ActivityMainBinding
-import com.app.smwc.fragments.Home.HistoryFragment
-import com.app.smwc.fragments.Home.HomeFragment
-import com.app.smwc.fragments.Home.NotificationFragment
-import com.app.smwc.fragments.Home.ProfileFragment
+import com.app.smwc.fragments.Home.*
+import com.app.smwc.fragments.Notification.NotificationFragment
+import com.app.smwc.fragments.Profile.ProfileFragment.ProfileFragment
+import com.app.ssn.Utils.Loader
+import com.app.ssn.Utils.NetworkResult
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
+@AndroidEntryPoint
 class MainActivity : BaseActivity(), View.OnClickListener {
 
     private var binding: ActivityMainBinding? = null
@@ -26,11 +33,82 @@ class MainActivity : BaseActivity(), View.OnClickListener {
     private var imageViewArray: ArrayList<ImageView>? = null
     private var localFragmentCalled: Fragment? = null
     private var currentFragmentVisible = 0
+    private val homeViewModel: HomeViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(act, R.layout.activity_main)
         Utils.makeStatusBarTransparent(this)
         initView()
+        //setHomeResponse()
+    }
+
+    private fun setApiCall() {
+        if (Utils.hasNetwork(act)) {
+            Loader.showProgress(act)
+            homeViewModel.home(
+                if (prefManager!!.getUser()!!.token!!.isNotEmpty()) "Bearer " + prefManager!!.getUser()!!.token!! else ""
+            )
+        } else {
+            HELPER.commonDialog(act, Constant.NETWORK_ERROR_MESSAGE)
+        }
+    }
+
+    private fun setHomeResponse() {
+        try {
+            homeViewModel.homeResponseLiveData.observe(this) {
+                when (it) {
+                    is NetworkResult.Success -> {
+                        Loader.hideProgress()
+                        if (it.data!!.status == 1 && it.data.data != null) {
+                            HELPER.print("GetOtpResponse::", gson!!.toJson(it.data))
+
+                        } else if (it.data.status == 2) {
+                            PubFun.commonDialog(
+                                act,
+                                getString(R.string.home),
+                                it.data.message!!.ifEmpty { "Server Error" },
+                                false,
+                                clickListener = {
+                                    prefManager!!.Logout()
+                                    val i = Intent(act, LoginActivity::class.java)
+                                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                                    act.startActivity(i)
+                                    act.finish()
+                                    HELPER.slideEnter(act)
+                                })
+                        } else {
+                            PubFun.commonDialog(
+                                act,
+                                getString(R.string.home),
+                                it.data.message!!.ifEmpty { "Server Error" },
+                                false,
+                                clickListener = {
+                                })
+                        }
+                    }
+                    is NetworkResult.Error -> {
+                        Loader.hideProgress()
+                        PubFun.commonDialog(
+                            act,
+                            getString(R.string.home),
+                            getString(
+                                R.string.errorMessage
+                            ),
+                            false,
+                            clickListener = {
+                            })
+                        HELPER.print("Network", "Error")
+                    }
+                    is NetworkResult.Loading -> {
+                        Loader.showProgress(act)
+                        HELPER.print("Network", "loading")
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     private fun initView() {
@@ -54,7 +132,8 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         resetBottomNav()
         binding!!.imgHome.setImageResource(R.drawable.home_fill)
         binding!!.homeSelected.visibility = View.VISIBLE
-        setPublic(homeFragment!!, "Home")
+        //setApiCall()
+        //setPublic(homeFragment!!, "Home")
     }
 
     private fun setPublic(fragment: Fragment, tag: String) {
@@ -93,19 +172,16 @@ class MainActivity : BaseActivity(), View.OnClickListener {
     override fun onClick(view: View?) {
         when (view!!.id) {
             R.id.Home -> {
-                HELPER.print("IsHomeClick", "YES")
                 localFragmentCalled = homeFragment
                 homeTabEnable(true)
                 setPublic(homeFragment!!, "Home")
             }
             R.id.History -> {
-                HELPER.print("IsHistoryClick", "YES")
                 localFragmentCalled = historyFragment
                 historyTabEnable(true)
                 setPublic(historyFragment!!, "History")
             }
             R.id.Notification -> {
-                HELPER.print("IsNotificationClick", "YES")
                 localFragmentCalled = notificationFragment
                 notificationTabEnable(true)
                 setPublic(notificationFragment!!, "Notification")
@@ -169,7 +245,6 @@ class MainActivity : BaseActivity(), View.OnClickListener {
             binding!!.profileSelected.visibility = View.GONE
         }
     }
-
 
     override fun onBackPressed() {
         var handled = false

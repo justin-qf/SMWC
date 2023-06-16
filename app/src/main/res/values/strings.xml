@@ -130,4 +130,6 @@
     <string name="choose">Choose</string>
     <string name="chooseSource">Choose Source</string>
 
+    <string name="listEmpty">List Empty</string>
+
 </resources>

@@ -22,6 +22,10 @@ public class Constant {
     public static final int OBSERVER_PROFILE_VISIBLE_FROM_HOME = 7;
     public static final int OBSERVER_HISTORY_BACK_PRESS_FRAGMENT_VISIBLE = 8;
     public static final int OBSERVER_PROFILE_BACK_PRESS_FRAGMENT_VISIBLE = 9;
+
     public static final int OBSERVER_OTP_CONFIRMATION = 10;
+
+    public static final int OBSERVER_REFRESH_PROFILE_DATA = 11;
+
 
 }

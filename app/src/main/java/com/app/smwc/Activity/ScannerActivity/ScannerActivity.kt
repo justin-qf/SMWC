@@ -13,24 +13,36 @@ import android.util.Patterns
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
+import com.app.frimline.views.Utils
+import com.app.omcsalesapp.Common.PubFun
 import com.app.omcsalesapp.Common.PubFun.Companion.permissionDialog
 import com.app.omcsalesapp.Common.PubFun.Companion.qrRedirectDialog
 import com.app.smwc.Activity.BaseActivity
+import com.app.smwc.Activity.CompanyInfo.CompanyData
+import com.app.smwc.Activity.CompanyInfo.CompanyInfoViewModel
+import com.app.smwc.Activity.LoginActivity.LoginActivity
 import com.app.smwc.Common.Constant
 import com.app.smwc.Common.HELPER
 import com.app.smwc.R
 import com.app.smwc.databinding.ActivityScannerBinding
+import com.app.ssn.Utils.Loader
 import com.app.ssn.Utils.Loader.showToast
+import com.app.ssn.Utils.NetworkResult
 import com.budiyev.android.codescanner.*
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ScannerActivity : BaseActivity(), View.OnClickListener {
 
     private var binding: ActivityScannerBinding? = null
     private lateinit var codeScanner: CodeScanner
     private var isGranted: Boolean = false
+    private val scannerViewModel: ScannerViewModel by viewModels()
+    private var scanResult: String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(act, R.layout.activity_scanner)
@@ -77,6 +89,104 @@ class ScannerActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
+    private fun apiCall() {
+        if (Utils.hasNetwork(act)) {
+            Loader.showProgress(act)
+            val scannerParam = ScannerResponseData(
+                qrId = scanResult,
+            )
+            scannerViewModel.createToken(
+                scannerParam,
+                if (prefManager.getUser()!!.token!!.isNotEmpty()) "Bearer " + prefManager.getUser()!!.token!! else ""
+            )
+        } else {
+            HELPER.commonDialog(act, Constant.NETWORK_ERROR_MESSAGE)
+        }
+    }
+
+    private fun setScannerResponse() {
+        try {
+            scannerViewModel.scannerResponseLiveData.observe(this) {
+                when (it) {
+                    is NetworkResult.Success -> {
+                        Loader.hideProgress()
+                        if (it.data!!.status == 1 && it.data.data != null) {
+                            HELPER.print("GetOtpResponse::", gson!!.toJson(it.data))
+                            PubFun.commonDialog(
+                                act,
+                                getString(R.string.scan_title),
+                                it.data.message!!.ifEmpty { "Server Error" },
+                                false,
+                                clickListener = {
+                                    qrRedirectDialog(act, scanResult, true, openListener = {
+                                        binding!!.title.text = ""
+                                        //copy Text
+                                        (act.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).setPrimaryClip(
+                                            ClipData.newPlainText(
+                                                null,
+                                                scanResult
+                                            )
+                                        )
+                                       // showToast(act, act.getString(R.string.copied_to_clipboard))
+                                        codeScanner.startPreview()
+                                    }, copyListener = {
+                                        binding!!.title.text = ""
+                                        codeScanner.startPreview()
+                                    }, closeListener = {
+                                        binding!!.title.text = ""
+                                        codeScanner.startPreview()
+                                    })
+                                })
+
+                        } else if (it.data.status == 2) {
+                            PubFun.commonDialog(
+                                act,
+                                getString(R.string.scan_title),
+                                it.data.message!!.ifEmpty { "Server Error" },
+                                false,
+                                clickListener = {
+                                    prefManager!!.Logout()
+                                    val i = Intent(act, LoginActivity::class.java)
+                                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                                    act.startActivity(i)
+                                    act.finish()
+                                    HELPER.slideEnter(act)
+                                })
+                        } else {
+                            PubFun.commonDialog(
+                                act,
+                                getString(R.string.scan_title),
+                                it.data.message!!.ifEmpty { "Server Error" },
+                                false,
+                                clickListener = {
+                                })
+                        }
+                    }
+                    is NetworkResult.Error -> {
+                        Loader.hideProgress()
+                        PubFun.commonDialog(
+                            act,
+                            getString(R.string.scan_title),
+                            getString(
+                                R.string.errorMessage
+                            ),
+                            false,
+                            clickListener = {
+                            })
+                        HELPER.print("Network", "Error")
+                    }
+                    is NetworkResult.Loading -> {
+                        Loader.showProgress(act)
+                        HELPER.print("Network", "loading")
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+
     private fun requestPermission() {
         ActivityCompat.requestPermissions(
             this,
@@ -108,6 +218,7 @@ class ScannerActivity : BaseActivity(), View.OnClickListener {
         codeScanner.decodeCallback = DecodeCallback {
             runOnUiThread {
                 binding!!.title.text = it.text
+                scanResult = it.text
                 if (Patterns.WEB_URL.matcher(it.text).matches()) {
                     qrRedirectDialog(act, it.text, false, openListener = {
                         // Open URL
@@ -136,24 +247,7 @@ class ScannerActivity : BaseActivity(), View.OnClickListener {
                             codeScanner.startPreview()
                         })
                 } else {
-                    qrRedirectDialog(act, it.text, true, openListener = {
-                        binding!!.title.text = ""
-                        //copy Text
-                        (act.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).setPrimaryClip(
-                            ClipData.newPlainText(
-                                null,
-                                it.text
-                            )
-                        )
-                        showToast(act, act.getString(R.string.copied_to_clipboard))
-                        codeScanner.startPreview()
-                    }, copyListener = {
-                        binding!!.title.text = ""
-                        codeScanner.startPreview()
-                    }, closeListener = {
-                        binding!!.title.text = ""
-                        codeScanner.startPreview()
-                    })
+                    apiCall()
                 }
             }
         }
@@ -165,6 +259,7 @@ class ScannerActivity : BaseActivity(), View.OnClickListener {
         binding!!.scannerView.setOnClickListener {
             codeScanner.startPreview()
         }
+        setScannerResponse()
     }
 
     override fun onClick(view: View?) {
