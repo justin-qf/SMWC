@@ -20,7 +20,6 @@ class HomeRepository @Inject constructor(@Named(Apis.BASE) private val apiServic
 
     suspend fun home(token: String) {
         homeResponse.postValue(NetworkResult.Loading())
-        HELPER.print("TOKEN: ", token)
         val response = apiServices.home(token)
         handleHomeResponse(response)
     }

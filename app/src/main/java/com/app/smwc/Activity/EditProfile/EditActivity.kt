@@ -209,7 +209,7 @@ class EditActivity : BaseActivity(), View.OnClickListener {
                 HELPER.print("IsUploadImage", gson.toJson(uploadImageResponse))
                 if (uploadImageResponse?.get("status") == 1) {
                     PubFun.commonDialog(act,
-                        getString(R.string.login),
+                        getString(R.string.title_edit),
                         uploadImageResponse?.get("message").toString().ifEmpty { "Server Error" },
                         false,
                         clickListener = {
@@ -219,7 +219,7 @@ class EditActivity : BaseActivity(), View.OnClickListener {
 
                 } else if (uploadImageResponse?.get("status") == 2) {
                     PubFun.commonDialog(act,
-                        getString(R.string.login),
+                        getString(R.string.title_edit),
                         uploadImageResponse?.get("message").toString().ifEmpty { "Server Error" },
                         false,
                         clickListener = {
@@ -233,7 +233,7 @@ class EditActivity : BaseActivity(), View.OnClickListener {
                 } else {
                     if (act != null && !act.isFinishing) {
                         PubFun.commonDialog(act,
-                            getString(R.string.login),
+                            getString(R.string.title_edit),
                             uploadImageResponse?.get("message").toString()
                                 .ifEmpty { "Server Error" },
                             false,
@@ -255,7 +255,7 @@ class EditActivity : BaseActivity(), View.OnClickListener {
             override fun onError(error: ANError) {
                 Loader.hideProgress()
                 PubFun.commonDialog(act,
-                    getString(R.string.login),
+                    getString(R.string.title_edit),
                     getString(
                         R.string.errorMessage
                     ),

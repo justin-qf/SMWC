@@ -34,6 +34,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
     private var localFragmentCalled: Fragment? = null
     private var currentFragmentVisible = 0
     private val homeViewModel: HomeViewModel by viewModels()
+    private var isHomeCLick: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -222,13 +223,13 @@ class MainActivity : BaseActivity(), View.OnClickListener {
 
     private fun notificationTabEnable(isActive: Boolean) {
         if (isActive) {
-            binding!!.igNotification.setImageResource(R.drawable.notification)
+            binding!!.igNotification.setImageResource(R.drawable.fill_notification)
             binding!!.notificationSelected.visibility = View.VISIBLE
             historyTabEnable(false)
             homeTabEnable(false)
             profileTabEnable(false)
         } else {
-            binding!!.igNotification.setImageResource(R.drawable.notification)
+            binding!!.igNotification.setImageResource(R.drawable.notification_icon)
             binding!!.notificationSelected.visibility = View.GONE
         }
     }

@@ -3,7 +3,6 @@ package com.app.smwc.fragments.Profile.ProfileFragment
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -46,20 +45,16 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(), View.OnClickList
         setApiCall()
         iniRefreshListener()
     }
-
     private fun iniRefreshListener() {
         binding.swipeContainer.setOnRefreshListener {
-            setApiCall()
-            val handler = Handler()
-            handler.postDelayed({
-
-            }, 1500)
+            setSwipeContainer()
         }
     }
+
     private fun setApiCall() {
         setProfileResponse()
         if (Utils.hasNetwork(act)) {
-            Loader.showProgress(act)
+            //Loader.showProgress(act)
             profileViewModel.profile(
                 if (pref!!.getUser()!!.token!!.isNotEmpty()) "Bearer " + pref!!.getUser()!!.token!! else ""
             )
@@ -73,15 +68,12 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(), View.OnClickList
             profileViewModel.profileResponseLiveData.observe(this) {
                 when (it) {
                     is NetworkResult.Success -> {
-                        if (binding.swipeContainer.isRefreshing) {
-                            binding.swipeContainer.isRefreshing = false
-                        }
                         Loader.hideProgress()
+                        setShimmerWithSwipeContainer()
                         if (it.data!!.status == 1 && it.data.data != null) {
                             HELPER.print("ProfileResponse::", gson!!.toJson(it.data))
                             setData(it.data.data)
                             profileData = it.data.data
-                            binding.name.text = it.data!!.data!!.firstName + " "+it.data!!.data!!.lastName
 //                            PubFun.commonDialog(
 //                                act,
 //                                getString(R.string.home),
@@ -115,6 +107,9 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(), View.OnClickList
                     }
                     is NetworkResult.Error -> {
                         Loader.hideProgress()
+                        binding.shimmerLayout.stopShimmer()
+                        binding.shimmerLayout.visibility = View.GONE
+                        binding.nestedLayout.visibility = View.VISIBLE
                         PubFun.commonDialog(
                             act,
                             getString(R.string.home),
@@ -127,7 +122,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(), View.OnClickList
                         HELPER.print("Network", "Error")
                     }
                     is NetworkResult.Loading -> {
-                        Loader.showProgress(act)
+                        //Loader.showProgress(act)
                         HELPER.print("Network", "loading")
                     }
                 }
@@ -135,6 +130,21 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(), View.OnClickList
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    private fun setSwipeContainer() {
+        binding.shimmerLayout.visibility = View.VISIBLE
+        binding.shimmerLayout.startShimmer()
+        binding.nestedLayout.visibility = View.GONE
+        setApiCall()
+    }
+    private fun setShimmerWithSwipeContainer() {
+        if (binding.swipeContainer.isRefreshing) {
+            binding.swipeContainer.isRefreshing = false
+        }
+        binding.shimmerLayout.stopShimmer()
+        binding.shimmerLayout.visibility = View.GONE
+        binding.nestedLayout.visibility = View.VISIBLE
     }
 
     private fun setData(data: ProfileData?) {
@@ -145,12 +155,17 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(), View.OnClickList
         binding.companyCitytxt.text = data.companyCity
         binding.zipCodeTxt.text = data.companyZipcode
         binding.companyAddressTxt.text = data.companyAddress
+        if (data.firstName!!.isNotEmpty()) {
+            binding.name.text = data.firstName + " " + data.lastName
+        }
         if (data.image != null && data.image.toString().isNotEmpty()) {
-            Glide.with(this)
-                .load(data.image)
+            Glide.with(this).load(data.image)
+                .placeholder(R.drawable.user_icon).error(R.drawable.user_icon)
                 .into(binding.ivEditProfile)
         } else {
-            return
+            Glide.with(this).load(R.drawable.user_icon)
+                .placeholder(R.drawable.user_icon).error(R.drawable.user_icon)
+                .into(binding.ivEditProfile)
         }
     }
 

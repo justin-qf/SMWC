@@ -29,6 +29,7 @@
     <color name="colorBlack">#000000</color>
     <color name="btnSecondary">#844fc1</color>
     <color name="renewColor">#4cc346</color>
+    <color name="simmerColor">#BFBFBF</color>
     <color name="black_overlay">#3B423B</color>
     <color name="black_normal_overlay">#3242b6</color>
     <color name="colorWhite">#FFFFFF</color>
@@ -36,7 +37,7 @@
     <color name="grayTextColor">#a8acaf</color>
     <color name="history_colour">#ADADAD</color>
     <color name="shadow">#838383</color>
-    <color name="simmerColor">#CDCDCD</color>
+    <color name="simmerColors">#CDCDCD</color>
     <color name="darkColor">#8e95aa</color>
     <color name="deemBlue">#007bff</color>
     <color name="transparent_color">#00017DFF</color>

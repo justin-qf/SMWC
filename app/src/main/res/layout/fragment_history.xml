@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:shimmer="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -11,6 +12,41 @@
         <include
             android:id="@+id/toolbar"
             layout="@layout/main_toolbar" />
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:orientation="vertical"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            shimmer:shimmer_duration="800">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_20sdp"
+                android:layout_marginEnd="@dimen/_20sdp"
+                android:orientation="vertical">
+
+                <include layout="@layout/item_order_shimmer_layout" />
+
+                <include layout="@layout/item_order_shimmer_layout" />
+
+                <include layout="@layout/item_order_shimmer_layout" />
+
+                <include layout="@layout/item_order_shimmer_layout" />
+
+                <include layout="@layout/item_order_shimmer_layout" />
+
+                <include layout="@layout/item_order_shimmer_layout" />
+            </LinearLayout>
+        </com.facebook.shimmer.ShimmerFrameLayout>
 
         <TextView
             android:id="@+id/emptyText"
@@ -30,10 +66,10 @@
             android:id="@+id/swipeContainer"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:scrollbars="none"
-            android:visibility="visible"
             android:layout_marginStart="@dimen/_20sdp"
             android:layout_marginEnd="@dimen/_20sdp"
+            android:scrollbars="none"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -44,12 +80,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
                 <TextView
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_20sdp"
@@ -64,14 +101,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:clipToPadding="false"
-                    android:paddingBottom="@dimen/_32sdp"
+                    android:paddingBottom="@dimen/_10sdp"
                     tools:listitem="@layout/store_matches_item_layout" />
 
             </LinearLayout>
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-        <!--        </androidx.core.widget.NestedScrollView>-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

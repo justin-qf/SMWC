@@ -80,7 +80,7 @@ public class HELPER {
                     "application/zip", "application/vnd.android.package-archive"};
 
     public static void print(String tag, String message) {
-        //Log.e(tag, message);
+        Log.e(tag, message);
     }
 
     public static void apiLog(String apiName, String method, Map<String, String> data) {

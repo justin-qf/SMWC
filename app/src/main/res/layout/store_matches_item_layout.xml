@@ -8,17 +8,33 @@
         android:paddingTop="@dimen/_10sdp"
         android:paddingBottom="@dimen/_8sdp">
 
+        <TextView
+            android:id="@+id/dateTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/rubik_bold"
+            android:includeFontPadding="false"
+            android:lineSpacingExtra="0dp"
+            android:paddingBottom="@dimen/_10sdp"
+            android:text="Notification"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_12sdp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            app:cardElevation="0dp"
             app:cardBackgroundColor="@color/store_bg"
             app:cardCornerRadius="@dimen/_20sdp"
+            app:cardElevation="0dp"
             app:cardPreventCornerOverlap="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@+id/dateTxt">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -44,12 +60,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/rubik_bold"
-                            android:text="10"
                             android:includeFontPadding="false"
+                            android:lineSpacingExtra="0dp"
+                            android:text="10"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_20sdp"
                             android:textStyle="bold"
-                            android:lineSpacingExtra="0dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -58,8 +74,8 @@
                             android:id="@+id/product_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_5sdp"
                             android:layout_marginStart="@dimen/_5sdp"
+                            android:layout_marginTop="@dimen/_5sdp"
                             android:fontFamily="@font/rubik_regular"
                             android:gravity="center"
                             android:text="@string/product"
@@ -163,18 +179,17 @@
                             android:src="@drawable/location" />
 
                         <TextView
-                            android:layout_marginEnd="@dimen/_28sdp"
                             android:id="@+id/location"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/_5sdp"
+                            android:layout_marginEnd="@dimen/_28sdp"
                             android:ellipsize="end"
                             android:fontFamily="@font/rubik_regular"
                             android:text="@string/address"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_9sdp"
-                            android:textStyle="normal"
-                           />
+                            android:textStyle="normal" />
 
                     </LinearLayout>
 

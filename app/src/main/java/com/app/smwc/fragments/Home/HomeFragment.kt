@@ -1,8 +1,8 @@
 package com.app.smwc.fragments.Home
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +22,9 @@ import com.app.smwc.fragments.BaseFragment
 import com.app.ssn.Utils.Loader
 import com.app.ssn.Utils.NetworkResult
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 
 @AndroidEntryPoint
@@ -29,6 +32,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), View.OnClickListener {
 
     private var homeAdapter: HomeAdapter? = null
     private val homeViewModel: HomeViewModel by activityViewModels()
+    private var isReload: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,27 +53,30 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), View.OnClickListener {
         setApiCall()
         iniRefreshListener()
     }
+
     private fun iniRefreshListener() {
         binding.swipeContainer.setOnRefreshListener {
-            setApiCall()
-            val handler = Handler()
-            handler.postDelayed({
-                if (binding.swipeContainer.isRefreshing) {
-                    binding.swipeContainer.isRefreshing = false
-                }
-            }, 1500)
+            setSwipeContainer()
         }
     }
-    private fun setApiCall() {
 
-        setHomeResponse()
-        if (Utils.hasNetwork(act)) {
-            Loader.showProgress(act)
-            homeViewModel.home(
-                if (pref!!.getUser()!!.token!!.isNotEmpty()) "Bearer " + pref!!.getUser()!!.token!! else ""
-            )
-        } else {
-            HELPER.commonDialog(act, Constant.NETWORK_ERROR_MESSAGE)
+    private fun setApiCall() {
+        // Make the API call
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                if (Utils.hasNetwork(act)) {
+                    //Loader.showProgress(act)
+                    // setHomeResponse()
+                    homeViewModel.home(
+                        if (pref!!.getUser()!!.token!!.isNotEmpty()) "Bearer " + pref!!.getUser()!!.token!! else ""
+                    )
+                } else {
+                    HELPER.commonDialog(act, Constant.NETWORK_ERROR_MESSAGE)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                // Handle exception
+            }
         }
     }
 
@@ -79,15 +86,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), View.OnClickListener {
                 when (it) {
                     is NetworkResult.Success -> {
                         Loader.hideProgress()
-                        if (binding.swipeContainer.isRefreshing) {
-                            binding.swipeContainer.isRefreshing = false
-                        }
+                        setShimmerWithSwipeContainer()
                         if (it.data!!.status == 1 && it.data.data != null) {
-                            HELPER.print("GetOtpResponse::", gson!!.toJson(it.data))
+                            HELPER.print("GetHOMEResponse::", gson!!.toJson(it.data))
                             setStoreTitle(it.data.data!!.orders)
                             setTokenWithCountLayout(it.data.data!!)
                             setAdapter(it.data.data!!.orders)
-                            //binding.userNameTxt.text = ""
 //                            PubFun.commonDialog(
 //                                act,
 //                                getString(R.string.home),
@@ -121,6 +125,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), View.OnClickListener {
                     }
                     is NetworkResult.Error -> {
                         Loader.hideProgress()
+                        binding.shimmerLayout.stopShimmer()
+                        binding.shimmerLayout.visibility = View.GONE
+                        binding.homeMainLayout.visibility = View.VISIBLE
                         PubFun.commonDialog(
                             act,
                             getString(R.string.home),
@@ -133,7 +140,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), View.OnClickListener {
                         HELPER.print("Network", "Error")
                     }
                     is NetworkResult.Loading -> {
-                        Loader.showProgress(act)
+                        //Loader.showProgress(act)
                         HELPER.print("Network", "loading")
                     }
                 }
@@ -141,6 +148,23 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), View.OnClickListener {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+
+    private fun setSwipeContainer() {
+        binding.shimmerLayout.visibility = View.VISIBLE
+        binding.shimmerLayout.startShimmer()
+        binding.homeMainLayout.visibility = View.GONE
+        setApiCall()
+    }
+
+    private fun setShimmerWithSwipeContainer() {
+        if (binding.swipeContainer.isRefreshing) {
+            binding.swipeContainer.isRefreshing = false
+        }
+        binding.shimmerLayout.stopShimmer()
+        binding.shimmerLayout.visibility = View.GONE
+        binding.homeMainLayout.visibility = View.VISIBLE
     }
 
     private fun setStoreTitle(orderList: ArrayList<Orders>?) {
@@ -197,6 +221,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), View.OnClickListener {
             listClickListener
         )
         binding.rootRecyclerList.adapter = homeAdapter
+        binding.rootRecyclerList.setHasFixedSize(true)
     }
 
     private fun initViews() {
@@ -212,6 +237,22 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), View.OnClickListener {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
+        }
+
+        if (pref!!.getUser() != null && pref!!.getUser()!!.firstName != null && pref!!.getUser()!!.firstName!!.isNotEmpty() && pref!!.getUser()!!.lastName != null && pref!!.getUser()!!.lastName!!.isNotEmpty()) {
+            binding.userNameTxt.text =
+                "Hello, " + pref!!.getUser()!!.firstName + " " + pref!!.getUser()!!.lastName
+        }
+
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        try {
+            setHomeResponse()
+            HELPER.print("onAttach", "DONE")
+        } catch (castException: ClassCastException) {
+            /** The activity does not implement the listener.  */
         }
     }
 

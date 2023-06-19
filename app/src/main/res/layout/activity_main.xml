@@ -118,7 +118,7 @@
                             android:id="@+id/ig_Notification"
                             android:layout_width="@dimen/bottom_navigation_icon_size"
                             android:layout_height="@dimen/bottom_navigation_icon_size"
-                            android:src="@drawable/notification" />
+                            android:src="@drawable/notification_icon" />
 
                         <ImageView
                             android:id="@+id/notification_selected"

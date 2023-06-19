@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:shimmer="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,23 +14,21 @@
             android:id="@+id/toolbar"
             layout="@layout/toolbar" />
 
-        <!--        <androidx.core.widget.NestedScrollView-->
-        <!--            android:id="@+id/scrollable"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_marginStart="@dimen/_20sdp"-->
-        <!--            android:layout_marginEnd="@dimen/_20sdp"-->
-        <!--            android:animateLayoutChanges="true"-->
-        <!--            android:clipToPadding="false"-->
-        <!--            android:fillViewport="true"-->
-        <!--            android:orientation="vertical"-->
-        <!--            android:scrollbars="none"-->
-        <!--            android:visibility="visible"-->
-        <!--            app:behavior_overlapTop="50dp"-->
-        <!--            app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
-        <!--            app:layout_constraintEnd_toEndOf="parent"-->
-        <!--            app:layout_constraintStart_toStartOf="parent"-->
-        <!--            app:layout_constraintTop_toBottomOf="@+id/toolbar">-->
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            shimmer:shimmer_duration="800">
+
+            <include layout="@layout/item_home_shimmer_layout" />
+        </com.facebook.shimmer.ShimmerFrameLayout>
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeContainer"
@@ -45,14 +44,13 @@
             app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
             <LinearLayout
+                android:id="@+id/homeMainLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_20sdp"
                 android:layout_marginEnd="@dimen/_20sdp"
                 android:orientation="vertical"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/toolbar">
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/userNameTxt"
@@ -345,14 +343,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:clipToPadding="false"
-                    android:paddingBottom="@dimen/_40sdp"
+                    android:paddingBottom="@dimen/_10sdp"
                     tools:listitem="@layout/store_matches_item_layout" />
 
             </LinearLayout>
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-        <!--</androidx.core.widget.NestedScrollView>-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -2,7 +2,6 @@ package com.app.smwc.fragments.Home
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +18,7 @@ import com.app.smwc.Interfaces.ListClickListener
 import com.app.smwc.R
 import com.app.smwc.databinding.FragmentHistoryBinding
 import com.app.smwc.fragments.BaseFragment
+import com.app.smwc.fragments.History.HistoryAdapter
 import com.app.smwc.fragments.History.HistoryViewModel
 import com.app.ssn.Utils.Loader
 import com.app.ssn.Utils.NetworkResult
@@ -27,7 +27,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class HistoryFragment : BaseFragment<FragmentHistoryBinding>(), View.OnClickListener {
 
-    private var homeAdapter: HomeAdapter? = null
+    private var historyAdapter: HistoryAdapter? = null
     private val historyViewModel: HistoryViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,28 +44,22 @@ class HistoryFragment : BaseFragment<FragmentHistoryBinding>(), View.OnClickList
         super.onViewCreated(view, savedInstanceState)
         SWCApp.getInstance().observer.value = Constant.OBSERVER_HISTORY_FRAGMENT_VISIBLE
         initViews()
-        setApiCall()
         iniRefreshListener()
     }
 
     private fun iniRefreshListener() {
         binding.swipeContainer.setOnRefreshListener {
-            setApiCall()
-            val handler = Handler()
-            handler.postDelayed({
-                if (binding.swipeContainer.isRefreshing) {
-                    binding.swipeContainer.isRefreshing = false
-                }
-            }, 1500)
+            setSwipeContainer()
         }
     }
+
     private fun setApiCall() {
         if (Utils.hasNetwork(act)) {
-            Loader.showProgress(act)
+            //Loader.showProgress(act)
+            setHistoryResponse()
             historyViewModel.history(
                 if (pref!!.getUser()!!.token!!.isNotEmpty()) "Bearer " + pref!!.getUser()!!.token!! else ""
             )
-            setHistoryResponse()
         } else {
             HELPER.commonDialog(act, Constant.NETWORK_ERROR_MESSAGE)
         }
@@ -77,16 +71,14 @@ class HistoryFragment : BaseFragment<FragmentHistoryBinding>(), View.OnClickList
                 when (it) {
                     is NetworkResult.Success -> {
                         Loader.hideProgress()
-                        if (binding.swipeContainer.isRefreshing) {
-                            binding.swipeContainer.isRefreshing = false
-                        }
+                        setShimmerWithSwipeContainer()
                         if (it.data!!.status == 1 && it.data.data != null) {
+                            HELPER.print("HistoryResponse::", gson!!.toJson(it.data))
                             if (it.data.data!!.orders != null && it.data.data!!.orders.size != 0) {
-
-                                HELPER.print("HistoryResponse::", gson!!.toJson(it.data))
                                 binding.historyMainLayout.visibility = View.VISIBLE
                                 binding.emptyText.visibility = View.GONE
-                                setAdapter(it.data.data!!.orders)
+                                isDate(it.data.data!!.orders)
+                                //setAdapter(it.data.data!!.orders)
                             } else {
                                 binding.historyMainLayout.visibility = View.GONE
                                 binding.emptyText.visibility = View.VISIBLE
@@ -123,6 +115,8 @@ class HistoryFragment : BaseFragment<FragmentHistoryBinding>(), View.OnClickList
                         }
                     }
                     is NetworkResult.Error -> {
+                        binding.shimmerLayout.stopShimmer()
+                        binding.shimmerLayout.visibility = View.GONE
                         Loader.hideProgress()
                         PubFun.commonDialog(
                             act,
@@ -136,7 +130,7 @@ class HistoryFragment : BaseFragment<FragmentHistoryBinding>(), View.OnClickList
                         HELPER.print("Network", "Error")
                     }
                     is NetworkResult.Loading -> {
-                        Loader.showProgress(act)
+                        //Loader.showProgress(act)
                         HELPER.print("Network", "loading")
                     }
                 }
@@ -144,6 +138,21 @@ class HistoryFragment : BaseFragment<FragmentHistoryBinding>(), View.OnClickList
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    private fun setSwipeContainer() {
+        binding.shimmerLayout.visibility = View.VISIBLE
+        binding.shimmerLayout.startShimmer()
+        binding.historyMainLayout.visibility = View.GONE
+        setApiCall()
+    }
+
+    private fun setShimmerWithSwipeContainer() {
+        if (binding.swipeContainer.isRefreshing) {
+            binding.swipeContainer.isRefreshing = false
+        }
+        binding.shimmerLayout.stopShimmer()
+        binding.shimmerLayout.visibility = View.GONE
     }
 
     //    {
@@ -167,7 +176,32 @@ class HistoryFragment : BaseFragment<FragmentHistoryBinding>(), View.OnClickList
 //        ]
 //    }
 //    }
-    private fun setAdapter(orderList: ArrayList<Orders>) {
+
+    private fun isDate(orderList: ArrayList<Orders>) {
+        val taskByDate = orderList.groupBy { it.date }
+        val orderArrayList: java.util.ArrayList<OrdersType> = java.util.ArrayList()
+        for (list in taskByDate) {
+            orderArrayList.add(
+                OrdersType(
+                    date = list.key.toString(),
+                    type = 0
+                )
+            )
+
+            for (model in list.value) {
+                orderArrayList.add(
+                    OrdersType(
+                        order = model,
+                        type = 1
+                    )
+                );
+
+            }
+        }
+        setAdapter(orderArrayList)
+    }
+
+    private fun setAdapter(orderList: ArrayList<OrdersType>) {
         binding.rootRecyclerList.layoutManager = LinearLayoutManager(
             act,
             LinearLayoutManager.VERTICAL,
@@ -177,12 +211,13 @@ class HistoryFragment : BaseFragment<FragmentHistoryBinding>(), View.OnClickList
             ListClickListener { _, _, _ ->
             }
 
-        homeAdapter = HomeAdapter(
+        historyAdapter = HistoryAdapter(
             act,
             orderList,
             listClickListener
         )
-        binding.rootRecyclerList.adapter = homeAdapter
+        binding.rootRecyclerList.adapter = historyAdapter
+        binding.rootRecyclerList.setHasFixedSize(true)
     }
 
     private fun initViews() {
@@ -190,6 +225,7 @@ class HistoryFragment : BaseFragment<FragmentHistoryBinding>(), View.OnClickList
         binding.toolbar.ivBack.setOnClickListener {
             app!!.observer.value = Constant.OBSERVER_HISTORY_BACK_PRESS_FRAGMENT_VISIBLE
         }
+        setApiCall()
     }
 
     override fun onClick(view: View?) {

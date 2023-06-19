@@ -2,7 +2,6 @@ package com.app.smwc.fragments.Notification
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,21 +39,16 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(), View.O
         setApiCall()
         iniRefreshListener()
     }
+
     private fun iniRefreshListener() {
         binding.swipeContainer.setOnRefreshListener {
-            setApiCall()
-            val handler = Handler()
-            handler.postDelayed({
-                if (binding.swipeContainer.isRefreshing) {
-                    binding.swipeContainer.isRefreshing = false
-                }
-            }, 1500)
+            setSwipeContainer()
         }
     }
 
     private fun setApiCall() {
         if (Utils.hasNetwork(act)) {
-            Loader.showProgress(act)
+            //Loader.showProgress(act)
             notificationViewModel.notification(
                 if (pref!!.getUser()!!.token!!.isNotEmpty()) "Bearer " + pref!!.getUser()!!.token!! else ""
             )
@@ -70,12 +64,10 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(), View.O
                 when (it) {
                     is NetworkResult.Success -> {
                         Loader.hideProgress()
-                        if (binding.swipeContainer.isRefreshing) {
-                            binding.swipeContainer.isRefreshing = false
-                        }
+                        setShimmerWithSwipeContainer()
                         if (it.data!!.status == 1 && it.data.data != null) {
+                            HELPER.print("NotificationResponse::", gson!!.toJson(it.data))
                             if (it.data.data != null && it.data.data.size != 0) {
-                                HELPER.print("HistoryResponse::", gson!!.toJson(it.data))
                                 binding.notificationMainLayout.visibility = View.VISIBLE
                                 binding.emptyText.visibility = View.GONE
                                 setAdapter(it.data.data)
@@ -83,7 +75,6 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(), View.O
                                 binding.notificationMainLayout.visibility = View.GONE
                                 binding.emptyText.visibility = View.VISIBLE
                             }
-
                         } else if (it.data.status == 2) {
                             PubFun.commonDialog(
                                 act,
@@ -109,6 +100,8 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(), View.O
                         }
                     }
                     is NetworkResult.Error -> {
+                        binding.shimmerLayout.stopShimmer()
+                        binding.shimmerLayout.visibility = View.GONE
                         Loader.hideProgress()
                         PubFun.commonDialog(
                             act,
@@ -122,7 +115,7 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(), View.O
                         HELPER.print("Network", "Error")
                     }
                     is NetworkResult.Loading -> {
-                        Loader.showProgress(act)
+                        //Loader.showProgress(act)
                         HELPER.print("Network", "loading")
                     }
                 }
@@ -130,6 +123,21 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(), View.O
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+
+    private fun setSwipeContainer() {
+        binding.shimmerLayout.visibility = View.VISIBLE
+        binding.shimmerLayout.startShimmer()
+        binding.notificationMainLayout.visibility = View.GONE
+        setApiCall()
+    }
+    private fun setShimmerWithSwipeContainer() {
+        if (binding.swipeContainer.isRefreshing) {
+            binding.swipeContainer.isRefreshing = false
+        }
+        binding.shimmerLayout.stopShimmer()
+        binding.shimmerLayout.visibility = View.GONE
     }
 
     private fun setAdapter(notificationList: ArrayList<NotificationData>) {
