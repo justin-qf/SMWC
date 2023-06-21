@@ -8,6 +8,11 @@ public class Constant {
     public static final String DEVICE_TYPE = "android";
     public static final String NETWORK_ERROR_MESSAGE = "SMWC app requires the internet connection. please turn on the data and try again.";
 
+    public static final int IS_DATE = 0;
+    public static final int IS_ITEM = 1;
+
+    public static final String PROFILE_DATA = "profileData";
+
     public static final String IS_LOGIN = "1";
     public static final String IS_SIGNUP = "0";
     public static final int autoDialogDismissTimeInMlSecLow = 2000;
@@ -21,14 +26,15 @@ public class Constant {
     public static final int OBSERVER_EDIT_PROFILE_BACK_PRESS_FRAGMENT_VISIBLE = 6;
     public static final int OBSERVER_PROFILE_VISIBLE_FROM_HOME = 7;
     public static final int OBSERVER_HISTORY_BACK_PRESS_FRAGMENT_VISIBLE = 8;
-    public static final int OBSERVER_PROFILE_BACK_PRESS_FRAGMENT_VISIBLE = 9;
+    public static final int OBSERVER_NOTIFICATION_BACK_PRESS_FRAGMENT_VISIBLE = 9;
 
-    public static final int OBSERVER_OTP_CONFIRMATION = 10;
+    public static final int OBSERVER_PROFILE_BACK_PRESS_FRAGMENT_VISIBLE = 10;
 
-    public static final int OBSERVER_REFRESH_PROFILE_DATA = 11;
+    public static final int OBSERVER_OTP_CONFIRMATION = 11;
 
-    public static final int OBSERVER_REFRESH_DASHBOARD_DATA = 12;
+    public static final int OBSERVER_REFRESH_PROFILE_DATA = 12;
 
+    public static final int OBSERVER_REFRESH_DASHBOARD_DATA = 13;
 
 
 }

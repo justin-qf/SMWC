@@ -2,19 +2,16 @@ package com.app.smwc.fragments.History
 
 import android.app.Activity
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.app.smwc.Common.Constant
 import com.app.smwc.Common.HELPER
 import com.app.smwc.Interfaces.ListClickListener
 import com.app.smwc.R
 import com.app.smwc.databinding.ItemStickyDateBinding
 import com.app.smwc.databinding.StoreMatchesItemLayoutBinding
 import com.app.smwc.fragments.Home.OrdersType
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.util.*
 
 class HistoryAdapter(
     private val act: Activity,
@@ -27,21 +24,19 @@ class HistoryAdapter(
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         when (viewType) {
-            0 -> {
-
-
-                val binding2: ItemStickyDateBinding = DataBindingUtil.inflate(
-                    LayoutInflater.from(viewGroup.context),
+            Constant.IS_DATE -> {
+                val binding: ItemStickyDateBinding = DataBindingUtil.inflate(
+                    LayoutInflater.from(act),
                     R.layout.item_sticky_date,
                     viewGroup,
                     false
                 )
-                return StickyHeader(binding2)
-
+                return StickyHeader(binding)
             }
-            1 -> {
+
+            Constant.IS_ITEM -> {
                 val binding: StoreMatchesItemLayoutBinding = DataBindingUtil.inflate(
-                    LayoutInflater.from(viewGroup.context),
+                    LayoutInflater.from(act),
                     R.layout.store_matches_item_layout,
                     viewGroup,
                     false
@@ -49,6 +44,7 @@ class HistoryAdapter(
                 return TopViewHolder(binding)
 
             }
+
             else -> {
                 val binding: StoreMatchesItemLayoutBinding = DataBindingUtil.inflate(
                     LayoutInflater.from(viewGroup.context),
@@ -59,27 +55,17 @@ class HistoryAdapter(
                 return TopViewHolder(binding)
             }
         }
-
-
-    }
-
-    fun convertDateToString(date: String?): String? {
-        val df: DateFormat = SimpleDateFormat(date)
-        val today: Date = Calendar.getInstance()
-            .time
-        return df.format(today)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when (position) {
-            0 -> {
-                val model = orderArrayList[position]
-                (holder as StickyHeader).binding.dateTxt.visibility = View.VISIBLE
-                HELPER.print("ORDER_LIST", model.date)
-                holder.binding.dateTxt.text = "sachin dfnsdkfnsdjfnsdjklf"
+        val model = orderArrayList[position]
+        when (holder.itemViewType) {
+            Constant.IS_DATE -> {
+                (holder as StickyHeader).binding.dateTxt.text =
+                    if (model.date.isNotEmpty()) HELPER.formatDate(model.date) else ""
             }
-            1 -> {
-                val model = orderArrayList[position]
+
+            Constant.IS_ITEM -> {
                 (holder as TopViewHolder).binding.symbol.text =
                     model.order!!.currency.toString().trim()
                 holder.binding.totalProduct.text = model.order!!.totalAmount.toString().trim()
@@ -88,11 +74,10 @@ class HistoryAdapter(
                 holder.binding.location.text = model.order!!.address.toString().trim()
             }
         }
-
     }
 
     override fun getItemViewType(position: Int): Int {
-        return orderArrayList[position].type;
+        return orderArrayList[position].type
     }
 
     override fun getItemCount(): Int {

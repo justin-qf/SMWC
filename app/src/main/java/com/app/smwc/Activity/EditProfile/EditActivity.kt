@@ -1,11 +1,9 @@
 package com.app.smwc.Activity.EditProfile
 
 import android.app.Activity
-import android.content.ContentResolver
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.provider.OpenableColumns
 import android.util.Patterns
 import android.view.View
 import android.view.WindowManager
@@ -42,16 +40,6 @@ class EditActivity : BaseActivity(), View.OnClickListener {
 
     private var binding: ActivityEditBinding? = null
     private val updateViewModel: UpdateProfileViewModel by viewModels()
-    private var firstName = ""
-    private var lastName = ""
-    private var emailMobile = ""
-    private var companyName = ""
-    private var companyEmail = ""
-    private var companyMobile = ""
-    private var companyAddress = ""
-    private var companyCity = ""
-    private var zipcode = ""
-    private var imageUrl = ""
     private var fileUri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,32 +74,28 @@ class EditActivity : BaseActivity(), View.OnClickListener {
 
     private fun setData() {
         //set Data
-//        firstName = intent.getStringExtra("firstName").toString()
-//        lastName = intent.getStringExtra("lastName").toString()
-//        emailMobile = intent.getStringExtra("emailMobile").toString()
-//        companyName = intent.getStringExtra("companyName").toString()
-//        companyEmail = intent.getStringExtra("companyEmail").toString()
-//        companyMobile = intent.getStringExtra("companyMobile").toString()
-//        companyAddress = intent.getStringExtra("companyAddress").toString()
-//        companyCity = intent.getStringExtra("companyCity").toString()
-//        zipcode = intent.getStringExtra("zipcode").toString()
-
-        binding!!.firstNameEdt.setText(intent.getStringExtra("firstName").toString())
-        binding!!.lastNameEdt.setText(intent.getStringExtra("lastName").toString())
-        binding!!.emailMobileEdt.setText(intent.getStringExtra("emailMobile").toString())
-        binding!!.companyNameEdt.setText(intent.getStringExtra("companyName").toString())
-        binding!!.companyEmailEdt.setText(intent.getStringExtra("companyEmail").toString())
-        binding!!.companyMobileEdt.setText(intent.getStringExtra("companyMobile").toString())
-        binding!!.companyAddressEdt.setText(intent.getStringExtra("companyAddress").toString())
-        binding!!.companyCityEdt.setText(intent.getStringExtra("companyCity").toString())
-        binding!!.zipCodeEdt.setText(intent.getStringExtra("zipcode").toString())
-        imageUrl = intent.getStringExtra("image").toString()
-        if (imageUrl.isNotEmpty()) {
-            Glide.with(this)
-                .load(imageUrl)
-                .into(binding!!.ivEdit)
-        } else {
-            return
+        val receivedList = intent.getStringArrayListExtra(Constant.PROFILE_DATA)
+        if (receivedList != null) {
+            binding!!.firstNameEdt.setText(receivedList[0])
+            binding!!.lastNameEdt.setText(receivedList[1])
+            binding!!.emailMobileEdt.setText(receivedList[2])
+            binding!!.companyNameEdt.setText(receivedList[3])
+            binding!!.companyEmailEdt.setText(receivedList[4])
+            binding!!.companyMobileEdt.setText(receivedList[5])
+            binding!!.companyAddressEdt.setText(receivedList[6])
+            binding!!.companyCityEdt.setText(receivedList[7])
+            binding!!.zipCodeEdt.setText(receivedList[8])
+            if (receivedList[9].isNotEmpty()) {
+                Glide.with(this)
+                    .load(receivedList[9])
+                    .placeholder(R.drawable.user_icon)
+                    .error(R.drawable.user_icon)
+                    .into(binding!!.ivEdit)
+            } else {
+                Glide.with(this).load(R.drawable.user_icon)
+                    .placeholder(R.drawable.user_icon).error(R.drawable.user_icon)
+                    .into(binding!!.ivEdit)
+            }
         }
     }
 
@@ -122,7 +106,6 @@ class EditActivity : BaseActivity(), View.OnClickListener {
             }
             binding!!.toolbar.submitLayout.id -> {
                 validation()
-                //validation()
             }
             binding!!.editProfileLayout.id -> {
                 PubFun.getImageDialog(act, cameraListener = {
@@ -199,7 +182,6 @@ class EditActivity : BaseActivity(), View.OnClickListener {
             if (prefManager.getUser()!!.token!!.isNotEmpty()) "Bearer " + prefManager.getUser()!!.token!! else ""
         )
 
-        HELPER.print("PassingData", request.toString())
         request.build().setUploadProgressListener { bytesUploaded, totalBytes ->
             // do anything with progress
         }.getAsJSONObject(object : JSONObjectRequestListener {
@@ -242,14 +224,7 @@ class EditActivity : BaseActivity(), View.OnClickListener {
                             })
                     }
                 }
-//                {"nameValuePairs":{"status":1,"message":"Profile updated successfully",
-//                    "data":{"nameValuePairs":{"id":24,"first_name":"Maulik","last_name":"Patel","email_mobile":"maulik2001@gmail.com",
-//                        "device_token":"android","device_type":"android","company_id":0,"is_verify":1,
-//                        "image":"https://dev.securemywillcall.com/public/profile/1686904105.jpg","company_name":"",
-//                        "company_email":"","company_mobile":"","company_city":"","company_zipcode":"","company_address":""}}}}
-
                 HELPER.print("response", response.toString())
-                HELPER.print("response", gson.toJson(response))
             }
 
             override fun onError(error: ANError) {
@@ -477,7 +452,7 @@ class EditActivity : BaseActivity(), View.OnClickListener {
                         if (it.data!!.status == 1) {
                             HELPER.print("GetOtpResponse::", gson.toJson(it.data))
                             PubFun.commonDialog(act,
-                                getString(R.string.login),
+                                getString(R.string.title_edit),
                                 it.data.message!!.ifEmpty { "Server Error" },
                                 false,
                                 clickListener = {
@@ -485,7 +460,7 @@ class EditActivity : BaseActivity(), View.OnClickListener {
                                 })
                         } else if (it.data.status == 2) {
                             PubFun.commonDialog(act,
-                                getString(R.string.login),
+                                getString(R.string.title_edit),
                                 it.data.message!!.ifEmpty { "Server Error" },
                                 false,
                                 clickListener = {
@@ -499,7 +474,7 @@ class EditActivity : BaseActivity(), View.OnClickListener {
                         } else {
                             if (act != null && !act.isFinishing) {
                                 PubFun.commonDialog(act,
-                                    getString(R.string.login),
+                                    getString(R.string.title_edit),
                                     it.data.message!!.ifEmpty { "Server Error" },
                                     false,
                                     clickListener = {
@@ -509,7 +484,7 @@ class EditActivity : BaseActivity(), View.OnClickListener {
                     }
                     is NetworkResult.Error -> {
                         PubFun.commonDialog(act,
-                            getString(R.string.login),
+                            getString(R.string.title_edit),
                             getString(
                                 R.string.errorMessage
                             ),
@@ -528,19 +503,5 @@ class EditActivity : BaseActivity(), View.OnClickListener {
             e.printStackTrace()
         }
     }
-
-}
-
-private fun ContentResolver.getFileName(fileUri: Uri): String {
-
-    var name = ""
-    val returnCursor = this.query(fileUri, null, null, null, null)
-    if (returnCursor != null) {
-        val nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-        returnCursor.moveToFirst()
-        name = returnCursor.getString(nameIndex)
-        returnCursor.close()
-    }
-    return name;
 }
 

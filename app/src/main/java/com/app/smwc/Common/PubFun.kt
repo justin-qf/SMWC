@@ -20,12 +20,11 @@ import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.HorizontalScrollView
 import android.widget.ImageView
-import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
-import androidx.core.content.res.ResourcesCompat
 import com.app.omcsalesapp.Views.DialogToast
 import com.app.smwc.Common.Constant
+import com.app.smwc.Common.HELPER
 import com.app.smwc.R
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textview.MaterialTextView
@@ -63,9 +62,14 @@ class PubFun {
             val dialog = builder.create()
             dialog.window!!.setBackgroundDrawableResource(R.color.transparent_color)
             dialog.setCancelable(false)
-            dialog.show()
-            cancelBtn.setOnClickListener { view: View? -> dialog.dismiss() }
+            if (!dialog.isShowing)
+                dialog.show()
+            cancelBtn.setOnClickListener { view: View? ->
+                act.onBackPressed()
+                dialog.dismiss()
+            }
             logoutBtn.setOnClickListener { view: View? ->
+                HELPER.print("IS_CLICK","INNER")
                 listener()
                 dialog.dismiss()
             }

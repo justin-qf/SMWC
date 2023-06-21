@@ -79,8 +79,8 @@ class CompanyInfoActivity : BaseActivity(), View.OnClickListener {
                 when (it) {
                     is NetworkResult.Success -> {
                         Loader.hideProgress()
-                        HELPER.print("GetOtpResponse::", gson.toJson(it.data!!))
-                        if (it.data.status == 1 && it.data.message!!.isNotEmpty()) {
+                        if (it.data!!.status == 1 && it.data.message!!.isNotEmpty()) {
+                            HELPER.print("AddCompanyResponse::", gson.toJson(it.data))
                             PubFun.commonDialog(
                                 act,
                                 getString(R.string.company_info_title),

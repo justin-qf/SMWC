@@ -29,7 +29,6 @@ abstract class BaseFragment<V : ViewBinding> : Fragment(), Observer {
         gson = Gson()
         app = act.application as SWCApp
         app!!.observer.addObserver(this)
-
         pref = Pref(act)
     }
 
@@ -46,7 +45,6 @@ abstract class BaseFragment<V : ViewBinding> : Fragment(), Observer {
     @CallSuper
     override fun onDestroyView() {
         super.onDestroyView()
-        //binding.
     }
 
     abstract fun onCreateBinding(

@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.frimline.views.Utils
 import com.app.omcsalesapp.Common.PubFun
 import com.app.smwc.Activity.LoginActivity.LoginActivity
-import com.app.smwc.Activity.MainActivity
 import com.app.smwc.Activity.ScannerActivity.ScannerActivity
 import com.app.smwc.Common.Constant
 import com.app.smwc.Common.HELPER
@@ -32,7 +31,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), View.OnClickListener {
 
     private var homeAdapter: HomeAdapter? = null
     private val homeViewModel: HomeViewModel by activityViewModels()
-    private var isReload: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,7 +64,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), View.OnClickListener {
             try {
                 if (Utils.hasNetwork(act)) {
                     //Loader.showProgress(act)
-                    // setHomeResponse()
                     homeViewModel.home(
                         if (pref!!.getUser()!!.token!!.isNotEmpty()) "Bearer " + pref!!.getUser()!!.token!! else ""
                     )
@@ -75,7 +72,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), View.OnClickListener {
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                // Handle exception
             }
         }
     }
@@ -88,17 +84,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), View.OnClickListener {
                         Loader.hideProgress()
                         setShimmerWithSwipeContainer()
                         if (it.data!!.status == 1 && it.data.data != null) {
-                            HELPER.print("GetHOMEResponse::", gson!!.toJson(it.data))
+                            HELPER.print("HomeResponse::", gson!!.toJson(it.data))
                             setStoreTitle(it.data.data!!.orders)
                             setTokenWithCountLayout(it.data.data!!)
                             setAdapter(it.data.data!!.orders)
-//                            PubFun.commonDialog(
-//                                act,
-//                                getString(R.string.home),
-//                                it.data.message!!.ifEmpty { "Server Error" },
-//                                false,
-//                                clickListener = {
-//                                })
                         } else if (it.data.status == 2) {
                             PubFun.commonDialog(
                                 act,
@@ -149,7 +138,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), View.OnClickListener {
             e.printStackTrace()
         }
     }
-
 
     private fun setSwipeContainer() {
         binding.shimmerLayout.visibility = View.VISIBLE
@@ -225,34 +213,21 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), View.OnClickListener {
     }
 
     private fun initViews() {
+        binding.completeCardview.setOnClickListener(this)
         binding.toolbar.ivQrcode.setOnClickListener(this)
-        binding.toolbar.ivQrcode.setOnClickListener {
-            val i = Intent(act, ScannerActivity::class.java)
-            startActivity(i)
-            HELPER.slideEnter(act)
-        }
-        binding.toolbar.ivProfile.setOnClickListener {
-            try {
-                app!!.observer.value = Constant.OBSERVER_PROFILE_VISIBLE_FROM_HOME
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-
+        binding.toolbar.ivProfile.setOnClickListener(this)
         if (pref!!.getUser() != null && pref!!.getUser()!!.firstName != null && pref!!.getUser()!!.firstName!!.isNotEmpty() && pref!!.getUser()!!.lastName != null && pref!!.getUser()!!.lastName!!.isNotEmpty()) {
             binding.userNameTxt.text =
                 "Hello, " + pref!!.getUser()!!.firstName + " " + pref!!.getUser()!!.lastName
         }
-
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         try {
             setHomeResponse()
-            HELPER.print("onAttach", "DONE")
         } catch (castException: ClassCastException) {
-            /** The activity does not implement the listener.  */
+            castException.printStackTrace()
         }
     }
 
@@ -268,11 +243,18 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), View.OnClickListener {
     }
 
     override fun onClick(view: View?) {
-        when (requireView().id) {
+        when (view!!.id) {
             binding.toolbar.ivQrcode.id -> {
-                val intent = Intent(act, MainActivity::class.java)
-                act.startActivity(intent)
+                val i = Intent(act, ScannerActivity::class.java)
+                startActivity(i)
                 HELPER.slideEnter(act)
+            }
+            binding.toolbar.ivProfile.id -> {
+                try {
+                    app!!.observer.value = Constant.OBSERVER_PROFILE_VISIBLE_FROM_HOME
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
         }
     }

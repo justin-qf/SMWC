@@ -45,6 +45,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(), View.OnClickList
         setApiCall()
         iniRefreshListener()
     }
+
     private fun iniRefreshListener() {
         binding.swipeContainer.setOnRefreshListener {
             setSwipeContainer()
@@ -74,17 +75,10 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(), View.OnClickList
                             HELPER.print("ProfileResponse::", gson!!.toJson(it.data))
                             setData(it.data.data)
                             profileData = it.data.data
-//                            PubFun.commonDialog(
-//                                act,
-//                                getString(R.string.home),
-//                                it.data.message!!.ifEmpty { "Server Error" },
-//                                false,
-//                                clickListener = {
-//                                })
                         } else if (it.data.status == 2) {
                             PubFun.commonDialog(
                                 act,
-                                getString(R.string.home),
+                                getString(R.string.title_profile),
                                 it.data.message!!.ifEmpty { "Server Error" },
                                 false,
                                 clickListener = {
@@ -98,7 +92,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(), View.OnClickList
                         } else {
                             PubFun.commonDialog(
                                 act,
-                                getString(R.string.home),
+                                getString(R.string.title_profile),
                                 it.data.message!!.ifEmpty { "Server Error" },
                                 false,
                                 clickListener = {
@@ -112,7 +106,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(), View.OnClickList
                         binding.nestedLayout.visibility = View.VISIBLE
                         PubFun.commonDialog(
                             act,
-                            getString(R.string.home),
+                            getString(R.string.title_profile),
                             getString(
                                 R.string.errorMessage
                             ),
@@ -138,6 +132,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(), View.OnClickList
         binding.nestedLayout.visibility = View.GONE
         setApiCall()
     }
+
     private fun setShimmerWithSwipeContainer() {
         if (binding.swipeContainer.isRefreshing) {
             binding.swipeContainer.isRefreshing = false
@@ -171,35 +166,8 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(), View.OnClickList
 
     private fun initViews() {
         binding.toolbar.ivBack.setOnClickListener(this)
-        binding.toolbar.editLayout.setOnClickListener {
-            val i = Intent(act, EditActivity::class.java)
-            i.putExtra("firstName", profileData!!.firstName.toString().trim())
-            i.putExtra("lastName", profileData!!.lastName.toString().trim())
-            i.putExtra("emailMobile", profileData!!.emailMobile.toString().trim())
-            i.putExtra("companyName", profileData!!.companyName.toString().trim())
-            i.putExtra("companyEmail", profileData!!.companyEmail.toString().trim())
-            i.putExtra("companyMobile", profileData!!.companyMobile.toString().trim())
-            i.putExtra("companyAddress", profileData!!.companyAddress.toString().trim())
-            i.putExtra("companyCity", profileData!!.companyCity.toString().trim())
-            i.putExtra("zipcode", profileData!!.companyZipcode.toString().trim())
-            i.putExtra("image", profileData!!.image.toString().trim())
-            act.startActivity(i)
-            HELPER.slideEnter(act)
-            //setPublic(EditFragment(), "Edit")
-        }
-        binding.ivEditProfile.setOnClickListener {
-            logoutDialog(act, clickListener = {
-                Pref(act).Logout()
-                val i = Intent(act, LoginActivity::class.java)
-                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                act.startActivity(i)
-                act.finish()
-                HELPER.slideEnter(act)
-            })
-        }
-//        binding.toolbar.ivBack.setOnClickListener {
-//            app!!.observer.value = Constant.OBSERVER_PROFILE_BACK_PRESS_FRAGMENT_VISIBLE
-//        }
+        binding.toolbar.editLayout.setOnClickListener(this)
+        binding.ivEditProfile.setOnClickListener(this)
         binding.toolbar.title.text = getString(R.string.title_profile)
         binding.toolbar.editLayout.visibility = View.VISIBLE
         binding.toolbar.submitLayout.visibility = View.GONE
@@ -207,10 +175,39 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(), View.OnClickList
 
 
     override fun onClick(view: View?) {
-        when (requireView().id) {
+        when (view!!.id) {
             binding.toolbar.ivBack.id -> {
+                app!!.observer.value = Constant.OBSERVER_PROFILE_BACK_PRESS_FRAGMENT_VISIBLE
             }
-            R.id.iv_edit_profile -> {
+            binding.toolbar.editLayout.id -> {
+                if (profileData != null) {
+                    val stringList = ArrayList<String>()
+                    stringList.add(profileData!!.firstName.toString().trim())
+                    stringList.add(profileData!!.lastName.toString().trim())
+                    stringList.add(profileData!!.emailMobile.toString().trim())
+                    stringList.add(profileData!!.companyName.toString().trim())
+                    stringList.add(profileData!!.companyEmail.toString().trim())
+                    stringList.add(profileData!!.companyMobile.toString().trim())
+                    stringList.add(profileData!!.companyAddress.toString().trim())
+                    stringList.add(profileData!!.companyCity.toString().trim())
+                    stringList.add(profileData!!.companyZipcode.toString().trim())
+                    stringList.add(profileData!!.image.toString().trim())
+                    val i = Intent(act, EditActivity::class.java)
+                    i.putStringArrayListExtra(Constant.PROFILE_DATA, stringList)
+                    act.startActivity(i)
+                    HELPER.slideEnter(act)
+                }
+                //setPublic(EditFragment(), "Edit")
+            }
+            binding.ivEditProfile.id -> {
+                logoutDialog(act, clickListener = {
+                    Pref(act).Logout()
+                    val i = Intent(act, LoginActivity::class.java)
+                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    act.startActivity(i)
+                    act.finish()
+                    HELPER.slideEnter(act)
+                })
             }
         }
     }
@@ -227,15 +224,15 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(), View.OnClickList
         }
     }
 
-    var screenAttech: Boolean = false
+    private var screenAttach: Boolean = false
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        screenAttech = true
+        screenAttach = true
     }
 
     override fun onDetach() {
         super.onDetach()
-        screenAttech = false
+        screenAttach = false
     }
 
     override fun onPause() {
@@ -244,7 +241,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(), View.OnClickList
 
     override fun onResume() {
         super.onResume()
-        screenAttech = true
+        screenAttach = true
         checkThatOtherFragmentVisible()
         refreshData()
     }
@@ -259,7 +256,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(), View.OnClickList
     }
 
     private fun checkThatOtherFragmentVisible() {
-        if (screenAttech)
+        if (screenAttach)
             onBackPressed()
     }
 
@@ -289,8 +286,6 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(), View.OnClickList
     private fun setPublic(fragment: Fragment, tag: String) {
         val currentFragment = childFragmentManager.findFragmentById(R.id.profile_fragment_container)
         if (currentFragment != null && currentFragment.javaClass == fragment.javaClass) {
-            if (tag.equals("home", ignoreCase = true)) {
-            }
             return
         }
         if (childFragmentManager.findFragmentByTag(tag) != null) {

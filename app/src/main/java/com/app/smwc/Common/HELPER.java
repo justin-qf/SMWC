@@ -163,11 +163,11 @@ public class HELPER {
     public static String formatDate(String dateString) {
         try {
             HELPER.print("Date", dateString);
-            @SuppressLint("SimpleDateFormat") SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yyyy");
             Date d = sd.parse(dateString);
-            sd = new SimpleDateFormat("dd/MM/yyyy");
+            sd = new SimpleDateFormat("dd MMMM, yyyy");
             assert d != null;
-            return sd.format(d).replace("/", "-");
+            return sd.format(d).replace("/", " ");
         } catch (ParseException ignored) {
         }
         return "";

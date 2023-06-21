@@ -96,7 +96,6 @@ public class BaseActivity extends AppCompatActivity implements Observer {
         }
     }
 
-
     private static void showNoConnectionDialog() {
         if (!noInternetConnectionAlertDialog.isShowing()) {
             noInternetConnectionAlertDialog.setContentView(R.layout.noconnectionlayout);
@@ -142,7 +141,6 @@ public class BaseActivity extends AppCompatActivity implements Observer {
             }
         }
     }
-
 
     private void registerNetworkBroadcastForNougat() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

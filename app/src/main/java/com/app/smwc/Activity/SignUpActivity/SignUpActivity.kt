@@ -124,7 +124,7 @@ class SignUpActivity : BaseActivity(), View.OnClickListener {
                     is NetworkResult.Success -> {
                         Loader.hideProgress()
                         if (it.data!!.status == 1 && it.data.otp != null) {
-                            HELPER.print("GetOtpResponse::", gson.toJson(it.data))
+                            HELPER.print("SignUpResponse::", gson.toJson(it.data))
                             val i = Intent(act, OtpActivity::class.java)
                             i.putExtra("name", binding!!.firstNameEdt.text.toString())
                             i.putExtra("lastName", binding!!.lastNameEdt.text.toString())

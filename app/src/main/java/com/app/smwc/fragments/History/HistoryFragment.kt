@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.frimline.views.Utils
 import com.app.omcsalesapp.Common.PubFun
 import com.app.smwc.Activity.LoginActivity.LoginActivity
-import com.app.smwc.Activity.MainActivity
 import com.app.smwc.Common.Constant
 import com.app.smwc.Common.HELPER
 import com.app.smwc.Common.SWCApp
@@ -29,10 +28,6 @@ class HistoryFragment : BaseFragment<FragmentHistoryBinding>(), View.OnClickList
 
     private var historyAdapter: HistoryAdapter? = null
     private val historyViewModel: HistoryViewModel by activityViewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateBinding(
         inflater: LayoutInflater,
@@ -77,19 +72,11 @@ class HistoryFragment : BaseFragment<FragmentHistoryBinding>(), View.OnClickList
                             if (it.data.data!!.orders != null && it.data.data!!.orders.size != 0) {
                                 binding.historyMainLayout.visibility = View.VISIBLE
                                 binding.emptyText.visibility = View.GONE
-                                isDate(it.data.data!!.orders)
-                                //setAdapter(it.data.data!!.orders)
+                                setHeaderWithItemLayout(it.data.data!!.orders)
                             } else {
                                 binding.historyMainLayout.visibility = View.GONE
                                 binding.emptyText.visibility = View.VISIBLE
                             }
-//                            PubFun.commonDialog(
-//                                act,
-//                                getString(R.string.title_history),
-//                                it.data.message!!.ifEmpty { "Server Error" },
-//                                false,
-//                                clickListener = {
-//                                })
                         } else if (it.data.status == 2) {
                             PubFun.commonDialog(
                                 act,
@@ -155,47 +142,23 @@ class HistoryFragment : BaseFragment<FragmentHistoryBinding>(), View.OnClickList
         binding.shimmerLayout.visibility = View.GONE
     }
 
-    //    {
-//        "status": 1,
-//        "message": "data get successfully",
-//        "data": {
-//        "orders": [
-//        {
-//            "total_amount": 60000,
-//            "order_number": "DST00023",
-//            "company_title": "Expanded Tertiary Migration",
-//            "address": "1956 McClure Street suite 350, Homestead, PA, USA",
-//            "status": 0,
-//            "status_name": "Pending",
-//            "currency": "$",
-//            "date": "16/06/2023",
-//            "id": 9,
-//            "item_pickup_up": 5000,
-//            "token_no": "Lu0004"
-//        }
-//        ]
-//    }
-//    }
-
-    private fun isDate(orderList: ArrayList<Orders>) {
+    private fun setHeaderWithItemLayout(orderList: ArrayList<Orders>) {
         val taskByDate = orderList.groupBy { it.date }
-        val orderArrayList: java.util.ArrayList<OrdersType> = java.util.ArrayList()
+        val orderArrayList: ArrayList<OrdersType> = ArrayList()
         for (list in taskByDate) {
             orderArrayList.add(
                 OrdersType(
                     date = list.key.toString(),
-                    type = 0
+                    type = Constant.IS_DATE
                 )
             )
-
             for (model in list.value) {
                 orderArrayList.add(
                     OrdersType(
                         order = model,
-                        type = 1
+                        type = Constant.IS_ITEM
                     )
-                );
-
+                )
             }
         }
         setAdapter(orderArrayList)
@@ -222,18 +185,14 @@ class HistoryFragment : BaseFragment<FragmentHistoryBinding>(), View.OnClickList
 
     private fun initViews() {
         binding.toolbar.title.text = getString(R.string.title_history)
-        binding.toolbar.ivBack.setOnClickListener {
-            app!!.observer.value = Constant.OBSERVER_HISTORY_BACK_PRESS_FRAGMENT_VISIBLE
-        }
+        binding.toolbar.ivBack.setOnClickListener(this)
         setApiCall()
     }
 
     override fun onClick(view: View?) {
-        when (requireView().id) {
+        when (view!!.id) {
             binding.toolbar.ivBack.id -> {
-                val intent = Intent(act, MainActivity::class.java)
-                act.startActivity(intent)
-                HELPER.slideEnter(act)
+                app!!.observer.value = Constant.OBSERVER_HISTORY_BACK_PRESS_FRAGMENT_VISIBLE
             }
         }
     }

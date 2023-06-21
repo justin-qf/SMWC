@@ -132,6 +132,7 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(), View.O
         binding.notificationMainLayout.visibility = View.GONE
         setApiCall()
     }
+
     private fun setShimmerWithSwipeContainer() {
         if (binding.swipeContainer.isRefreshing) {
             binding.swipeContainer.isRefreshing = false
@@ -160,12 +161,14 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(), View.O
 
     private fun initViews() {
         binding.toolbar.title.text = getString(R.string.notification_title)
-        binding.toolbar.ivBack.setOnClickListener {
-            app!!.observer.value = Constant.OBSERVER_HISTORY_BACK_PRESS_FRAGMENT_VISIBLE
-        }
+        binding.toolbar.ivBack.setOnClickListener(this)
     }
 
     override fun onClick(view: View?) {
-
+        when (view!!.id) {
+            binding.toolbar.ivBack.id -> {
+                app!!.observer.value = Constant.OBSERVER_NOTIFICATION_BACK_PRESS_FRAGMENT_VISIBLE
+            }
+        }
     }
 }

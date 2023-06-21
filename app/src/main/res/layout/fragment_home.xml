@@ -126,6 +126,7 @@
                         android:visibility="visible">
 
                         <carbon.widget.LinearLayout
+                            android:id="@+id/completeCardview"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/_105sdp"
                             android:background="@color/blue"

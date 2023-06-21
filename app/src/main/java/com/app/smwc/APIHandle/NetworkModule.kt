@@ -46,9 +46,10 @@ class NetworkModule {
                 .writeTimeout(60, TimeUnit.SECONDS)
                 .readTimeout(60, TimeUnit.SECONDS)
                 .addInterceptor(loggingInterceptor)
+                .followRedirects(false)
+                .followSslRedirects(false)
+                .retryOnConnectionFailure(false)
                 .build()
-
-//            client.dispatcher.cancelAll()
 
             val gson: Gson = GsonBuilder()
                 .setLenient()

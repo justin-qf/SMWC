@@ -51,6 +51,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
             binding!!.getOtpBtn.id -> {
                 checkValidation()
             }
+
             binding!!.signUpBtn.id -> {
                 val i = Intent(act, SignUpActivity::class.java)
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -94,7 +95,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                 when (it) {
                     is NetworkResult.Success -> {
                         if (it.data!!.status == 1 && it.data.otp != null) {
-                            HELPER.print("GetOtpResponse::", gson.toJson(it.data))
+                            HELPER.print("OtpResponse::", gson.toJson(it.data))
                             val i = Intent(act, OtpActivity::class.java)
                             i.putExtra(
                                 "email_mobile",
@@ -105,8 +106,6 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                                 "otp",
                                 it.data.otp!!.toString().trim()
                             )
-                            // i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-                            HELPER.print("startActivity", "startActivity")
                             startActivity(i)
                             HELPER.slideEnter(act)
                         } else if (it.data.status == 2) {

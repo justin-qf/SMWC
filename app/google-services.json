@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "155704598811",
+    "project_id": "smwc-9bf50",
+    "storage_bucket": "smwc-9bf50.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:155704598811:android:a4bd413a25a5243d4df3be",
+        "android_client_info": {
+          "package_name": "com.app.smwc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "155704598811-if6seudmnlfm8j18osjc29rhu3nsre4u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5T-pggK1HLOTEZssjf1wWQc4o4j8PAv4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "155704598811-if6seudmnlfm8j18osjc29rhu3nsre4u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

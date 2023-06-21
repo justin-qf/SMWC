@@ -9,6 +9,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Patterns
 import android.view.View
 import android.widget.Toast
@@ -38,6 +39,7 @@ class ScannerActivity : BaseActivity(), View.OnClickListener {
     private var binding: ActivityScannerBinding? = null
     private lateinit var codeScanner: CodeScanner
     private var isGranted: Boolean = false
+    private var isGrantedCameraPermission: Boolean = false
     private val scannerViewModel: ScannerViewModel by viewModels()
     private var scanResult: String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,7 +79,17 @@ class ScannerActivity : BaseActivity(), View.OnClickListener {
                     ) {
                         permissionDialog(act, "You need to allow access permissions", listener = {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                requestPermission()
+                                isGrantedCameraPermission = true
+                                //requestPermission()
+                                val intent =
+                                    Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                                val uri = Uri.fromParts(
+                                    "package",
+                                    packageName,
+                                    null
+                                )
+                                intent.data = uri
+                                act.startActivityForResult(intent, 0)
                             }
                         })
                     }
@@ -205,6 +217,9 @@ class ScannerActivity : BaseActivity(), View.OnClickListener {
         binding!!.title.setOnClickListener(this)
 
         codeScanner = CodeScanner(this, binding!!.scannerView)
+        if (isGrantedCameraPermission) {
+            codeScanner.startPreview()
+        }
         // Parameters (default values)
         codeScanner.camera = CodeScanner.CAMERA_BACK // or CAMERA_FRONT or specific camera id
         codeScanner.formats = CodeScanner.ALL_FORMATS // list of type BarcodeFormat,
@@ -280,14 +295,28 @@ class ScannerActivity : BaseActivity(), View.OnClickListener {
 
     override fun onResume() {
         super.onResume()
-        if (isGranted)
-            codeScanner
-                .startPreview()
+        if (isGrantedCameraPermission) {
+            if (ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_DENIED
+            ) {
+                act.onBackPressed()
+                return
+            } else {
+                initView()
+            }
+
+        } else {
+            if (isGranted) {
+                codeScanner
+                    .startPreview()
+            }
+        }
     }
 
     override fun onPause() {
         super.onPause()
-        if (isGranted)
+        if (!isGrantedCameraPermission && isGranted) {
             codeScanner.releaseResources()
+        }
     }
 }

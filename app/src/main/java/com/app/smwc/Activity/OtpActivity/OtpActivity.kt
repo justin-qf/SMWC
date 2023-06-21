@@ -77,7 +77,6 @@ class OtpActivity : BaseActivity(), View.OnClickListener {
         binding!!.toolbar.title.text = getString(R.string.code_verify_title)
         HELPER.setTextColour(binding!!.toolbar.title, act)
         HELPER.setImageColour(binding!!.toolbar.ivBack, act)
-
         otpView()
         verifyOtpResponse()
         loginResponse()
@@ -292,7 +291,7 @@ class OtpActivity : BaseActivity(), View.OnClickListener {
                 when (it) {
                     is NetworkResult.Success -> {
                         Loader.hideProgress()
-                        HELPER.print("GetOtpResponse::", gson.toJson(it.data!!))
+                        HELPER.print("VerifyOtpResponse::", gson.toJson(it.data!!))
                         if (it.data.status == 1 && it.data.data != null) {
                             prefManager.saveUSer(it.data.data!!)
                             PubFun.commonDialog(
