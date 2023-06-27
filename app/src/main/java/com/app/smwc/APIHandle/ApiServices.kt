@@ -1,7 +1,6 @@
-package com.app.ssn.data.api
+package com.app.smwc.APIHandle
 
 import com.app.omcsalesapp.Activity.SignInActivity.SendOtpResponse
-import com.app.smwc.APIHandle.Apis
 import com.app.smwc.Activity.CompanyInfo.CompanyData
 import com.app.smwc.Activity.CompanyInfo.CompanyInfoResponse
 import com.app.smwc.Activity.EditProfile.EditProfileResponse

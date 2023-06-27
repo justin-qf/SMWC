@@ -1,4 +1,4 @@
-package com.app.omcsalesapp.APIHandle
+package com.app.smwc.APIHandle
 
 import dagger.Module
 import dagger.Provides

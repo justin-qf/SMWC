@@ -11,6 +11,8 @@ public class Constant {
     public static final int IS_DATE = 0;
     public static final int IS_ITEM = 1;
 
+    public static final Long DELAY_TIME = 1000L;
+
     public static final String PROFILE_DATA = "profileData";
 
     public static final String IS_LOGIN = "1";
@@ -35,6 +37,8 @@ public class Constant {
     public static final int OBSERVER_REFRESH_PROFILE_DATA = 12;
 
     public static final int OBSERVER_REFRESH_DASHBOARD_DATA = 13;
+
+    public static final int OBSERVER_NO_INTERNET_CONNECTION = 14;
 
 
 }

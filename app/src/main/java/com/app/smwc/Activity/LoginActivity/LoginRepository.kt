@@ -2,15 +2,16 @@ package com.app.ssn.ui.login
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.app.smwc.APIHandle.ApiServices
 import com.app.smwc.APIHandle.Apis
 import com.app.smwc.Activity.LoginActivity.LoginData
 import com.app.smwc.Activity.LoginActivity.LoginResponse
 import com.app.smwc.Common.HELPER
 import com.app.ssn.Utils.NetworkResult
-import com.app.ssn.data.api.ApiServices
 import com.google.gson.Gson
 import org.json.JSONObject
 import retrofit2.Response
+import java.net.SocketTimeoutException
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -21,10 +22,16 @@ class LoginRepository @Inject constructor(@Named(Apis.BASE) private val apiServi
         get() = loginResponse
 
     suspend fun loginUser(userRequest: LoginData) {
-        loginResponse.postValue(NetworkResult.Loading())
-        HELPER.print("PASSING_DATA", Gson().toJson(userRequest))
-        val response = apiServices.login(userRequest)
-        handleResponse(response)
+        try {
+            loginResponse.postValue(NetworkResult.Loading())
+            HELPER.print("PASSING_DATA", Gson().toJson(userRequest))
+            val response = apiServices.login(userRequest)
+            handleResponse(response)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } catch (e: SocketTimeoutException) {
+            e.printStackTrace()
+        }
     }
 
     private fun handleResponse(response: Response<LoginResponse>) {

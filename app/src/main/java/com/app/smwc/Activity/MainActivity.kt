@@ -1,15 +1,12 @@
 package com.app.smwc.Activity
 
-import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
-import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.app.frimline.views.Utils
-import com.app.omcsalesapp.Common.PubFun
-import com.app.smwc.Activity.LoginActivity.LoginActivity
 import com.app.smwc.Common.Constant
 import com.app.smwc.Common.HELPER
 import com.app.smwc.R
@@ -17,8 +14,6 @@ import com.app.smwc.databinding.ActivityMainBinding
 import com.app.smwc.fragments.Home.*
 import com.app.smwc.fragments.Notification.NotificationFragment
 import com.app.smwc.fragments.Profile.ProfileFragment.ProfileFragment
-import com.app.ssn.Utils.Loader
-import com.app.ssn.Utils.NetworkResult
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
@@ -33,85 +28,23 @@ class MainActivity : BaseActivity(), View.OnClickListener {
     private var imageViewArray: ArrayList<ImageView>? = null
     private var localFragmentCalled: Fragment? = null
     private var currentFragmentVisible = 0
-    private val homeViewModel: HomeViewModel by viewModels()
-    private var isHomeCLick: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(act, R.layout.activity_main)
         Utils.makeStatusBarTransparent(this)
         initView()
-        //setHomeResponse()
     }
 
-    private fun setApiCall() {
-        if (Utils.hasNetwork(act)) {
-            Loader.showProgress(act)
-            homeViewModel.home(
-                if (prefManager!!.getUser()!!.token!!.isNotEmpty()) "Bearer " + prefManager!!.getUser()!!.token!! else ""
-            )
-        } else {
-            HELPER.commonDialog(act, Constant.NETWORK_ERROR_MESSAGE)
-        }
-    }
-
-    private fun setHomeResponse() {
+    private fun setAppCatch(){
         try {
-            homeViewModel.homeResponseLiveData.observe(this) {
-                when (it) {
-                    is NetworkResult.Success -> {
-                        Loader.hideProgress()
-                        if (it.data!!.status == 1 && it.data.data != null) {
-                            HELPER.print("GetOtpResponse::", gson!!.toJson(it.data))
-
-                        } else if (it.data.status == 2) {
-                            PubFun.commonDialog(
-                                act,
-                                getString(R.string.home),
-                                it.data.message!!.ifEmpty { "Server Error" },
-                                false,
-                                clickListener = {
-                                    prefManager!!.Logout()
-                                    val i = Intent(act, LoginActivity::class.java)
-                                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                                    act.startActivity(i)
-                                    act.finish()
-                                    HELPER.slideEnter(act)
-                                })
-                        } else {
-                            PubFun.commonDialog(
-                                act,
-                                getString(R.string.home),
-                                it.data.message!!.ifEmpty { "Server Error" },
-                                false,
-                                clickListener = {
-                                })
-                        }
-                    }
-                    is NetworkResult.Error -> {
-                        Loader.hideProgress()
-                        PubFun.commonDialog(
-                            act,
-                            getString(R.string.home),
-                            getString(
-                                R.string.errorMessage
-                            ),
-                            false,
-                            clickListener = {
-                            })
-                        HELPER.print("Network", "Error")
-                    }
-                    is NetworkResult.Loading -> {
-                        Loader.showProgress(act)
-                        HELPER.print("Network", "loading")
-                    }
-                }
-            }
-        } catch (e: Exception) {
+            val versionCode = act.packageManager
+                .getPackageInfo(act.packageName, 0).versionCode
+            prefManager.setAppCode(versionCode)
+        } catch (e: PackageManager.NameNotFoundException) {
             e.printStackTrace()
         }
     }
-
     private fun initView() {
         loadFragment(HomeFragment())
         binding!!.Home.setOnClickListener(this)
@@ -133,8 +66,6 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         resetBottomNav()
         binding!!.imgHome.setImageResource(R.drawable.home_fill)
         binding!!.homeSelected.visibility = View.VISIBLE
-        //setApiCall()
-        //setPublic(homeFragment!!, "Home")
     }
 
     private fun setPublic(fragment: Fragment, tag: String) {
@@ -247,6 +178,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         var handled = false
         if (currentFragmentVisible != Constant.OBSERVER_HOME_FRAGMENT_VISIBLE && currentFragmentVisible != Constant.OBSERVER_HISTORY_FRAGMENT_VISIBLE && currentFragmentVisible != Constant.OBSERVER_NOTIFICATION_FRAGMENT_VISIBLE && currentFragmentVisible != Constant.OBSERVER_PROFILE_FRAGMENT_VISIBLE) {

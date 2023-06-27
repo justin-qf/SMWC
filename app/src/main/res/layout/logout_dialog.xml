@@ -84,7 +84,7 @@
                 android:paddingEnd="@dimen/_10sdp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/muli_medium"
+                android:fontFamily="@font/rubik_regular"
                 android:gravity="center"
                 android:text=""
                 android:textColor="@color/black"

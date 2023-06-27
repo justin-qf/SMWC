@@ -84,7 +84,7 @@ class CompanyInfoActivity : BaseActivity(), View.OnClickListener {
                             PubFun.commonDialog(
                                 act,
                                 getString(R.string.company_info_title),
-                                it.data.message!!.ifEmpty { "Server Error" },
+                                it.data.message!!.ifEmpty {getString(R.string.serverErrorMessage) },
                                 false,
                                 clickListener = {
                                     val i = Intent(act, MainActivity::class.java)
@@ -97,7 +97,7 @@ class CompanyInfoActivity : BaseActivity(), View.OnClickListener {
                             PubFun.commonDialog(
                                 act,
                                 getString(R.string.company_info_title),
-                                it.data.message!!.ifEmpty { "Server Error" },
+                                it.data.message!!.ifEmpty { getString(R.string.serverErrorMessage) },
                                 false,
                                 clickListener = {
                                     prefManager.Logout()
@@ -111,7 +111,7 @@ class CompanyInfoActivity : BaseActivity(), View.OnClickListener {
                             PubFun.commonDialog(
                                 act,
                                 getString(R.string.company_info_title),
-                                it.data.message!!.ifEmpty { "Server Error" },
+                                it.data.message!!.ifEmpty { getString(R.string.serverErrorMessage) },
                                 false,
                                 clickListener = {
                                 })

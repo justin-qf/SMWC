@@ -23,6 +23,7 @@ import com.app.ssn.Common.Pref
 import com.app.ssn.Utils.Loader
 import com.app.ssn.Utils.NetworkResult
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
@@ -60,7 +61,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(), View.OnClickList
                 if (pref!!.getUser()!!.token!!.isNotEmpty()) "Bearer " + pref!!.getUser()!!.token!! else ""
             )
         } else {
-            HELPER.commonDialog(act, Constant.NETWORK_ERROR_MESSAGE)
+            //HELPER.commonDialog(act, Constant.NETWORK_ERROR_MESSAGE)
         }
     }
 
@@ -79,7 +80,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(), View.OnClickList
                             PubFun.commonDialog(
                                 act,
                                 getString(R.string.title_profile),
-                                it.data.message!!.ifEmpty { "Server Error" },
+                                it.data.message!!.ifEmpty { getString(R.string.serverErrorMessage) },
                                 false,
                                 clickListener = {
                                     pref!!.Logout()
@@ -93,7 +94,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(), View.OnClickList
                             PubFun.commonDialog(
                                 act,
                                 getString(R.string.title_profile),
-                                it.data.message!!.ifEmpty { "Server Error" },
+                                it.data.message!!.ifEmpty { getString(R.string.serverErrorMessage) },
                                 false,
                                 clickListener = {
                                 })
@@ -156,10 +157,14 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(), View.OnClickList
         if (data.image != null && data.image.toString().isNotEmpty()) {
             Glide.with(this).load(data.image)
                 .placeholder(R.drawable.user_icon).error(R.drawable.user_icon)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .centerCrop()
                 .into(binding.ivEditProfile)
         } else {
             Glide.with(this).load(R.drawable.user_icon)
                 .placeholder(R.drawable.user_icon).error(R.drawable.user_icon)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .centerCrop()
                 .into(binding.ivEditProfile)
         }
     }
@@ -220,6 +225,16 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(), View.OnClickList
         } else if (app!!.observer.value == Constant.OBSERVER_REFRESH_PROFILE_DATA) {
             act.runOnUiThread {
                 setApiCall()
+            }
+        } else if (app!!.observer.value == Constant.OBSERVER_NO_INTERNET_CONNECTION) {
+            if (!act.isDestroyed && !act.isFinishing) {
+                act.runOnUiThread {
+                    try {
+                        setApiCall()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
             }
         }
     }

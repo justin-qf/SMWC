@@ -3,14 +3,15 @@ package com.app.smwc.Activity.OtpActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.app.omcsalesapp.Activity.SignInActivity.SendOtpResponse
+import com.app.smwc.APIHandle.ApiServices
 import com.app.smwc.APIHandle.Apis
 import com.app.smwc.Activity.LoginActivity.VerifyOtpResponse
 import com.app.smwc.Common.HELPER
 import com.app.ssn.Utils.NetworkResult
-import com.app.ssn.data.api.ApiServices
 import com.google.gson.Gson
 import org.json.JSONObject
 import retrofit2.Response
+import java.net.SocketTimeoutException
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -24,10 +25,16 @@ class SignUpRepository @Inject constructor(@Named(Apis.BASE) private val apiServ
         get() = verifyOtpResponse
 
     suspend fun senOtp(userRequestDate: OtpData) {
-        getOtpResponse.postValue(NetworkResult.Loading())
-        HELPER.print("PASSING_DATA", Gson().toJson(userRequestDate))
-        val response = apiServices.setOtp(userRequestDate)
-        handleSendOtpResponse(response)
+        try {
+            getOtpResponse.postValue(NetworkResult.Loading())
+            HELPER.print("PASSING_DATA", Gson().toJson(userRequestDate))
+            val response = apiServices.setOtp(userRequestDate)
+            handleSendOtpResponse(response)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } catch (e: SocketTimeoutException) {
+            e.printStackTrace()
+        }
     }
 
     private fun handleSendOtpResponse(response: Response<SendOtpResponse>) {
@@ -53,11 +60,18 @@ class SignUpRepository @Inject constructor(@Named(Apis.BASE) private val apiServ
             e.printStackTrace()
         }
     }
+
     suspend fun verifyOtp(userRequestDate: OtpData) {
-        verifyOtpResponse.postValue(NetworkResult.Loading())
-        HELPER.print("PASSING_DATA", Gson().toJson(userRequestDate))
-        val response = apiServices.verifyOtp(userRequestDate)
-        handleVerifyOtpResponse(response)
+        try {
+            verifyOtpResponse.postValue(NetworkResult.Loading())
+            HELPER.print("PASSING_DATA", Gson().toJson(userRequestDate))
+            val response = apiServices.verifyOtp(userRequestDate)
+            handleVerifyOtpResponse(response)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } catch (e: SocketTimeoutException) {
+            e.printStackTrace()
+        }
     }
 
     private fun handleVerifyOtpResponse(response: Response<VerifyOtpResponse>) {

@@ -10,6 +10,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.frimline.views.Utils
 import com.app.omcsalesapp.Common.PubFun
+import com.app.smwc.APIHandle.NoConnectivityException
+import com.app.smwc.APIHandle.NoInternetException
 import com.app.smwc.Activity.LoginActivity.LoginActivity
 import com.app.smwc.Activity.ScannerActivity.ScannerActivity
 import com.app.smwc.Common.Constant
@@ -21,9 +23,7 @@ import com.app.smwc.fragments.BaseFragment
 import com.app.ssn.Utils.Loader
 import com.app.ssn.Utils.NetworkResult
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import java.io.IOException
 import java.util.*
 
 @AndroidEntryPoint
@@ -59,20 +59,21 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), View.OnClickListener {
     }
 
     private fun setApiCall() {
-        // Make the API call
-        CoroutineScope(Dispatchers.Main).launch {
-            try {
-                if (Utils.hasNetwork(act)) {
-                    //Loader.showProgress(act)
-                    homeViewModel.home(
-                        if (pref!!.getUser()!!.token!!.isNotEmpty()) "Bearer " + pref!!.getUser()!!.token!! else ""
-                    )
-                } else {
-                    HELPER.commonDialog(act, Constant.NETWORK_ERROR_MESSAGE)
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
+        try {
+            if (Utils.hasNetwork(act)) {
+                //Loader.showProgress(act)
+                homeViewModel.home(
+                    if (pref!!.getUser()!!.token!!.isNotEmpty()) "Bearer " + pref!!.getUser()!!.token!! else ""
+                )
+            } else {
+                //HELPER.commonDialog(act, Constant.NETWORK_ERROR_MESSAGE)
             }
+        } catch (e: IOException) {
+            HELPER.print("IO","EXCEPTION")
+            e.printStackTrace()
+        } catch (e: Exception) {
+            HELPER.print("E","EXCEPTION")
+            e.printStackTrace()
         }
     }
 
@@ -92,7 +93,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), View.OnClickListener {
                             PubFun.commonDialog(
                                 act,
                                 getString(R.string.home),
-                                it.data.message!!.ifEmpty { "Server Error" },
+                                it.data.message!!.ifEmpty { getString(R.string.serverErrorMessage) },
                                 false,
                                 clickListener = {
                                     pref!!.Logout()
@@ -106,7 +107,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), View.OnClickListener {
                             PubFun.commonDialog(
                                 act,
                                 getString(R.string.home),
-                                it.data.message!!.ifEmpty { "Server Error" },
+                                it.data.message!!.ifEmpty { getString(R.string.serverErrorMessage) },
                                 false,
                                 clickListener = {
                                 })
@@ -136,6 +137,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), View.OnClickListener {
             }
         } catch (e: Exception) {
             e.printStackTrace()
+        } catch (e: NoInternetException) {
+            HELPER.print("NoInternetException", "Done")
+            HELPER.print("NoInternetException", e.message)
+
+        } catch (e: NoConnectivityException) {
+            HELPER.print("NoConnectivityException", "Done")
+            HELPER.print("NoConnectivityException", e.message)
         }
     }
 
@@ -237,7 +245,21 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), View.OnClickListener {
         super.update(observable, data)
         if (app!!.observer.value == Constant.OBSERVER_REFRESH_DASHBOARD_DATA) {
             act.runOnUiThread {
-                setApiCall()
+                try {
+                    setApiCall()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+        } else if (app!!.observer.value == Constant.OBSERVER_NO_INTERNET_CONNECTION) {
+            if (!act.isDestroyed && !act.isFinishing) {
+                act.runOnUiThread {
+                    try {
+                        setApiCall()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
             }
         }
     }

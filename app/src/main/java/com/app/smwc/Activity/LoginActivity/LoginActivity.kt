@@ -21,6 +21,8 @@ import com.app.smwc.databinding.ActivityLoginBinding
 import com.app.ssn.Utils.Loader
 import com.app.ssn.Utils.NetworkResult
 import com.app.ssn.ui.login.SignUpViewModel
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -37,6 +39,16 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         hideKeyboard(binding!!.mainLayout)
         loginResponse()
         initView()
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                HELPER.print("Fetching FCM registration token failed", task.exception.toString())
+                return@OnCompleteListener
+            }
+            // Get new FCM registration token
+            val token = task.result
+            // Log and toast
+            HELPER.print("FirebaseToken",token.toString())
+        })
     }
 
     private fun initView() {
@@ -111,7 +123,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                         } else if (it.data.status == 2) {
                             PubFun.commonDialog(act,
                                 getString(R.string.login),
-                                it.data.message!!.ifEmpty { "Server Error" },
+                                it.data.message!!.ifEmpty { getString(R.string.serverErrorMessage) },
                                 false,
                                 clickListener = {
                                     prefManager.Logout()
@@ -125,7 +137,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                             if (act != null && !act.isFinishing) {
                                 PubFun.commonDialog(act,
                                     getString(R.string.login),
-                                    it.data.message!!.ifEmpty { "Server Error" },
+                                    it.data.message!!.ifEmpty { getString(R.string.serverErrorMessage) },
                                     false,
                                     clickListener = {
                                     })

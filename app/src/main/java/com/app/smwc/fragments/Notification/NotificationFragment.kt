@@ -19,6 +19,7 @@ import com.app.smwc.fragments.BaseFragment
 import com.app.ssn.Utils.Loader
 import com.app.ssn.Utils.NetworkResult
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
 
 @AndroidEntryPoint
 class NotificationFragment : BaseFragment<FragmentNotificationBinding>(), View.OnClickListener {
@@ -54,7 +55,7 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(), View.O
             )
             setNotificationResponse()
         } else {
-            HELPER.commonDialog(act, Constant.NETWORK_ERROR_MESSAGE)
+            //HELPER.commonDialog(act, Constant.NETWORK_ERROR_MESSAGE)
         }
     }
 
@@ -79,7 +80,7 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(), View.O
                             PubFun.commonDialog(
                                 act,
                                 getString(R.string.notification_title),
-                                it.data.message!!.ifEmpty { "Server Error" },
+                                it.data.message!!.ifEmpty { getString(R.string.serverErrorMessage) },
                                 false,
                                 clickListener = {
                                     pref!!.Logout()
@@ -93,7 +94,7 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(), View.O
                             PubFun.commonDialog(
                                 act,
                                 getString(R.string.notification_title),
-                                it.data.message!!.ifEmpty { "Server Error" },
+                                it.data.message!!.ifEmpty { getString(R.string.serverErrorMessage) },
                                 false,
                                 clickListener = {
                                 })
@@ -164,6 +165,21 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(), View.O
         binding.toolbar.ivBack.setOnClickListener(this)
     }
 
+    @Deprecated("Deprecated in Java")
+    override fun update(observable: Observable?, data: Any?) {
+        super.update(observable, data)
+        if (app!!.observer.value == Constant.OBSERVER_NO_INTERNET_CONNECTION) {
+            if (!act.isDestroyed && !act.isFinishing) {
+                act.runOnUiThread {
+                    try {
+                        setApiCall()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+            }
+        }
+    }
     override fun onClick(view: View?) {
         when (view!!.id) {
             binding.toolbar.ivBack.id -> {

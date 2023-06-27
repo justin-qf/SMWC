@@ -22,6 +22,7 @@ import com.app.smwc.fragments.History.HistoryViewModel
 import com.app.ssn.Utils.Loader
 import com.app.ssn.Utils.NetworkResult
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
 
 @AndroidEntryPoint
 class HistoryFragment : BaseFragment<FragmentHistoryBinding>(), View.OnClickListener {
@@ -56,7 +57,7 @@ class HistoryFragment : BaseFragment<FragmentHistoryBinding>(), View.OnClickList
                 if (pref!!.getUser()!!.token!!.isNotEmpty()) "Bearer " + pref!!.getUser()!!.token!! else ""
             )
         } else {
-            HELPER.commonDialog(act, Constant.NETWORK_ERROR_MESSAGE)
+            //HELPER.commonDialog(act, Constant.NETWORK_ERROR_MESSAGE)
         }
     }
 
@@ -81,7 +82,7 @@ class HistoryFragment : BaseFragment<FragmentHistoryBinding>(), View.OnClickList
                             PubFun.commonDialog(
                                 act,
                                 getString(R.string.title_history),
-                                it.data.message!!.ifEmpty { "Server Error" },
+                                it.data.message!!.ifEmpty { getString(R.string.serverErrorMessage) },
                                 false,
                                 clickListener = {
                                     pref!!.Logout()
@@ -95,7 +96,7 @@ class HistoryFragment : BaseFragment<FragmentHistoryBinding>(), View.OnClickList
                             PubFun.commonDialog(
                                 act,
                                 getString(R.string.title_history),
-                                it.data.message!!.ifEmpty { "Server Error" },
+                                it.data.message!!.ifEmpty { getString(R.string.serverErrorMessage) },
                                 false,
                                 clickListener = {
                                 })
@@ -181,6 +182,22 @@ class HistoryFragment : BaseFragment<FragmentHistoryBinding>(), View.OnClickList
         )
         binding.rootRecyclerList.adapter = historyAdapter
         binding.rootRecyclerList.setHasFixedSize(true)
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun update(observable: Observable?, data: Any?) {
+        super.update(observable, data)
+         if (app!!.observer.value == Constant.OBSERVER_NO_INTERNET_CONNECTION) {
+            if (!act.isDestroyed && !act.isFinishing) {
+                act.runOnUiThread {
+                    try {
+                        setApiCall()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+            }
+        }
     }
 
     private fun initViews() {

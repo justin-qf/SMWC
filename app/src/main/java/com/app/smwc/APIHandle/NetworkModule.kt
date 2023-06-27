@@ -1,8 +1,6 @@
-package com.app.omcsalesapp.APIHandle
+package com.app.smwc.APIHandle
 
 import androidx.viewbinding.BuildConfig
-import com.app.smwc.APIHandle.Apis
-import com.app.ssn.data.api.ApiServices
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -17,7 +15,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
 import javax.inject.Singleton
-
 
 @InstallIn(SingletonComponent::class)
 @Module
@@ -37,18 +34,17 @@ class NetworkModule {
             val client = OkHttpClient.Builder()
                 .addInterceptor(Interceptor { chain ->
                     val builder = chain.request().newBuilder()
-                    // builder.addHeader("Authorization", Constant.AUTH)
                     val newRequest = builder.build()
                     chain.proceed(newRequest)
                 })
+                .addInterceptor(loggingInterceptor)
                 .callTimeout(60, TimeUnit.SECONDS)
                 .connectTimeout(60, TimeUnit.SECONDS)
                 .writeTimeout(60, TimeUnit.SECONDS)
                 .readTimeout(60, TimeUnit.SECONDS)
-                .addInterceptor(loggingInterceptor)
                 .followRedirects(false)
                 .followSslRedirects(false)
-                .retryOnConnectionFailure(false)
+                .retryOnConnectionFailure(true)
                 .build()
 
             val gson: Gson = GsonBuilder()

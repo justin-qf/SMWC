@@ -28,6 +28,7 @@ import com.app.smwc.databinding.ActivityEditBinding
 import com.app.ssn.Utils.Loader
 import com.app.ssn.Utils.NetworkResult
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.github.dhaval2404.imagepicker.ImagePicker
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MultipartBody
@@ -90,10 +91,14 @@ class EditActivity : BaseActivity(), View.OnClickListener {
                     .load(receivedList[9])
                     .placeholder(R.drawable.user_icon)
                     .error(R.drawable.user_icon)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .centerCrop()
                     .into(binding!!.ivEdit)
             } else {
                 Glide.with(this).load(R.drawable.user_icon)
                     .placeholder(R.drawable.user_icon).error(R.drawable.user_icon)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .centerCrop()
                     .into(binding!!.ivEdit)
             }
         }
@@ -192,7 +197,8 @@ class EditActivity : BaseActivity(), View.OnClickListener {
                 if (uploadImageResponse?.get("status") == 1) {
                     PubFun.commonDialog(act,
                         getString(R.string.title_edit),
-                        uploadImageResponse?.get("message").toString().ifEmpty { "Server Error" },
+                        uploadImageResponse?.get("message").toString()
+                            .ifEmpty { getString(R.string.serverErrorMessage) },
                         false,
                         clickListener = {
                             onBackPressed()
@@ -202,7 +208,8 @@ class EditActivity : BaseActivity(), View.OnClickListener {
                 } else if (uploadImageResponse?.get("status") == 2) {
                     PubFun.commonDialog(act,
                         getString(R.string.title_edit),
-                        uploadImageResponse?.get("message").toString().ifEmpty { "Server Error" },
+                        uploadImageResponse?.get("message").toString()
+                            .ifEmpty { getString(R.string.serverErrorMessage) },
                         false,
                         clickListener = {
                             prefManager.Logout()
@@ -217,7 +224,7 @@ class EditActivity : BaseActivity(), View.OnClickListener {
                         PubFun.commonDialog(act,
                             getString(R.string.title_edit),
                             uploadImageResponse?.get("message").toString()
-                                .ifEmpty { "Server Error" },
+                                .ifEmpty { getString(R.string.serverErrorMessage) },
                             false,
                             clickListener = {
                                 onBackPressed()
@@ -453,7 +460,7 @@ class EditActivity : BaseActivity(), View.OnClickListener {
                             HELPER.print("GetOtpResponse::", gson.toJson(it.data))
                             PubFun.commonDialog(act,
                                 getString(R.string.title_edit),
-                                it.data.message!!.ifEmpty { "Server Error" },
+                                it.data.message!!.ifEmpty { getString(R.string.serverErrorMessage) },
                                 false,
                                 clickListener = {
 
@@ -461,7 +468,7 @@ class EditActivity : BaseActivity(), View.OnClickListener {
                         } else if (it.data.status == 2) {
                             PubFun.commonDialog(act,
                                 getString(R.string.title_edit),
-                                it.data.message!!.ifEmpty { "Server Error" },
+                                it.data.message!!.ifEmpty { getString(R.string.serverErrorMessage) },
                                 false,
                                 clickListener = {
                                     prefManager.Logout()
@@ -475,7 +482,7 @@ class EditActivity : BaseActivity(), View.OnClickListener {
                             if (act != null && !act.isFinishing) {
                                 PubFun.commonDialog(act,
                                     getString(R.string.title_edit),
-                                    it.data.message!!.ifEmpty { "Server Error" },
+                                    it.data.message!!.ifEmpty { getString(R.string.serverErrorMessage) },
                                     false,
                                     clickListener = {
                                     })

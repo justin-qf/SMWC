@@ -2,14 +2,15 @@ package com.app.smwc.Activity.EditProfile
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.app.smwc.APIHandle.ApiServices
 import com.app.smwc.APIHandle.Apis
 import com.app.smwc.Common.HELPER
 import com.app.ssn.Utils.NetworkResult
-import com.app.ssn.data.api.ApiServices
 import com.google.gson.Gson
 import okhttp3.MultipartBody
 import org.json.JSONObject
 import retrofit2.Response
+import java.net.SocketTimeoutException
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -24,10 +25,16 @@ class UpdateProfileRepository @Inject constructor(@Named(Apis.BASE) private val 
         token: String,
         image: MultipartBody.Part
     ) {
-        updateProfileResponse.postValue(NetworkResult.Loading())
-        HELPER.print("PASSING_DATA", Gson().toJson(userRequest))
-        val response = apiServices.updateProfile(token, image, userRequest)
-        handleUpdateProfileResponse(response)
+        try {
+            updateProfileResponse.postValue(NetworkResult.Loading())
+            HELPER.print("PASSING_DATA", Gson().toJson(userRequest))
+            val response = apiServices.updateProfile(token, image, userRequest)
+            handleUpdateProfileResponse(response)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } catch (e: SocketTimeoutException) {
+            e.printStackTrace()
+        }
     }
 
     private fun handleUpdateProfileResponse(response: Response<EditProfileResponse>) {

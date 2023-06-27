@@ -33,8 +33,8 @@ class HomeAdapter(
     override fun onBindViewHolder(holder: DataHolder, position: Int) {
         val model = orderArrayList[position]
         holder.binding.symbol.text = model.currency.toString().trim()
-        holder.binding.totalProduct.text = model.totalAmount.toString().trim()
         holder.binding.totalProduct.text = model.itemPickupUp.toString().trim()
+        holder.binding.count.text = model.totalAmount.toString().trim()
         holder.binding.title.text = model.companyTitle.toString().trim()
         holder.binding.location.text = model.address.toString().trim()
     }

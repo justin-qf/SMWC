@@ -2,13 +2,14 @@ package com.app.smwc.fragments.Profile.ProfileFragment
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.app.smwc.APIHandle.ApiServices
 import com.app.smwc.APIHandle.Apis
 import com.app.smwc.Common.HELPER
 import com.app.ssn.Utils.NetworkResult
-import com.app.ssn.data.api.ApiServices
 import com.google.gson.Gson
 import org.json.JSONObject
 import retrofit2.Response
+import java.net.SocketTimeoutException
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -19,10 +20,16 @@ class ProfileRepository @Inject constructor(@Named(Apis.BASE) private val apiSer
         get() = profileResponse
 
     suspend fun userProfile(token: String) {
-        profileResponse.postValue(NetworkResult.Loading())
-        HELPER.print("Token", token)
-        val response = apiServices.profile(token)
-        handleProfileResponse(response)
+        try {
+            profileResponse.postValue(NetworkResult.Loading())
+            HELPER.print("Token", token)
+            val response = apiServices.profile(token)
+            handleProfileResponse(response)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } catch (e: SocketTimeoutException) {
+            e.printStackTrace()
+        }
     }
 
     private fun handleProfileResponse(response: Response<ProfileResponse>) {

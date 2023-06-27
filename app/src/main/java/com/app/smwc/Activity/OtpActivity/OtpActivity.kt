@@ -202,11 +202,11 @@ class OtpActivity : BaseActivity(), View.OnClickListener {
                         Loader.hideProgress()
                         if (it.data!!.status == 1 && it.data.data != null) {
                             HELPER.print("VERIFY_OTP_RESPONSE", gson.toJson(it.data.data!!))
-                            prefManager.saveUSer(it.data.data!!)
+                            prefManager.saveUser(it.data.data!!)
                             PubFun.commonDialog(
                                 act,
                                 getString(R.string.verifyOtp),
-                                it.data.message!!.ifEmpty { "Server Error" },
+                                it.data.message!!.ifEmpty { getString(R.string.serverErrorMessage) },
                                 false,
                                 clickListener = {
                                     val i = Intent(act, CompanyInfoActivity::class.java)
@@ -221,7 +221,7 @@ class OtpActivity : BaseActivity(), View.OnClickListener {
                             PubFun.commonDialog(
                                 act,
                                 getString(R.string.verifyOtp),
-                                it.data.message!!.ifEmpty { "Server Error" },
+                                it.data.message!!.ifEmpty { getString(R.string.serverErrorMessage) },
                                 false,
                                 clickListener = {
                                     prefManager.Logout()
@@ -236,7 +236,7 @@ class OtpActivity : BaseActivity(), View.OnClickListener {
                                 PubFun.commonDialog(
                                     act,
                                     getString(R.string.verifyOtp),
-                                    it.data.message!!.ifEmpty { "Server Error" },
+                                    it.data.message!!.ifEmpty { getString(R.string.serverErrorMessage) },
                                     false,
                                     clickListener = {
                                     })
@@ -293,11 +293,11 @@ class OtpActivity : BaseActivity(), View.OnClickListener {
                         Loader.hideProgress()
                         HELPER.print("VerifyOtpResponse::", gson.toJson(it.data!!))
                         if (it.data.status == 1 && it.data.data != null) {
-                            prefManager.saveUSer(it.data.data!!)
+                            prefManager.saveUser(it.data.data!!)
                             PubFun.commonDialog(
                                 act,
                                 getString(R.string.verifyOtp),
-                                it.data.message!!.ifEmpty { "Server Error" },
+                                it.data.message!!.ifEmpty { getString(R.string.serverErrorMessage) },
                                 false,
                                 clickListener = {
                                     val i = Intent(act, MainActivity::class.java)
@@ -310,7 +310,7 @@ class OtpActivity : BaseActivity(), View.OnClickListener {
                             PubFun.commonDialog(
                                 act,
                                 getString(R.string.verifyOtp),
-                                it.data.message!!.ifEmpty { "Server Error" },
+                                it.data.message!!.ifEmpty { getString(R.string.serverErrorMessage) },
                                 false,
                                 clickListener = {
                                     prefManager.Logout()
@@ -324,7 +324,7 @@ class OtpActivity : BaseActivity(), View.OnClickListener {
                             PubFun.commonDialog(
                                 act,
                                 getString(R.string.verifyOtp),
-                                it.data.message!!.ifEmpty { "Server Error" },
+                                it.data.message!!.ifEmpty { getString(R.string.serverErrorMessage) },
                                 false,
                                 clickListener = {
                                 })

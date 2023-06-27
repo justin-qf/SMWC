@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import com.app.frimline.views.Utils
 import com.app.omcsalesapp.Common.PubFun
 import com.app.smwc.Activity.BaseActivity
+import com.app.smwc.Activity.LoginActivity.LoginActivity
 import com.app.smwc.Activity.OtpActivity.OtpActivity
 import com.app.smwc.Activity.OtpActivity.OtpData
 import com.app.smwc.Common.CodeReUse
@@ -137,11 +138,24 @@ class SignUpActivity : BaseActivity(), View.OnClickListener {
                             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                             startActivity(i)
                             HELPER.slideEnter(act)
+                        } else if (it.data.status == 2) {
+                            PubFun.commonDialog(act,
+                                getString(R.string.sign_up_title),
+                                it.data.message!!.ifEmpty { getString(R.string.serverErrorMessage) },
+                                false,
+                                clickListener = {
+                                    prefManager.Logout()
+                                    val i = Intent(act, LoginActivity::class.java)
+                                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                                    act.startActivity(i)
+                                    act.finish()
+                                    HELPER.slideEnter(act)
+                                })
                         } else {
                             if (act != null && !act.isFinishing) {
                                 PubFun.commonDialog(act,
                                     getString(R.string.sign_up_title),
-                                    it.data.message!!.ifEmpty { "Server Error" },
+                                    it.data.message!!.ifEmpty { getString(R.string.serverErrorMessage) },
                                     false,
                                     clickListener = {
                                     })

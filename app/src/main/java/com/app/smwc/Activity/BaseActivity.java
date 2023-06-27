@@ -24,6 +24,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.app.frimline.views.Utils;
 import com.app.omcsalesapp.Views.DialogToast;
+import com.app.smwc.Common.Constant;
 import com.app.smwc.Common.HELPER;
 import com.app.smwc.Common.NetworkChangeReceiver;
 import com.app.smwc.Common.SWCApp;
@@ -88,6 +89,8 @@ public class BaseActivity extends AppCompatActivity implements Observer {
         if (!staticAct.isDestroyed() && !staticAct.isFinishing()) {
             if (value) {
                 if (noInternetConnectionAlertDialog.isShowing()) {
+                    HELPER.print("IS_Connected","DONE");
+                    SWCApp.getInstance().getObserver().setValue(Constant.OBSERVER_NO_INTERNET_CONNECTION);
                     noInternetConnectionAlertDialog.dismiss();
                 }
             } else {
@@ -101,7 +104,7 @@ public class BaseActivity extends AppCompatActivity implements Observer {
             noInternetConnectionAlertDialog.setContentView(R.layout.noconnectionlayout);
             noInternetConnectionAlertDialog.setCancelable(false);
             noInternetConnectionAlertDialog.findViewById(R.id.closeBtn).setOnClickListener(view -> {
-                noInternetConnectionAlertDialog.dismiss();
+                //noInternetConnectionAlertDialog.dismiss();
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     staticAct.startActivity(new Intent(Settings.Panel.ACTION_INTERNET_CONNECTIVITY));
                 } else {

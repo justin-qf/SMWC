@@ -123,6 +123,7 @@
 
     <!-- API Handling text-->
     <string name="errorMessage">Something went wrong</string>
+    <string name="serverErrorMessage">Server Error</string>
 
     <!-- Image text-->
     <string name="camera">Camera</string>

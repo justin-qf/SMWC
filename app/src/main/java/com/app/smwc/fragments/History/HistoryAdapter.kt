@@ -68,8 +68,8 @@ class HistoryAdapter(
             Constant.IS_ITEM -> {
                 (holder as TopViewHolder).binding.symbol.text =
                     model.order!!.currency.toString().trim()
-                holder.binding.totalProduct.text = model.order!!.totalAmount.toString().trim()
                 holder.binding.totalProduct.text = model.order!!.itemPickupUp.toString().trim()
+                holder.binding.count.text = model.order!!.totalAmount.toString().trim()
                 holder.binding.title.text = model.order!!.companyTitle.toString().trim()
                 holder.binding.location.text = model.order!!.address.toString().trim()
             }

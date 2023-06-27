@@ -17,6 +17,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
+import android.provider.Settings;
 import android.provider.Telephony;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
@@ -569,43 +570,33 @@ public class HELPER {
     }
 
     public static void commonDialog(Activity act, String msg) {
-
         DialogToast dialogPermission = new DialogToast(act);
-        dialogPermission.show();
-        dialogPermission.getHolder().getMessageLayout().setVisibility(View.VISIBLE);
+        if (act != null && !dialogPermission.isShowing())
+            dialogPermission.show();
+        Objects.requireNonNull(dialogPermission.getHolder()).getMessageLayout().setVisibility(View.VISIBLE);
         dialogPermission.getHolder().getTvMessage().setText(msg);
+        dialogPermission.getHolder().getCloseBtn().setVisibility(View.VISIBLE);
+        dialogPermission.getHolder().getCloseBtn().setText(act.getString(R.string.ok));
         dialogPermission.getHolder().getBottomBtnLayout().setVisibility(View.VISIBLE);
-        dialogPermission.getHolder().getBtnDialogGet().setVisibility(View.GONE);
-        dialogPermission.getHolder().getBtnDialogLogout().setText(R.string.delete);
+        dialogPermission.getHolder().getBottomBtnLayout().setVisibility(View.GONE);
+        dialogPermission.getHolder().getBtnDialogLogout().setText(act.getString(R.string.ok));
         Objects.requireNonNull(dialogPermission.getHolder()).getBtnDialogCancel().setOnClickListener(view1 -> dialogPermission.dismiss());
-        dialogPermission.getHolder().getBtnDialogLogout().setOnClickListener(view12 -> {
+        dialogPermission.getHolder().getCloseBtn().setOnClickListener(view -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                act.startActivity(new Intent(Settings.Panel.ACTION_INTERNET_CONNECTIVITY));
+            } else {
+                act.startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
+            }
             dialogPermission.dismiss();
         });
-
     }
 
     public static void apiResponseDialog(Activity act, String msg) {
         DialogToast dialogPermission = new DialogToast(act);
         dialogPermission.show();
-
         dialogPermission.getHolder().getMessageLayout().setVisibility(View.VISIBLE);
         dialogPermission.getHolder().getTvMessage().setText(msg);
         dialogPermission.getHolder().getTvMessage().setGravity(Gravity.CENTER);
-        dialogPermission.getHolder().getBottomBtnLayout().setVisibility(View.VISIBLE);
-        dialogPermission.getHolder().getBtnDialogGet().setVisibility(View.GONE);
-        dialogPermission.getHolder().getBtnDialogLogout().setText(R.string.delete);
-        Objects.requireNonNull(dialogPermission.getHolder()).getBtnDialogCancel().setOnClickListener(view1 -> dialogPermission.dismiss());
-        dialogPermission.getHolder().getBtnDialogLogout().setOnClickListener(view12 -> {
-            dialogPermission.dismiss();
-        });
-
-    }
-
-    public static void deleteEntryDialog(Activity act) {
-        DialogToast dialogPermission = new DialogToast(act);
-        dialogPermission.show();
-        dialogPermission.getHolder().getMessageLayout().setVisibility(View.VISIBLE);
-        dialogPermission.getHolder().getTvMessage().setText(R.string.deleteMessage);
         dialogPermission.getHolder().getBottomBtnLayout().setVisibility(View.VISIBLE);
         dialogPermission.getHolder().getBtnDialogGet().setVisibility(View.GONE);
         dialogPermission.getHolder().getBtnDialogLogout().setText(R.string.delete);
@@ -637,18 +628,6 @@ public class HELPER {
                                     .READ_EXTERNAL_STORAGE},
                     1);
         }
-    }
-
-    public static void datelogic() {
-        // 24 Hours And AM AND PM SHOW IN LOGIC
-        Date dt = new Date();
-        SimpleDateFormat dateFormat;
-        dateFormat = new SimpleDateFormat("hh:mm:ss a");
-        String date = dateFormat.format(dt);
-//        // 48 Hours Show
-//        Calendar calendar = Calendar.getInstance();
-//        SimpleDateFormat mdformat = new SimpleDateFormat("HH:mm:ss");
-//        String strDate = mdformat.format(calendar.getTime());
     }
 
     public static void getMimType() {

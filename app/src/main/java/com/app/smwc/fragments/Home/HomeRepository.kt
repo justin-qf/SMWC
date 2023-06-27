@@ -2,13 +2,14 @@ package com.app.smwc.fragments.Home
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.app.smwc.APIHandle.ApiServices
 import com.app.smwc.APIHandle.Apis
 import com.app.smwc.Common.HELPER
 import com.app.ssn.Utils.NetworkResult
-import com.app.ssn.data.api.ApiServices
 import com.google.gson.Gson
 import org.json.JSONObject
 import retrofit2.Response
+import java.net.SocketTimeoutException
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -19,9 +20,15 @@ class HomeRepository @Inject constructor(@Named(Apis.BASE) private val apiServic
         get() = homeResponse
 
     suspend fun home(token: String) {
-        homeResponse.postValue(NetworkResult.Loading())
-        val response = apiServices.home(token)
-        handleHomeResponse(response)
+        try {
+            homeResponse.postValue(NetworkResult.Loading())
+            val response = apiServices.home(token)
+            handleHomeResponse(response)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } catch (e: SocketTimeoutException) {
+            e.printStackTrace()
+        }
     }
 
     private fun handleHomeResponse(response: Response<HomeResponse>) {
@@ -44,7 +51,8 @@ class HomeRepository @Inject constructor(@Named(Apis.BASE) private val apiServic
             }
         } catch (e: Exception) {
             e.printStackTrace()
+        } catch (e: SocketTimeoutException) {
+            e.printStackTrace()
         }
     }
-
 }
