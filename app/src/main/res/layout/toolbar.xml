@@ -10,6 +10,7 @@
         android:paddingBottom="@dimen/_5sdp">
 
         <ImageView
+            android:visibility="gone"
             android:id="@+id/iv_logo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -27,10 +28,10 @@
             android:text=""
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/_11sdp"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_logo"
-            app:layout_constraintStart_toEndOf="@+id/iv_logo"
-            app:layout_constraintTop_toTopOf="@+id/iv_logo" />
-
+            app:layout_constraintEnd_toStartOf="@+id/iv_qrcode"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/iv_profile"
@@ -43,8 +44,9 @@
 
         <ImageView
             android:id="@+id/iv_qrcode"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:padding="@dimen/_2sdp"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
             android:layout_marginEnd="@dimen/_13sdp"
             android:src="@drawable/qrcode"
             app:layout_constraintBottom_toBottomOf="parent"

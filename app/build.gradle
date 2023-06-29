@@ -9,11 +9,11 @@ plugins {
 }
 
 android {
-    namespace 'com.app.smwc'
+    namespace 'com.vovance.securemywillcall'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.app.smwc"
+        applicationId "com.vovance.securemywillcall"
         minSdk 21
         targetSdk 33
         versionCode 1

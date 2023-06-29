@@ -40,6 +40,7 @@
     <string name="detail">Store details</string>
     <string name="address">2414 Leo StreetNew Florence, PA 15944</string>
     <string name="product">Products</string>
+    <string name="order_no">Order No.</string>
     <string name="token_no">Token Number</string>
     <string name="token_no_hint">1 2 3 4 5</string>
 
@@ -132,5 +133,6 @@
     <string name="chooseSource">Choose Source</string>
 
     <string name="listEmpty">List Empty</string>
+    <string name="bearer">Bearer </string>
 
 </resources>

@@ -1,34 +1,49 @@
 {
   "project_info": {
-    "project_number": "155704598811",
-    "project_id": "smwc-9bf50",
-    "storage_bucket": "smwc-9bf50.appspot.com"
+    "project_number": "77565552787",
+    "project_id": "my-will-call-f34cd",
+    "storage_bucket": "my-will-call-f34cd.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:155704598811:android:a4bd413a25a5243d4df3be",
+        "mobilesdk_app_id": "1:77565552787:android:a8e99a5c6b4848e8e64566",
         "android_client_info": {
-          "package_name": "com.app.smwc"
+          "package_name": "com.vovance.securemywillcall"
         }
       },
       "oauth_client": [
         {
-          "client_id": "155704598811-if6seudmnlfm8j18osjc29rhu3nsre4u.apps.googleusercontent.com",
+          "client_id": "77565552787-66dkc232f291pe7ls31ab9dc3vumk8gr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.vovance.securemywillcall",
+            "certificate_hash": "3f6852c55f855a5da9aaa625a7cf6a77bf06c38a"
+          }
+        },
+        {
+          "client_id": "77565552787-tnsccqqiu8j3899bobolr7t5alij2tq0.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB5T-pggK1HLOTEZssjf1wWQc4o4j8PAv4"
+          "current_key": "AIzaSyDy-ky03uc6SNe7utLDy813XKoYmsO4gG0"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "155704598811-if6seudmnlfm8j18osjc29rhu3nsre4u.apps.googleusercontent.com",
+              "client_id": "77565552787-tnsccqqiu8j3899bobolr7t5alij2tq0.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "77565552787-0nqs2nhk0rk76pgtororbbdlkegcps9c.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.vovance.SecureMyWillCall"
+              }
             }
           ]
         }
