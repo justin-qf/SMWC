@@ -121,7 +121,12 @@
     <string name="open">Open</string>
     <string name="close">Close</string>
     <string name="copied_to_clipboard">Copied to clipboard</string>
-
+    <string name="permissionTitle">Permission required</string>
+    <string name="openSetting">Open Settings</string>
+    <string name="permissionRequiredMsg">It looks like your privacy settings are preventing us from accessing your camera to do capture photo. You can fix this by doing the following:\n
+        1. Touch the Go button below to open the Settings app.\n
+        2. Turn the Camera on.\n
+        3. Open this app and try again.</string>
     <!-- API Handling text-->
     <string name="errorMessage">Something went wrong</string>
     <string name="serverErrorMessage">Server Error</string>

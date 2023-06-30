@@ -77,7 +77,7 @@ class ScannerActivity : BaseActivity(), View.OnClickListener {
                     if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                         != PackageManager.PERMISSION_GRANTED
                     ) {
-                        permissionDialog(act, "You need to allow access permissions", listener = {
+                        permissionDialog(act, getString(R.string.permissionRequiredMsg), listener = {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                                 isGrantedCameraPermission = true
                                 //requestPermission()

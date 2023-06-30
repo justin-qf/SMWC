@@ -29,7 +29,7 @@ data class Orders(
     @SerializedName("status") var status: Int? = null,
     @SerializedName("status_name") var statusName: String? = null,
     @SerializedName("token_no") var tokenNo: String? = null,
-    @SerializedName("total_amount") var totalAmount: Int? = null,
+    @SerializedName("total_amount") var totalAmount: String? = null,
     @SerializedName("type") var type: Int? = null,
 
     )

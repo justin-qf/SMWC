@@ -11,14 +11,14 @@
     android:orientation="vertical">
 
     <androidx.appcompat.widget.LinearLayoutCompat
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="@dimen/_5sdp">
+        android:padding="@dimen/_5sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <RelativeLayout
             android:id="@+id/close"
@@ -37,6 +37,7 @@
                 android:src="@drawable/close"
                 app:tint="@color/colorPrimary" />
         </RelativeLayout>
+
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvDialogTitle"
             android:layout_width="match_parent"
@@ -71,7 +72,6 @@
             android:visibility="visible">
 
             <com.google.android.material.textview.MaterialTextView
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/muli_bold"
@@ -80,16 +80,17 @@
                 android:textColor="@color/colorBlack"
                 android:textSize="@dimen/_12sdp"
                 android:textStyle="bold"
+                android:visibility="gone"
                 tools:ignore="HardcodedText" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/userId"
-                android:paddingStart="@dimen/_10sdp"
-                android:paddingEnd="@dimen/_10sdp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/rubik_regular"
                 android:gravity="center"
+                android:paddingStart="@dimen/_10sdp"
+                android:paddingEnd="@dimen/_10sdp"
                 android:text=""
                 android:textColor="@color/black"
                 android:textSize="@dimen/_12sdp"
@@ -103,9 +104,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginBottom="@dimen/_10sdp"
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_10sdp"
             android:orientation="horizontal">
 
             <androidx.appcompat.widget.AppCompatButton
@@ -125,8 +126,10 @@
                 tools:ignore="HardcodedText" />
 
             <androidx.appcompat.widget.AppCompatButton
+                android:paddingStart="@dimen/_10sdp"
+                android:paddingEnd="@dimen/_10sdp"
                 android:id="@+id/btnDialogLogout"
-                android:layout_width="@dimen/_60sdp"
+                android:layout_width="wrap_content"
                 android:layout_height="@dimen/_30sdp"
                 android:background="@drawable/ic_button_bg"
                 android:fontFamily="@font/muli_regular"

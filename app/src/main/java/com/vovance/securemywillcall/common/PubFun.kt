@@ -55,11 +55,14 @@ class PubFun {
 
         fun permissionDialog(act: Activity, userId: String?, listener: () -> Unit) {
             val builder = AlertDialog.Builder(act, R.style.RoundShapeTheme)
-            val customLayout = act.layoutInflater.inflate(R.layout.logout_dialog, null)
+            val customLayout = act.layoutInflater.inflate(R.layout.permission_dialog, null)
             val loggedUserId = customLayout.findViewById<TextView>(R.id.userId)
+            val title = customLayout.findViewById<MaterialTextView>(R.id.tvDialogTitle)
             val cancelBtn = customLayout.findViewById<AppCompatButton>(R.id.btnDialogCancel)
             val logoutBtn = customLayout.findViewById<AppCompatButton>(R.id.btnDialogLogout)
             loggedUserId.text = userId
+            title.text =act.getString(R.string.permissionTitle)
+            logoutBtn.text = act.getString(R.string.openSetting)
             builder.setView(customLayout)
             val dialog = builder.create()
             dialog.window!!.setBackgroundDrawableResource(R.color.transparent_color)
@@ -71,7 +74,6 @@ class PubFun {
                 dialog.dismiss()
             }
             logoutBtn.setOnClickListener { view: View? ->
-                HELPER.print("IS_CLICK", "INNER")
                 listener()
                 dialog.dismiss()
             }
