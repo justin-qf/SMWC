@@ -3,6 +3,7 @@ package com.vovance.omcsalesapp.Common;
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
 import android.content.res.Resources
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
@@ -28,12 +29,13 @@ import com.google.android.material.textview.MaterialTextView
 import com.google.firebase.messaging.FirebaseMessaging
 import com.vovance.omcsalesapp.Views.DialogToast
 import com.vovance.securemywillcall.R
+import com.vovance.securemywillcall.activity.LoginActivity.LoginActivity
 import com.vovance.securemywillcall.common.Constant
 import com.vovance.securemywillcall.common.HELPER
+import com.vovance.ssn.Common.Pref
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
-
 
 class PubFun {
     companion object {
@@ -53,7 +55,25 @@ class PubFun {
 
         var numFormatNew: NumberFormat = NumberFormat.getCurrencyInstance(Locale("en", "IN"))
 
-        fun permissionDialog(act: Activity, userId: String?, listener: () -> Unit) {
+        fun openLoginScreen(act: Activity, pref: Pref?) {
+            try {
+                pref!!.Logout()
+                val i = Intent(act, LoginActivity::class.java)
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                act.startActivity(i)
+                act.finish()
+                HELPER.slideEnter(act)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
+        fun permissionDialog(
+            act: Activity,
+            userId: String?,
+            listener: () -> Unit,
+            fromScanner: Boolean
+        ) {
             val builder = AlertDialog.Builder(act, R.style.RoundShapeTheme)
             val customLayout = act.layoutInflater.inflate(R.layout.permission_dialog, null)
             val loggedUserId = customLayout.findViewById<TextView>(R.id.userId)
@@ -61,7 +81,7 @@ class PubFun {
             val cancelBtn = customLayout.findViewById<AppCompatButton>(R.id.btnDialogCancel)
             val logoutBtn = customLayout.findViewById<AppCompatButton>(R.id.btnDialogLogout)
             loggedUserId.text = userId
-            title.text =act.getString(R.string.permissionTitle)
+            title.text = act.getString(R.string.permissionTitle)
             logoutBtn.text = act.getString(R.string.openSetting)
             builder.setView(customLayout)
             val dialog = builder.create()
@@ -69,11 +89,13 @@ class PubFun {
             dialog.setCancelable(false)
             if (!dialog.isShowing)
                 dialog.show()
-            cancelBtn.setOnClickListener { view: View? ->
-                act.onBackPressed()
+            cancelBtn.setOnClickListener {
+                if (fromScanner) {
+                    act.onBackPressed()
+                }
                 dialog.dismiss()
             }
-            logoutBtn.setOnClickListener { view: View? ->
+            logoutBtn.setOnClickListener {
                 listener()
                 dialog.dismiss()
             }
@@ -497,11 +519,11 @@ class PubFun {
 
 
     fun getPixelValue(context: Activity, dimenId: Int): Int {
-        val resources: Resources = context.getResources()
+        val resources: Resources = context.resources
         return TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
             dimenId.toFloat(),
-            resources.getDisplayMetrics()
+            resources.displayMetrics
         ).toInt()
     }
 }

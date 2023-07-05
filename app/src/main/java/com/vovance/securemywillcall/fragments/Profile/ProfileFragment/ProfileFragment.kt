@@ -82,12 +82,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(), View.OnClickList
                                 it.data.message!!.ifEmpty { getString(R.string.serverErrorMessage) },
                                 false,
                                 clickListener = {
-                                    pref!!.Logout()
-                                    val i = Intent(act, LoginActivity::class.java)
-                                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                                    act.startActivity(i)
-                                    act.finish()
-                                    HELPER.slideEnter(act)
+                                    PubFun.openLoginScreen(act, pref)
                                 })
                         } else {
                             PubFun.commonDialog(
@@ -182,12 +177,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding>(), View.OnClickList
         when (view!!.id) {
             binding.toolbar.ivLogout.id -> {
                 PubFun.logoutDialog(act, clickListener = {
-                    Pref(act).Logout()
-                    val i = Intent(act, LoginActivity::class.java)
-                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    act.startActivity(i)
-                    act.finish()
-                    HELPER.slideEnter(act)
+                    PubFun.openLoginScreen(act, pref)
                 })
                 //app!!.observer.value = Constant.OBSERVER_PROFILE_BACK_PRESS_FRAGMENT_VISIBLE
             }

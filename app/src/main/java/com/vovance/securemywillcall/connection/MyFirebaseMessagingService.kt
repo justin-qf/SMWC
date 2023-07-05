@@ -25,7 +25,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
-    var GROUP_KEY = "com.vovance.SecureMyWillCall.user.GROUP"
+    private var GROUP_KEY = "com.vovance.SecureMyWillCall.user.GROUP"
 
     @Override
     override fun onNewToken(s: String) {
@@ -36,18 +36,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
         try {
-            HELPER.print("NotificationsResponse::1", Gson().toJson(remoteMessage))
-            HELPER.print("NotificationsResponse:2", Gson().toJson(remoteMessage.notification))
-            HELPER.print("NotificationsResponse:3", Gson().toJson(remoteMessage.data))
-            HELPER.print("NotificationsResponse:4", Gson().toJson(remoteMessage.data["status"]))
-            HELPER.print(
-                "NotificationsResponse:5",
-                Gson().toJson(remoteMessage.notification!!.title!!)
-            )
-            HELPER.print(
-                "NotificationsResponse:6",
-                Gson().toJson(remoteMessage.notification!!.body)
-            )
+            HELPER.print("NotificationsResponse:1", Gson().toJson(remoteMessage.notification))
+            HELPER.print("NotificationsResponse:2", Gson().toJson(remoteMessage.data))
             if (remoteMessage.notification != null) {
                 showNotification(
                     remoteMessage.data["status"],
@@ -109,11 +99,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         }
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationBuilder = NotificationCompat.Builder(this, Constant.CHANNEL_ID)
-            .setSmallIcon(R.drawable.notification_icon)
+            .setSmallIcon(R.drawable.ic_launcher_logo)
             .setLargeIcon(
                 BitmapFactory.decodeResource(
                     application.resources,
-                    R.drawable.notification_icon
+                    R.drawable.ic_launcher_logo
                 )
             )
             .setContentTitle(title)
@@ -140,7 +130,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 //                NotificationCompat.BigTextStyle().bigText(Html.fromHtml(msg))
 //            )
 //        }
-        notificationBuilder.setSmallIcon(R.drawable.notification_icon)
+        notificationBuilder.setSmallIcon(R.drawable.ic_launcher_logo)
         notificationBuilder.color = resources.getColor(R.color.colorPrimary)
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.notify(

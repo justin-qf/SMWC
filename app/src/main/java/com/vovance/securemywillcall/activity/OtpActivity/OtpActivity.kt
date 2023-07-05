@@ -16,7 +16,6 @@ import com.vovance.omcsalesapp.Common.PubFun
 import com.vovance.securemywillcall.R
 import com.vovance.securemywillcall.activity.BaseActivity
 import com.vovance.securemywillcall.activity.CompanyInfo.CompanyInfoActivity
-import com.vovance.securemywillcall.activity.LoginActivity.LoginActivity
 import com.vovance.securemywillcall.activity.LoginActivity.LoginData
 import com.vovance.securemywillcall.activity.MainActivity
 import com.vovance.securemywillcall.common.Constant
@@ -70,6 +69,7 @@ class OtpActivity : BaseActivity(), View.OnClickListener {
             }
         })
     }
+
     private fun initView() {
 
         // getText From Intent
@@ -107,7 +107,7 @@ class OtpActivity : BaseActivity(), View.OnClickListener {
         PubFun.apiResponseErrorDialog(
             act,
             getString(R.string.otp),
-            if (otp.isNotEmpty()) "Your OTP: $otp" else getString(R.string.serverErrorMessage) ,
+            if (otp.isNotEmpty()) "Your OTP: $otp" else getString(R.string.serverErrorMessage),
             false,
             listener = {
                 binding!!.otpOne.requestFocus()
@@ -218,7 +218,7 @@ class OtpActivity : BaseActivity(), View.OnClickListener {
                 when (it) {
                     is NetworkResult.Success -> {
                         Loader.hideProgress()
-                        if (it.data!!.status == 1 && it.data.data != null) {
+                        if (it.data != null && it.data.status == 1 && it.data.data != null) {
                             HELPER.print("VERIFY_OTP_RESPONSE", gson.toJson(it.data.data!!))
                             prefManager.saveUser(it.data.data!!)
                             PubFun.commonDialog(
@@ -232,22 +232,16 @@ class OtpActivity : BaseActivity(), View.OnClickListener {
                                     startActivity(i)
                                     finish()
                                     finishAffinity()
-                                    //exitProcess(0);
                                     HELPER.slideEnter(act)
                                 })
-                        } else if (it.data.status == 2) {
+                        } else if (it.data!!.status == 2) {
                             PubFun.commonDialog(
                                 act,
                                 getString(R.string.verifyOtp),
                                 it.data.message!!.ifEmpty { getString(R.string.serverErrorMessage) },
                                 false,
                                 clickListener = {
-                                    prefManager.Logout()
-                                    val i = Intent(act, LoginActivity::class.java)
-                                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                                    act.startActivity(i)
-                                    act.finish()
-                                    HELPER.slideEnter(act)
+                                    PubFun.openLoginScreen(act, prefManager)
                                 })
                         } else {
                             if (act != null && !act.isFinishing) {
@@ -309,8 +303,8 @@ class OtpActivity : BaseActivity(), View.OnClickListener {
                 when (it) {
                     is NetworkResult.Success -> {
                         Loader.hideProgress()
-                        HELPER.print("VerifyOtpResponse::", gson.toJson(it.data!!))
-                        if (it.data.status == 1 && it.data.data != null) {
+                        if (it.data != null && it.data.status == 1 && it.data.data != null) {
+                            HELPER.print("VerifyOtpResponse::", gson.toJson(it.data))
                             prefManager.saveUser(it.data.data!!)
                             PubFun.commonDialog(
                                 act,
@@ -324,19 +318,14 @@ class OtpActivity : BaseActivity(), View.OnClickListener {
                                     HELPER.slideEnter(act)
                                 })
 
-                        } else if (it.data.status == 2) {
+                        } else if (it.data!!.status == 2) {
                             PubFun.commonDialog(
                                 act,
                                 getString(R.string.verifyOtp),
                                 it.data.message!!.ifEmpty { getString(R.string.serverErrorMessage) },
                                 false,
                                 clickListener = {
-                                    prefManager.Logout()
-                                    val i = Intent(act, LoginActivity::class.java)
-                                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                                    act.startActivity(i)
-                                    act.finish()
-                                    HELPER.slideEnter(act)
+                                    PubFun.openLoginScreen(act, prefManager)
                                 })
                         } else {
                             PubFun.commonDialog(

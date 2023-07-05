@@ -1,6 +1,5 @@
 package com.vovance.securemywillcall.fragments.Notification
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,13 +8,12 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.vovance.frimline.views.Utils
 import com.vovance.omcsalesapp.Common.PubFun
-import com.vovance.securemywillcall.activity.LoginActivity.LoginActivity
+import com.vovance.securemywillcall.R
 import com.vovance.securemywillcall.common.Constant
 import com.vovance.securemywillcall.common.HELPER
-import com.vovance.securemywillcall.interfaces.ListClickListener
-import com.vovance.securemywillcall.R
 import com.vovance.securemywillcall.databinding.FragmentNotificationBinding
 import com.vovance.securemywillcall.fragments.BaseFragment
+import com.vovance.securemywillcall.interfaces.ListClickListener
 import com.vovance.ssn.Utils.Loader
 import com.vovance.ssn.Utils.NetworkResult
 import dagger.hilt.android.AndroidEntryPoint
@@ -83,12 +81,7 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(), View.O
                                 it.data.message!!.ifEmpty { getString(R.string.serverErrorMessage) },
                                 false,
                                 clickListener = {
-                                    pref!!.Logout()
-                                    val i = Intent(act, LoginActivity::class.java)
-                                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                                    act.startActivity(i)
-                                    act.finish()
-                                    HELPER.slideEnter(act)
+                                    PubFun.openLoginScreen(act, pref)
                                 })
                         } else {
                             PubFun.commonDialog(

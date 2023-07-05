@@ -12,7 +12,6 @@ import android.os.Bundle
 import android.provider.Settings
 import android.util.Patterns
 import android.view.View
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -72,7 +71,7 @@ class ScannerActivity : BaseActivity(), View.OnClickListener {
                 initView()
             } else {
                 isGranted = false
-                Toast.makeText(applicationContext, "Permission Denied", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(applicationContext, "Permission Denied", Toast.LENGTH_SHORT).show()
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                         != PackageManager.PERMISSION_GRANTED
@@ -91,7 +90,7 @@ class ScannerActivity : BaseActivity(), View.OnClickListener {
                                 intent.data = uri
                                 act.startActivityForResult(intent, 0)
                             }
-                        })
+                        },true)
                     }
                 }
             }
@@ -124,37 +123,18 @@ class ScannerActivity : BaseActivity(), View.OnClickListener {
                             PubFun.commonDialog(
                                 act,
                                 getString(R.string.scan_title),
-                                it.data.message!!.ifEmpty { "Server Error" },
+                                it.data.message!!.ifEmpty { getString(R.string.serverErrorMessage) },
                                 false,
                                 clickListener = {
                                     onBackPressed()
                                     app!!.observer.value = Constant.OBSERVER_REFRESH_DASHBOARD_DATA
-//                                    qrRedirectDialog(act, scanResult, true, openListener = {
-//                                        binding!!.title.text = ""
-//                                        //copy Text
-//                                        (act.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).setPrimaryClip(
-//                                            ClipData.newPlainText(
-//                                                null,
-//                                                scanResult
-//                                            )
-//                                        )
-//                                       // showToast(act, act.getString(R.string.copied_to_clipboard))
-//                                        codeScanner.startPreview()
-//                                    }, copyListener = {
-//                                        binding!!.title.text = ""
-//                                        codeScanner.startPreview()
-//                                    }, closeListener = {
-//                                        binding!!.title.text = ""
-//                                        codeScanner.startPreview()
-//                                    })
-
                                 })
 
                         } else if (it.data.status == 2) {
                             PubFun.commonDialog(
                                 act,
                                 getString(R.string.scan_title),
-                                it.data.message!!.ifEmpty { "Server Error" },
+                                it.data.message!!.ifEmpty { getString(R.string.serverErrorMessage) },
                                 false,
                                 clickListener = {
                                     prefManager!!.Logout()
@@ -168,9 +148,10 @@ class ScannerActivity : BaseActivity(), View.OnClickListener {
                             PubFun.commonDialog(
                                 act,
                                 getString(R.string.scan_title),
-                                it.data.message!!.ifEmpty { "Server Error" },
+                                it.data.message!!.ifEmpty {getString(R.string.serverErrorMessage) },
                                 false,
                                 clickListener = {
+                                    act.onBackPressed()
                                 })
                         }
                     }
@@ -184,6 +165,7 @@ class ScannerActivity : BaseActivity(), View.OnClickListener {
                             ),
                             false,
                             clickListener = {
+                                act.onBackPressed()
                             })
                         HELPER.print("Network", "Error")
                     }
@@ -228,6 +210,7 @@ class ScannerActivity : BaseActivity(), View.OnClickListener {
         codeScanner.scanMode = ScanMode.SINGLE // or CONTINUOUS or PREVIEW
         codeScanner.isAutoFocusEnabled = true // Whether to enable auto focus or not
         codeScanner.isFlashEnabled = false // Whether to enable flash or not
+        codeScanner.isTouchFocusEnabled = true
 
         // Callbacks
         codeScanner.decodeCallback = DecodeCallback {

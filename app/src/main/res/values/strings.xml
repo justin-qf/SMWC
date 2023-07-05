@@ -127,6 +127,10 @@
         1. Touch the Go button below to open the Settings app.\n
         2. Turn the Camera on.\n
         3. Open this app and try again.</string>
+
+    <string name="notificationPermissionRequiredMsg">It looks like your privacy settings are preventing us from accessing your notification. You can fix this by doing the following:\n
+        1. Touch the Go button below to open the Settings app.\n
+        2. Turn the Notification on.</string>
     <!-- API Handling text-->
     <string name="errorMessage">Something went wrong</string>
     <string name="serverErrorMessage">Server Error</string>

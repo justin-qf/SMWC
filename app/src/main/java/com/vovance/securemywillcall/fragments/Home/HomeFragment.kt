@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.vovance.frimline.views.Utils
 import com.vovance.omcsalesapp.Common.PubFun
 import com.vovance.securemywillcall.R
-import com.vovance.securemywillcall.activity.LoginActivity.LoginActivity
 import com.vovance.securemywillcall.activity.ScannerActivity.ScannerActivity
 import com.vovance.securemywillcall.apiHandle.NoConnectivityException
 import com.vovance.securemywillcall.apiHandle.NoInternetException
@@ -95,12 +94,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), View.OnClickListener {
                                 it.data.message!!.ifEmpty { getString(R.string.serverErrorMessage) },
                                 false,
                                 clickListener = {
-                                    pref!!.Logout()
-                                    val i = Intent(act, LoginActivity::class.java)
-                                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                                    act.startActivity(i)
-                                    act.finish()
-                                    HELPER.slideEnter(act)
+                                    PubFun.openLoginScreen(act, pref)
                                 })
                         } else {
                             PubFun.commonDialog(
@@ -137,11 +131,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), View.OnClickListener {
         } catch (e: Exception) {
             e.printStackTrace()
         } catch (e: NoInternetException) {
-            HELPER.print("NoInternetException", "Done")
             HELPER.print("NoInternetException", e.message)
 
         } catch (e: NoConnectivityException) {
-            HELPER.print("NoConnectivityException", "Done")
             HELPER.print("NoConnectivityException", e.message)
         }
     }

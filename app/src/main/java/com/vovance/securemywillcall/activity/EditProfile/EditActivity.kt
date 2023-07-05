@@ -471,12 +471,7 @@ class EditActivity : BaseActivity(), View.OnClickListener {
                                 it.data.message!!.ifEmpty { getString(R.string.serverErrorMessage) },
                                 false,
                                 clickListener = {
-                                    prefManager.Logout()
-                                    val i = Intent(act, LoginActivity::class.java)
-                                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                                    act.startActivity(i)
-                                    act.finish()
-                                    HELPER.slideEnter(act)
+                                    PubFun.openLoginScreen(act, prefManager)
                                 })
                         } else {
                             if (act != null && !act.isFinishing) {

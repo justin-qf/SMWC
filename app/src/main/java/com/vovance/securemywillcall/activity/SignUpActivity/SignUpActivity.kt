@@ -9,14 +9,13 @@ import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import com.vovance.frimline.views.Utils
 import com.vovance.omcsalesapp.Common.PubFun
+import com.vovance.securemywillcall.R
 import com.vovance.securemywillcall.activity.BaseActivity
-import com.vovance.securemywillcall.activity.LoginActivity.LoginActivity
 import com.vovance.securemywillcall.activity.OtpActivity.OtpActivity
 import com.vovance.securemywillcall.activity.OtpActivity.OtpData
 import com.vovance.securemywillcall.common.CodeReUse
 import com.vovance.securemywillcall.common.Constant
 import com.vovance.securemywillcall.common.HELPER
-import com.vovance.securemywillcall.R
 import com.vovance.securemywillcall.databinding.ActivitySignUpBinding
 import com.vovance.ssn.Utils.Loader
 import com.vovance.ssn.Utils.NetworkResult
@@ -144,12 +143,7 @@ class SignUpActivity : BaseActivity(), View.OnClickListener {
                                 it.data.message!!.ifEmpty { getString(R.string.serverErrorMessage) },
                                 false,
                                 clickListener = {
-                                    prefManager.Logout()
-                                    val i = Intent(act, LoginActivity::class.java)
-                                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                                    act.startActivity(i)
-                                    act.finish()
-                                    HELPER.slideEnter(act)
+                                    PubFun.openLoginScreen(act, prefManager)
                                 })
                         } else {
                             if (act != null && !act.isFinishing) {

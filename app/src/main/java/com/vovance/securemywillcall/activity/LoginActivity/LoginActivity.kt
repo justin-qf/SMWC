@@ -1,11 +1,26 @@
 package com.vovance.securemywillcall.activity.LoginActivity
 
+import android.Manifest
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Patterns
 import android.view.View
 import android.view.WindowManager
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.vovance.frimline.views.Utils
 import com.vovance.omcsalesapp.Common.PubFun
@@ -28,6 +43,10 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
 
     private var binding: ActivityLoginBinding? = null
     private val otpViewModel: SignUpViewModel by viewModels()
+    private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
+    private val notificationManager: NotificationManager by lazy {
+        getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +63,47 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         binding!!.signUpBtn.setOnClickListener(this)
         //Remove Errors
         CodeReUse.RemoveError(binding!!.emailNoEdt, binding!!.emailNoLayout)
+        setNotificationHandle()
+        setNotificationPermission()
+    }
+
+    private fun setNotificationHandle() {
+        // Sets up permissions request launcher.
+        requestPermissionLauncher =
+            registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+                if (it) {
+                    //showDummyNotification()
+                } else {
+                    PubFun.permissionDialog(
+                        act,
+                        getString(R.string.notificationPermissionRequiredMsg),
+                        listener = {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                val intent =
+                                    Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                                val uri = Uri.fromParts(
+                                    "package",
+                                    packageName,
+                                    null
+                                )
+                                intent.data = uri
+                                act.startActivityForResult(intent, 0)
+                            }
+                        },false)
+                }
+            }
+    }
+
+    private fun setNotificationPermission() {
+
+        if (ContextCompat.checkSelfPermission(act,Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+            //showDummyNotification()
+            HELPER.print("POST_NOTIFICATIONS","DONE")
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
     }
 
     override fun onClick(view: View?) {
@@ -114,12 +174,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                                 it.data.message!!.ifEmpty { getString(R.string.serverErrorMessage) },
                                 false,
                                 clickListener = {
-                                    prefManager.Logout()
-                                    val i = Intent(act, LoginActivity::class.java)
-                                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                                    act.startActivity(i)
-                                    act.finish()
-                                    HELPER.slideEnter(act)
+                                    PubFun.openLoginScreen(act, prefManager)
                                 })
                         } else {
                             if (act != null && !act.isFinishing) {
@@ -164,6 +219,42 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
             otpViewModel.getOtp(paymentParam)
         } else {
             HELPER.commonDialog(act, Constant.NETWORK_ERROR_MESSAGE)
+        }
+    }
+
+
+    companion object {
+        const val CHANNEL_ID = "dummy_channel"
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun createNotificationChannel() {
+        val channel = NotificationChannel(
+            CHANNEL_ID,
+            "Important Notification Channel",
+            NotificationManager.IMPORTANCE_HIGH,
+        ).apply {
+            description = "This notification contains important announcement, etc."
+        }
+        notificationManager.createNotificationChannel(channel)
+    }
+
+    private fun showDummyNotification() {
+        val builder = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setContentTitle("Congratulations! 🎉🎉🎉")
+            .setContentText("You have post a notification to Android 13!!!")
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+
+        with(NotificationManagerCompat.from(this)) {
+            if (ActivityCompat.checkSelfPermission(
+                    act,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return
+            }
+            notify(1, builder.build())
         }
     }
 }
